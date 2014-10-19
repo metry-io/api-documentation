@@ -4,16 +4,30 @@ HOST: https://app.energimolnet.se/api/2.0/
 # Energimolnet API v2 (BETA)
 Energimolnet collects energy data from any source available. Once collected, developers can easily access it for any purpose and start making amazing stuff.
 
+
+## Get started
+
+To get started we recommend you to install a tool for making HTTP requests such as <a href="https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo" target="_BLANK">Advanced Rest Client</a> or <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm" target="_BLANK">Postman</a> for Chrome. This is a good way to understand the API *before you start programming*.
+
+We will use Postman in this example. 
+
+1. Enter the following URL <code>https://app.energimolnet.se/api/2.0/users/me/contracts</code>
+2. Add a new Header with name <code>Authorization</code> and value <code>OAuth 2f9bf2cccd808358e6850e41c5a765ed</code>
+
+Here's a <a href="https://github.com/energimolnet/api-documentation/blob/master/images/Postman.png" >screenshot</a> of what it should look like 
+
+
+
+
+
+Use the following header to get some demo data from our office!
+
+
+
 ## Authentication
 We use OAuth2 to authenticate users and manages access to third parties. 
 
 NOTE: This API is under development and may change any time.
-
-## Get started
-
-Use the following header to get some demo data from our office!
-
-Authorization: OAuth 2f9bf2cccd808358e6850e41c5a765ed
 
 ## Examples
 
