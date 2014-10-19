@@ -13,15 +13,15 @@ We will use Postman in this example.
 
 1. Enter the following URL <code>https://app.energimolnet.se/api/2.0/users/me/contracts</code>
 2. Add a new Header with name <code>Authorization</code> and value <code>OAuth 2f9bf2cccd808358e6850e41c5a765ed</code>
+3. Click Send and you'll see a list of available contracts for the **authenticated user**.
 
-Here's a <a href="https://github.com/energimolnet/api-documentation/blob/master/images/Postman.png" >screenshot</a> of what it should look like 
+Here's a <a href="https://github.com/energimolnet/api-documentation/blob/master/images/Postman.png" >screenshot</a> of what it should look like.
 
+So, what exactly happened here? The URL told the API to return all available contracts. I this case there was just one. The Authorization header tells **who is being authenticated** which determines what contracts will be returned. In this example we use a demo-account which has the consumption for Energimolnet's office.
 
+To get information about the authenticated user try <code>https://app.energimolnet.se/api/2.0/users/me</code>.
 
-
-
-Use the following header to get some demo data from our office!
-
+**NOTE:** In this example we are using an API-token to access a user's data. API-tokens are only to be used by the user and never shared with anyone else. To build apps for other users, then use OAuth and the Code-flow to obtain refresh_tokens and access_tokens.
 
 
 ## Authentication
