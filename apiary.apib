@@ -990,7 +990,20 @@ A developer is a person or an organization that develops services such as system
 
 # Group Consumption
 
-Consumption is the use of energy for each meter. Consumption is measured by the granularity month, day and hour but the availabilty depends and the consumption feed from the meter's owner.
+Consumption is the use of energy or other metrics for a meter. Consumption is measured by the granularity month, day and hour but the availabilty depends and the consumption feed from the meter's owner.
+
+<h3>Metrics</h3>
+<table>
+  <tr>
+    <td>energy</td><td>Amount of energy used, always measured in kWh</td>
+  </tr>
+  <tr>
+    <td>flow</td><td>Amount of fluid used, always measured in m<sup>3</sup></td>
+  </tr>
+  <tr>
+    <td>power</td><td>Averge power, measured in kW. Note that <b>power is same as energy for hourly values </b> since the best granularity is hour.</td>
+  </tr>
+</table>
 
 ## Preview consumption for a meter [/consumptions/{meter_id}?metrics={metrics}]
 
@@ -1039,8 +1052,6 @@ Returns a preview of what consumption data that is available for the meter.
             }
             
 ## Consumption for a meter [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
-
-What is an API for energy with consmption data? Here's where you get it.
 
 If consumption data is found, then **all data points are returned** including missing ones and points that are in the future.
 
