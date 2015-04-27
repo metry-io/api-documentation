@@ -34,16 +34,16 @@ NOTE: This API is under development and may change any time.
 
 We have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>. 
 
-# Group User
+# Group Accounts
 
-A user is a person or organization buying energy from an <b>owner</b>
+## Accounts resource [/users/{id}]
 
-## User resource [/users/{id}]
+### Get an account [GET]
 
-### Get a User resource [GET]
+Tip: Use alias "me" to reference the currently authorized user.
 
 + Parameters
-    + id (required, string, `53294e5ae9cada3306001735`) ... The id of the user to get info about
+    + id (required, string, `53294e5ae9cada3306001735`) ... The id of the account to get info about
 
 + Request
     
@@ -56,50 +56,7 @@ A user is a person or organization buying energy from an <b>owner</b>
 
     + Body
     
-            { "code" : 200,
-              "data" : { "_id" : "521e0be2dedcde8459000000",
-                  "active" : true,
-                  "api_token" : null,
-                  "authority_document" : null,
-                  "files" : null,
-                  "name" : "Magnus Lüttkens",
-                  "owner_connections" : [  ],
-                  "owners" : [ null,
-                      "5268c832dedcde9d1d0000df"
-                    ],
-                  "partner_id" : null,
-                  "password" : null,
-                  "role" : "user",
-                  "shared_with" : [ { "_identifier" : "Energimolnet developer",
-                        "account_id" : "5174f0e1e4b094b3d0813349",
-                        "account_name" : "Energimolnet",
-                        "account_role" : "developer",
-                        "scope" : null
-                      },
-                      { "_identifier" : "Energiappen developer",
-                        "account_id" : "51a5f7e051151717380000a1",
-                        "account_name" : "Energiappen",
-                        "account_role" : "developer",
-                        "scope" : null
-                      },
-                      { "_identifier" : "Öresundskraft AB developer",
-                        "account_id" : "53046615753c017c768ba119",
-                        "account_name" : "Öresundskraft AB",
-                        "account_role" : "developer",
-                        "scope" : null
-                      },
-                      { "_identifier" : "Erik Andersson user",
-                        "account_id" : "504dfd5f3145a7ba50000001",
-                        "account_name" : "Erik Andersson",
-                        "account_role" : "user",
-                        "scope" : null
-                      }
-                    ],
-                  "username" : "luttkens@gmail.com",
-                  "zendesk_user_id" : null
-                },
-              "message" : "OK"
-            }
+            {"code":200,"message":"OK","profiling":null,"data":{"_id":"51c14e184a25203f5f000059","name":"Demokonto","username":"demo@demo.se","registration_form":{"enabled":null,"trusted":null,"validate_contracts":true,"css":"","terms":null,"intro_html":"","error_message":"","failure_message":"","logo_path":"","validation_key":null,"validation_secret":null,"welcome_email":null,"error_email":null,"failure_email":null},"plan":null,"role":"user","active":null,"grid_areas":null,"ean_prefixes":null,"ediel_number":null,"sub_accounts_count":0,"sub_accounts":[]}}
 
 ### Update a User resource [PUT]
 
@@ -111,522 +68,25 @@ A user is a person or organization buying energy from an <b>owner</b>
 
     + Body
 
-            { "active" : true,
-              "api_token" : "sdfsdf",
-              "name" : "Magnus Lüttkens",
-              "shared_with" : [ { "account_id" : "5174f0e1e4b094b3d0813349" },
-                  { "account_id" : "51a5f7e051151717380000a1" },
-                  { "account_id" : "53046615753c017c768ba119" },
-                  { "account_id" : "504dfd5f3145a7ba50000001" }
-                ],
-              "username" : "luttkens@gmail.com"
-            }
+            { "name" : "New name" }
 
 
 + Response 200
 
     + Body
     
-            { "code" : 200,
-              "data" : { "_id" : "521e0be2dedcde8459000000",
-                  "active" : true,
-                  "api_token" : "sdfsdf",
-                  "authority_document" : null,
-                  "files" : null,
-                  "name" : "Magnus Lüttkens",
-                  "owner_connections" : [  ],
-                  "owners" : [ null,
-                      "5268c832dedcde9d1d0000df"
-                    ],
-                  "partner_id" : null,
-                  "password" : "$2a$10$Jufkzl9tFj1yIYeDdXA0wOFakb.0Kbyq4fA3fd//XjG42N6SP0kpq",
-                  "role" : "user",
-                  "shared_with" : [ { "_identifier" : "Energimolnet developer",
-                        "account_id" : "5174f0e1e4b094b3d0813349",
-                        "account_name" : "Energimolnet",
-                        "account_role" : "developer",
-                        "scope" : null
-                      },
-                      { "_identifier" : "Energiappen developer",
-                        "account_id" : "51a5f7e051151717380000a1",
-                        "account_name" : "Energiappen",
-                        "account_role" : "developer",
-                        "scope" : null
-                      },
-                      { "_identifier" : "Öresundskraft AB developer",
-                        "account_id" : "53046615753c017c768ba119",
-                        "account_name" : "Öresundskraft AB",
-                        "account_role" : "developer",
-                        "scope" : null
-                      },
-                      { "_identifier" : "Erik Andersson user",
-                        "account_id" : "504dfd5f3145a7ba50000001",
-                        "account_name" : "Erik Andersson",
-                        "account_role" : "user",
-                        "scope" : null
-                      }
-                    ],
-                  "username" : "luttkens@gmail.com",
-                  "zendesk_user_id" : null
-                },
-              "message" : "OK"
-            }
+            {"code":200,"message":"OK","profiling":null,"data":{"_id":"51c14e184a25203f5f000059","name":"New name","username":"demo@demo.se","registration_form":{"enabled":null,"trusted":null,"validate_contracts":true,"css":"","terms":null,"intro_html":"","error_message":"","failure_message":"","logo_path":"","validation_key":null,"validation_secret":null,"welcome_email":null,"error_email":null,"failure_email":null},"plan":null,"role":"user","active":null,"grid_areas":null,"ean_prefixes":null,"ediel_number":null,"sub_accounts_count":0,"sub_accounts":[]}}
 
-## Owner Connection [/users/{user_id}/owner_connection/{id}]
 
-Owner connections keeps a user's contracts and consumption data up to date. The connection uses a connector service that is customized for each owner. The connector service
-will use the provided credentials to gain access to the user's data available at the owner's end (normally reffered to as Mina sidor)
 
-Owners that collaborates with Energimolnet has <b>trusted connections</b>. Those connections will validate the credentials immediately and only once. You can think
-of it as entering a bar; once checked at the door, you can order without getting checked everytime. However, the credential's password will be erased once
-the trusted connection is validated, since trusted owner connections does not require passwords to validated contracts or update consumptions.
-
-<table class="tableizer-table">
-<tr class="tableizer-firstrow"><th>Field</th><th>Description</th><th>Access</th></tr>
- <tr><td>owner_id</td><td>What meter owner (e.g. energy company) to fetch data from using the provided credentials</td><td>Required, must be unique for user</td></tr>
- <tr><td>credentials</td><td>Array of objects with username and password that will be used to sign in to the owner’s web site.</td><td>Required</td></tr>
- <tr><td>tasks</td><td>A list of what tasks to with the connection:  validate_credentials, validate_contracts, update_consumption</td><td>Defaults to all.</td></tr>
- <tr><td>metrics</td><td>Can only be “energy”, but is available for future implementations of other metrics.</td><td>Defaults to “energy”</td></tr>
- <tr><td>granularity</td><td>Granularity to fetch consumption data for. Can only be “month”, but is available for future implementations of  “day” and “hour”</td><td>Defaults to “month”</td></tr>
- <tr><td>types</td><td>Type of contracts to validate and meters to get consumption data for. Available types depend on the connection implementation with the owner. </td><td>Defaults to all.</td></tr>
- <tr><td>autorun</td><td>If true, the connection will be run automatically. This may be set to false, if you want to create owner connection and manually queue jobs.</td><td>Defaults to true.</td></tr>
- <tr><td>error</td><td>If an error occured while initating the connector service it is shown here. This error is generalyl a system error that cannot be handle by the user.</td><td>Read only.</td></tr>
- <tr><td>status_credentials.validated_on</td><td>Last time a validation_credentials task was run. Null is validation is pending</td><td>Read only</td></tr>
- <tr><td>status_credentials.valid</td><td>True if all credentials were valid last validation run, false if not and NULL if not yet run.</td><td>Read only</td></tr>
- <tr><td>status_credentials.invalid_credentials</td><td>A list with usernames for each invalid credentials item. Will be empty if all credentials are valid, and NULL if validation is pending.</td><td>Read only</td></tr>
- <tr><td>status_credentials.error</td><td>If an exception error occurred during validation details will be presented here in an arbitrary format. If NULL no errors.</td><td>Read only</td></tr>
- <tr><td>status_contracts.validated_on</td><td>&nbsp;</td><td>Read only</td></tr>
- <tr><td>status_contracts.error</td><td>If an exception error occurred during validation details will be presented here in an arbitrary format. If NULL no errors.</td><td>Read only</td></tr>
- <tr><td>status_consumption.updated_on</td><td>&nbsp;</td><td>Read only</td></tr>
- <tr><td>status_consumption.error</td><td>If an exception error occurred during updating details will be presented here in an arbitrary format. If NULL no errors.</td><td>Read only</td></tr>
-</table>
-
-<h3>Tasks</h3>
-<table>
-  <tr>
-    <td>validate_credentials</td>
-    <td>This task will simply make sure that the credentials are valid. It is a prerequiste to perform other tasks</td>
-  </tr>
-  <tr>
-    <td>validate_contracts</td>
-    <td>Will sync the active contracts so that our records will stay the same as the energy company's.</td>
-  </tr>
-  <tr>
-    <td>update_consumption</td>
-    <td>Will try to fetch new consumption values. Existing consumption values will never be overwritten.</td>
-  </tr>
-</table>
-
-<h3>Types</h3>
-<table>
-  <tr>
-    <td>heat</td>
-    <td>District heating</td>
-  </tr>
-  <tr>
-    <td>electricity</td>
-    <td>Electricity</td>
-  </tr>
-  <tr>
-    <td>gas</td>
-    <td>Gas</td>
-  </tr>
-    </tr>
-    <tr>
-    <td>water</td>
-    <td>Non-heated or cooled water. Just plain water.</td>
-  </tr>
-</table>
-
-<h3>Metrics</h3>
-<table>
-  <tr>
-    <td>energy</td>
-    <td>Applies to types electricity, heat and gas.</td>
-  </tr>
-  <tr>
-    <td>flow</td>
-    <td>Applies to types heat and water</td>
-  </tr>
-  <tr>
-    <td>delta_temp</td>
-    <td>Applies to type heat</td>
-  </tr>
-</table>
-
-+ Parameters
-    + user_id (required, string, `1`) ... Reference to user
-    + id (required, string, `1`) ... Reference to user
-
-+ Model (application/json)
-
-    Bsfg sfgdfgs fdgsfd ddfg sdfg     
-
-
-    + Body
-
-            {
-               "code":200,
-               "message":"OK",
-               "data":{
-                  "_id":"53294e5ae9cada3306001735",
-                  "owner_id":"53242732df6232402d000004",
-                  "credentials":[{"username":"700454","password":"54698"}],
-                  "tasks":["validate_credentials"],
-                  "types":["heat","electricity"],
-                  "metrics":["energy"],
-                  "granularity":"month",
-                  "autorun":true,
-                  "owner_name":"Vattenfall eldistribution AB",
-                  "error" : null
-                  "status_credentials":{
-                     "validated_on":null,
-                     "valid":null,
-                     "invalid_credentials":null,
-                     "error":null
-                  },
-                  "status_contracts":{
-                     "validated_on":null,
-                     "error":null
-                  },
-                  "status_consumption":{
-                     "updated_on":null,
-                     "error":null
-                  }
-               }
-            }
-
-### Get information about one Owner Connection [GET]
-
-+ Response 200 (application/json)
-    
-    [Owner Connection][]
-
-### Update information for one Owner Connection [PUT]
-
-Updating any of the following fields will restart the connector job, just as if the resource was just 
-created. See Owner Connection Collection for more information.
-
-+ Request
-
-    + Body
-
-            {
-                "credentials" : [{"username" : "username-to-sign-in", "password-to-sign-in" : "54698"}],
-            }
-
-+ Response 200 (application/json)
-    
-    [Owner Connection][]
-
-### Delete an Owner Connection [DELETE]
-
-+ Response 200 (application/json)
-
-   
-   
-   
-## Owner Connection Collection [/users/{user_id}/owner_connection]
-
-Collection of owner connections for a user.
-
-
-### List all owner connections [GET]
-
-List all owner connections for the user. Note that this is an *embedded collection* which means that it will
-return all owner connections in one array, without pagination features. This is acceptable since there is
-unlikely to be more than 10 owner connections. Even hundreds what not be an issue.
-
-+ Parameters
-    + user_id (required, string, `1`) ... Reference to user
-    
-+ Response 200 (application/json)
-
-    + Header
-    
-            Authorization: Bearer <your-access-token>
-    
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK",
-               "data":[{ ... },{ ... },{ ... }]} // An array of owner connections
-            }
-
-
-
-
-### Add a new owner connection [POST]
-
-Adds a owner connection to the collection. Note that <code>owner_id</code> must be unique within the collection
-and that the owner must exist.
-
-When a new owner connection is added to the collection it will be automatically queued to perform 
-the assigned tasks using the owner's custom connector service. You may track the status by query the specific connection using the 
-returned <code>_id</code> as identifier. 
-
-The following fields will be updated when the task has finnished: 
-<code>status_credentials</code>, <code>status_contracts</code>, <code>status_consumption</code>
-
-+ Parameters
-    + user_id (required, number, `1`) ... Reference to user
-
-
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-    
-    + Body
-
-            {
-                "owner_id" : "53242732df6232402d000004", // E.g. Vattenfall
-                "credentials" : [{"username" : "username-to-sign-in", "password-to-sign-in" : "54698"}],
-                "tasks" : ["validate_credentials"],
-                "types" : ["heat", "electricity"]
-            }
-
-+ Response 200 (application/json)
-    
-    [Owner Connection][]
-
-## Shared with [/users/{user_id}/shared_with/{account_id}]
-
-+ Model (application/json)
-
-    + Body
-
-            {
-               "code":200,
-               "message":"OK",
-               "data":{
-                  "account_id":"53294e5ae9cada3306001735",
-                  "scope":"",
-                  "account_role": "developer",
-                  "account_name": "Awesome developer"
-               }
-            }
-
-### Get an account the has access to a user's account [GET]
-
-+ Parameters
-    + user_id (required, string, `1`) ... The users which has granted accesses to an account
-    + account_id (required, string, `1`) ... The account to which the user has granted accesss
-    
-+ Response 200 (application/json)
-    
-    [Shared with][]
-
-### Revoke access for an account [DELETE]
-
-+ Parameters
-    + user_id (required, string, `1`) ... The user which has granted accesses to an account
-    + account_id (required, string, `1`) ... The account for which access shallbe revoked.
-    
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"Deleted"
-            }
-   
- 
-## Shared with collection [/users/{user_id}/shared_with]
-
-Shared with resource shows what accounts that have access to user.
-
-### List accounts that has access to a user's account[GET]
-
-Shows a list of what accounts (users, developers, owners or admins) the account holder has shared its data with.
-
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK",
-               "count" : 20,
-               "data" : [...]
-            }
-
-### Grant access to an account [POST]
-
-Adds a new account that should have access to the users data
-
-+ Parameters
-    + user_id (required, string, `53294e5ae9cada3306001735`) ... The user which has granted accesses to an account
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-    
-    + Body
-
-            {
-                "account_id" : "53242732df6232402d000004",
-            }
-
-+ Response 200 (application/json)
-    
-    [Shared with][]
-
-## Contracts collection [/users/{user_id}/contracts]
-
-This collection holds all contracts **accessable** by a user, including contracts that are accessable because another user has shared its data with the user.
-From a user perspectiv a contract is a meter that it currently as has access to.
-
-### List a user's accessable contracts [GET]
-
-List all ontracts that are accessable by the specified user
-
-+ Parameters
-    + user_id (required, string, `53294e5ae9cada3306001735`) ... The user to fetch contracts for
-
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK",
-               "count" : 20,
-               "data" : [...]
             }
             
-### Batch upsert contracts for a user [PUT]
+# Group Meters
 
-This end point is designed to upsert a batch of contracts, pasted from an excelsheet. Existing contracts will be **unchanged**, **merged** or **overwritten** depending on request parameters. Existing meters will be unchanged, non-existing will be created.
-
-The columns has to be in the following order <code>ean</code> <code>address</code> <code>name</code> <code>tags</code> <code>type</code> <code>owner</code>. All are optional, except the first <code>ean</code>.
-
-<h5>Example</h5>
-<pre><code>735999199000000001   Grevegatan 12    Hemma   test2
-735999199000000002  Ostgatan 32 Kontoret    konto-12,konto-32   heat
-123456  Potatisgatan 32 Kontoret   konto-12,konto-32\theat  Vattenfall
-123456  Matgatan 32 Sommarstället      electricity Fortum
-123456
-</code>
-</pre>
-+ Parameters
-    + user_id (required, string, `53294e5ae9cada3306001735`) ... The user to upsert contracts for
-    
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-    
-    + Body
-
-            {"default_owner_id":"5268c832dedcde9d1d0000df","default_type":"electricity","merge":false,"delimiter":"\t","overwrite":false,"preview":true,"values":"735999199000000001\tGrevegatan 12\tHemma\ttest2\n735999199000000002\tOstgatan 32\tKontoret\tkonto-12,konto-32\theat\n123456\tPotatisgatan 32\tKontoret\tkonto-12,konto-32\theat\tVattenfall\n123456\tMatgatan 32\tSommarst\u00e4llet\t\telectricity\tFortum\n123456\n"}
-
-+ Response 200 (application/json)
-
-    + Body
-    
-            {"code":200,"message":"OK","profiling":[],"data":{"values":[{"_id":"5405ba72df6232ac0400005d","user_id":"5405ba72df6232ac0400005c","meter_id":"5405ba6fdf6232ac04000039","owner_id":"4fe2e968e11426d5577d9105","owner_name":"Bor\u00e5s eln\u00e4t AB","ean":"735999199000000001","address":"Stackabogatan 32","type":"electricity","tags":["test"],"name":"Zu Hause"},{"_id":null,"user_id":"5405ba72df6232ac0400005c","meter_id":"5405ba6fdf6232ac0400003a","owner_id":"4fe2e968e11426d5577d9105","owner_name":null,"ean":"735999199000000002","address":"Ostgatan 32","type":"heat","tags":["konto-12","konto-32"],"name":"Kontoret"},{"_id":null,"user_id":"5405ba72df6232ac0400005c","meter_id":"5405ba73df62320c10001cfe","owner_id":"53242732df6232402d000004","owner_name":null,"ean":"123456","address":"Potatisgatan 32","type":"heat","tags":["konto-12","konto-32"],"name":"Kontoret"},{"_id":null,"user_id":"5405ba72df6232ac0400005c","meter_id":"5405ba73df62320c10001cff","owner_id":"51078d650d9cdbbe73000019","owner_name":null,"ean":"123456","address":"Matgatan 32","type":"electricity","tags":[],"name":"Sommarst\u00e4llet"},{"_id":null,"user_id":"5405ba72df6232ac0400005c","meter_id":"5405ba73df62320c10001d00","owner_id":"5268c832dedcde9d1d0000df","owner_name":null,"ean":"123456","address":null,"type":"electricity","tags":[],"name":null}]}}
-            
-## Change password [/accounts/me/password]
-
-### Change an accounts password [PUT]
-
-Note the the end-point is different from other users' requests. We use accounts instead and
-the alias **me** is required, which means that this end-point may only change the currently
-authenticated user. The user must also have been authenticated using grant_type "password".
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-    
-    + Body
-
-            {
-                "current_password" : "secret",
-                "new_password" : "better_secret" 
-            }
-
-+ Response 200
-
-    + Body
-
-            {
-                "code" : "200",
-                "message" : "OK" 
-            }
-            
-# Group Contract
-
-A contract is an agreement between a <b>user</b> and an <b>owner</b> for one <b>meter</b>. A user's contracts is what defines the access to meters and its consumption data.
-
-The Contract end-point is a little bit different from other end-points; it allows **batch upserts**.
 
 ## Contract collection [/contracts]
 
-### Upsert multiple contracts [PUT]
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-    
-    + Body
-
-            [
-                {
-                    "user_id" : "My Summer House",
-                    "meter_id" : ["foo", "bar"] 
-                    "tags" : [],
-                    "address" : "My address that overrides the actual"
-                },
-                {
-                    "user_id" : "My Summer House",
-                    "meter_id" : ["foo", "bar"] 
-                    "tags" : [],
-                    "address" : "My address that overrides the actual"
-                }
-            ]
-
-+ Response 200
-
-    + Body
-
-            {
-               "code":200,
-               "message":"OK",
-               "data":{
-                  "meter_id":"521c72ad2e90ff0700000000",
-                  "user_id":"504debb13145a70a4a000000",
-                  "address":"Johannebergsgatan 18",
-                  "name":"My Summer House",
-                  "tags":["foo", "bar"],
-                  "refused":false,
-                  "active":true,
-                  "force_access":false,
-                  "owner_id":"521c72ad2e90ff0700003040",
-                  "owner_name":"Göteborg energi",
-                  "ean":"753999166938765849",
-                  "type":"electricity",
-                  "user_name":"Joe Smith",
-                  "user_username":"joe@example.com",
-                  "_identifier":"753999166938765849 for Joe Smith",
-                  "_id":"52652cc1df62328455000006"
-               }
-            }
-
-## Contract resource [/contracts/{contract_id}]
-
-### Update a contract [PUT]
+### Get a meter [GET]
 
 + Request (application/json)
 
@@ -669,324 +129,49 @@ The Contract end-point is a little bit different from other end-points; it allow
             }
             
             
-# Group Meter
+### Update a meter [PUT]
 
-A meter is a point where energy is measured. One meter can only represent one type of energy, but may have multiple metrics. A meter always has an <b>owner</b> that is responsible for maintaining the meter and feeding Energimolnet
-with consumption data.
++ Request (application/json)
 
-# Group Owner
+    + Header
 
-An owner is organization with responsibility (that "owns") for one or more <b>meters</b>, in most cases the owner is an energy company.
-
-<table class="tableizer-table">
-<tr class="tableizer-firstrow"><th>Field</th><th>Description</th><th>Access</th></tr>
- <tr><td>_id</td><td>Internal id used when referensing the owner from other collections</td><td>Required, must be unique for user</td></tr>
- <tr><td>username</td><td>Normally not set. If set it is used to sign in to the Owner Portal.</td><td>Option, must be unique if set.</td></tr>
- <tr><td>ediel_number</td><td>Only applicable to electricity distribution company and is a 5-digit number given by Svenska Kraftnät.</td><td>Option, must be unique if set.</td></tr>
- <tr><td>grid_areas</td><td>An array of grid area codes, eg. "HBG", "GBG", "HJN". These values are used to map incoming consumption values from Ediel-traffic</td><td>Optional</td></tr>
- <tr><td>ean_prefixes</td><td>An array of 3-digit ean prefixes. These are used to automatically connect a EAN number to an owner, in case the grid area cannot be used.
-                              the EAN-prexif is located at position 6 to 9, eg. 7359991000123456789 has ean preix 100 (Vattenfall).</td><td>Optional</td></tr>
-
- <tr><td>logo_path</td><td>Use Assets collection to upload files, then save the <code>file_path</code> here.</td><td>Optional</td></tr>
- <tr><td>connector_class</td><td>Name of class used when process owner connections</td><td>Optional</td></tr>
- <tr><td>connector_class_trusted</td><td>If the Energimolnet has a trusted connection with the owner.</td><td>Optional</td></tr>
- <tr><td>zendesk_contact_id</td><td>Reference to Zendesk user id. Used internally.</td><td>Read only</td></tr>
-</table>
-
-## Owner Collection [/owners]
-
-### List all owners [GET]
+            Authorization: Bearer <your-access-token>
     
-+ Response 200 (application/json)
-
     + Body
-    
+
             {
-               "code":200,
-               "message":"OK"
-               "count" : 2012,
-               "limit" : 100,
-               "skip" : 0,
-               "data" : [...]
+                "name" : "My Summer House",
+                "tags" : ["foo", "bar"] 
             }
 
-## Owner resource [/owners/{id}]
-
-+ Parameters
-    + id (required, string, `51078d650dacdb3e73000019`) ... The owner id
-
-### Get an owner [GET]
-
-
-+ Response 200 (application/json)
++ Response 200
 
     + Body
+
             {
                "code":200,
                "message":"OK",
                "data":{
-                  "name":"Fortum Distribution AB",
-                  "alias":null,
-                  "role":"owner",
-                  "ediel_number":null,
-                  "zendesk_contact_id":null,
-                  "grid_areas":["UPP","STO"],
-                  "ean_prefixes":["102"],
-                  "connector_class":null,
-                  "connector_class_trusted":null,
-                  "logo_path":null,
-                  "logo_url":null,
-                  "username":null,
-                  "password":null,
-                  "api_token":null,
-                  "zendesk_user_id":null,
-                  "_id":"51078d650d9cdbbe73000019"
+                  "meter_id":"521c72ad2e90ff0700000000",
+                  "user_id":"504debb13145a70a4a000000",
+                  "address":"Johannebergsgatan 18",
+                  "name":"My Summer House",
+                  "tags":["foo", "bar"],
+                  "refused":false,
+                  "active":true,
+                  "force_access":false,
+                  "owner_id":"521c72ad2e90ff0700003040",
+                  "owner_name":"Göteborg energi",
+                  "ean":"753999166938765849",
+                  "type":"electricity",
+                  "user_name":"Joe Smith",
+                  "user_username":"joe@example.com",
+                  "_identifier":"753999166938765849 for Joe Smith",
+                  "_id":"52652cc1df62328455000006"
                }
             }
-
-## Direct connections [/owners/{owner_id}/direct_connections]
-
-Direct connections are FTP connections to an owner. A direction connection defines where data should be fetched from and how it should med parsed.
-
-+ Parameters
-    + owner_id (required, string, `51078d650d9cdbbe73000019`) ... The id of the owner to add a direct connection for
-
-### List all direct connections [GET]
-
-+ Response 200 (application/json)
-    
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK",
-               "data":[{ ... },{ ... },{ ... }]} // An array of direct connections
-            }
             
-
-### Create a new direct connection [POST]
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-
-    + Body
-            {
-                "code" : 200,
-                "message" : "OK",
-                "data" : { 
-                    "file_volume_class" : "BorasElnatFileVolume",
-                    "ftp_host" : "ftp.example.com",
-                    "ftp_password" : "pass",
-                    "ftp_port" : "21",
-                    "ftp_username" : "user",
-                    "granularity" : "hour",
-                    "path" : "",
-                    "pattern" : "",
-                    "target_size" : 50000,
-                    "type" : "heat"
-                }
-            }
-
-+ Response 200 (application/json)
-    
-    + Body
-    
-            {"code":200,"message":"OK","data":{"_id":"537073a4df6232880a001fb7","ftp_host":"ftp.example.com","ftp_port":21,"ftp_username":"user","ftp_password":"pass","file_volume_class":"BorasElnatFileVolume","file_reading_class":null,"granularity":"hour","path":null,"pattern":null,"type":"heat","target_size":50000}}
             
-
-## Direct connection resource [/owners/{owner_id}/direct_connections/{id}]
-
-Direct connections are FTP connections to an owner. A direction connection defines where data should be fetched from and how it should med parsed.
-
-+ Parameters
-    + owner_id (required, string, `51078d650d9cdbbe73000019`) ... Reference to the owner
-    + id (required, string, `51078d650d9cdbbe73000019`) ... The id of the direct connection
-
-### Get a direct connections [GET]
-
-+ Response 200 (application/json)
-    
-    + Body
-            {"code":200,"message":"OK","data":{"_id":"537073a4df6232880a001fb7","ftp_host":"ftp.example.com","ftp_port":21,"ftp_username":"user","ftp_password":"pass","file_volume_class":"BorasElnatFileVolume","file_reading_class":null,"granularity":"hour","path":null,"pattern":null,"type":"heat","target_size":50000}}
-
-### Update a direct connection [PUT]
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-
-    + Body
-            {
-                "code" : 200,
-                "message" : "OK",
-                "data" : { 
-                    "ftp_password" : "new_pass",
-                }
-            }
-
-+ Response 200 (application/json)
-    
-    + Body
-    
-            {"code":200,"message":"OK","data":{"_id":"537073a4df6232880a001fb7","ftp_host":"ftp.example.com","ftp_port":21,"ftp_username":"user","ftp_password":"new_pass","file_volume_class":"BorasElnatFileVolume","file_reading_class":null,"granularity":"hour","path":null,"pattern":null,"type":"heat","target_size":50000}}
-
-### Delete a direct connection [DELETE]
-
-+ Response 200 (application/json)
-    
-    + Body
-            { 
-                "code" : 200,
-                "message" : "Deleted"
-            }
-
-## Batch update consumptions [/owners/{owner_id}/consumptions]
-
-Use this end point to update batch of conumption values for meters based on its <code>ean</code> (which is unique for a specific owner). The provided <code>ean</code> must exists, otherwise an error will be thrown.
-
-<h3>Body parameters</h3>
-<table>
-  <tr>
-    <td>granularity</td>
-    <td>required</td>
-    <td>The granularity each imported value represents and what date format to expect. Can be month (yyyy-mm), day (yyyy-mm-dd) or hour (yyyy-mm-dd hh:00)</td>
-  </tr>
-  <tr>
-    <td>values</td>
-    <td>required</td>
-    <td>The string that should be parsed and imported. Line-break character is <code>\n</code> (Unix style)</td>
-  </tr>
-  <tr>
-    <td>delimeter</td>
-    <td>defaults to \t (TAB)</td>
-    <td>The character that defines columns</td>
-  </tr>
-  <tr>
-    <td>preview</td>
-    <td>defaults to false</td>
-    <td>If set to true, no consumption values will be saved.</td>
-  </tr>
-  <tr>
-    <td>overwrite</td>
-    <td>defaults to false</td>
-    <td>If true, existing values will be overwritten. The response will indicate if a value was overwritten, including its value prior to overwrite.</td>
-  </tr>
-  
-</table>
-
-### Batch update consumption values [PUT]
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-
-    + Body
-            {
-                "granularity" : "month",
-                "delimeter" : "\t",
-                "overwrite" : false
-                "preview" : false
-                "values" : "
-                    73599952101254587\t2014-04\t236.45\n
-                    73599953210125454\t2014-04\t98,09\n
-                    3025065\t2014-05\t2 362.2\n
-                "
-            }
-            
-+ Response 200 (application/json)
-    
-    + Body
-            { 
-                "code" : 200,
-                "message" : "Created",
-                "data" : {
-                    "values" : [
-                        {
-                            "ean" : "73599952101254587", "range" : 201404, "value" : 236.45, 
-                            "replaced_value" : false, "saved" : true, "meter_id" : "53e9f7afdf6232e027000038"
-                        },
-                        {
-                            "ean" : "73599953210125454", "range" : 201404, "value" : 98.09,
-                            "replaced_value" : false, "saved" : true, "meter_id" : "53e9f7afdf6232e027000039"
-                        },
-                        {
-                            "ean" : "3025065", "range" : 201405, "value" : 2362.2,
-                            "replaced_value" : false, "saved" : false, "meter_id" : "53e9f7afdf6232e027000039"
-                        }
-                    ]
-                }
-            }
-
-
-
-# Group Developer
-
-A developer is a person or an organization that develops services such as systems for billing, energy monitoring, facility monitoring or apps that inspires to more efficient energy usage.
-
-## Developer collection [/developers]
-
-### List all developres [GET]
-    
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK"
-               "count" : 2012,
-               "limit" : 100,
-               "skip" : 0,
-               "data" : [...]
-            }
-
-
-## Developer resource [/developers/{developer_id}]
-
-### Get a developer [GET]
-
-
-+ Parameters
-    + developer_id (required, string, `1`) ... The developer id
-
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK"
-               "data" : {
-                    "name" : "Awesome developer",
-                }
-            }
-     
-## Meters [/developers/{developer_id}/meters]       
-
-### Get meters that the developer has access to [GET]
-
-+ Parameters
-    + developer_id (required, string, `1`) ... The developer id
-
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK"
-               "count" : 2012,
-               "limit" : 100,
-               "skip" : 0,
-               "data" : [...]
-            }
 
 # Group Consumption
 
@@ -1109,88 +294,4 @@ thanks to **shared_with** will also be insluded in the aggregation.
                "message":"Deleted"
             }
 
-# Group Statistics
-
-## Consumption Data Delivery ime [/stats_delivery_time/meter/{meter_id}/{metric}/{granularity}/{period}]
-
-### Get consumption delivery time for a meter [GET]
-
-Returns the number of seconds it took a to deliver each consumption value. For instance, if a month consumption value was picked up by the system the 5:th in the month, then number of seconds for that value will be 3600x24x5.
-
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"Deleted"
-            }
-
-# Group Reports
-
-## Excel reports [/reports]
-
-You can only create reports for meters that you have access to. If you do not have access to any of the requested meters, the request will return **403 Forbidden**
-
-The following **types** are available
-
-<table class="tableizer-table">
-<tr class="tableizer-firstrow"><th>type</th><th>Description</th></tr>
- <tr><td>month_overview</td><td>A matrix with all hourly values for each month in the specified period.</td></tr>
- <tr><td>month_list</td><td>A list with all month valus for the specidied period.</td></tr>
- <tr><td>day_list</td><td>A list with all day valus for the specidied period.</td></tr>
- <tr><td>hour_list</td><td>A list with all hour valus for the specidied period. Limited to 1 year.</td></tr>
-</table>
-
-### Create a report [POST]
-
-+ Request (application/json)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-            
-    + Body
-    
-            {"type" : "month_overview", "period" : "201310", "meters" : ["51078d650dacdb3e73000019"]}
-            
-    
-+ Response 200 (application/json)
-
-            
-    + Body
-    
-            {
-               "code":200,
-               "message":"Deleted",
-               "data" : {"url" : "http://d2mz5vsxeolgw6.cloudfront.net/downloads/temp_faa658ceef126f0a8dd5a708cda2f8148a179916.xls"}
-            } 
-
-# Group Uploading files
-
-## Assets collection [/assets]
-
-Use Assets collection to upload public files such as images. In response you will get an <code>url</code> and <code>file_path</code>. Always use the <code>file_path</code> when storing files in other collections.
-
-### Upload a file [POST]
-
-
-+ Request (multipart/form-data)
-
-    + Header
-
-            Authorization: Bearer <your-access-token>
-    
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"OK"
-               "data" : {
-                  "url" : "https://cdn.energimolnet.se/assets/123c2d2a1d2fc2.png",
-                  "file_path" : "assets/123c2d2a1d2fc2.png",
-               }
-            }
 
