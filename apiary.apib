@@ -87,7 +87,7 @@ A meter represents a physical device that measures consumption from a utility su
 Each meter has a holder who can **assign** or **share** the meter to other accounts.
 
 Assigned or shared meters references a root meter, and it is good practice to use the
-*root._id** as unique identifer in your own applications. The **_id** field only represents the
+**root._id** as unique identifer in your own applications. The **_id** field only represents the
 reference itself, and is used to updated meta-information about the meter such as name, tags or if the meter is active or not.
 
 
@@ -101,12 +101,6 @@ reference itself, and is used to updated meta-information about the meter such a
 | address          | string  | The address.                                                                                                             |   |   |
 | active           | boolean | If the holder of the meter consider it active. Active meters may be subjected to payments, depending on the users' plan. |   |   |
 
-
-
-A meter always belongs to an account, which 
-
-
-
 ## Meters collection [/contracts]
 
 ### Get a meter [GET]
@@ -117,12 +111,6 @@ A meter always belongs to an account, which
 
             Authorization: Bearer <your-access-token>
     
-    + Body
-
-            {
-                "name" : "My Summer House",
-                "tags" : ["foo", "bar"] 
-            }
 
 + Response 200
 
