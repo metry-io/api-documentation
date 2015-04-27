@@ -83,8 +83,31 @@ Tip: Use alias "me" to reference the currently authorized user.
             
 # Group Meters
 
+A meter represents a physical device that measures consumption from a utility such as heat, cooling or electricity.
+Each meter has a holder who can **assign** or **share** the meter to other accounts.
 
-## Contract collection [/contracts]
+Assigned or shared meters references a root meter, and it is good practice to use the
+*root._id** as unique identifer in your own applications. The **_id** field only represents the
+reference itself, and is used to updated meta-information about the meter such as name, tags or if the meter is active or not.
+
+
+| Atribute            | Type    | Description                                                                                                              |   |   |
+|------------------|---------|--------------------------------------------------------------------------------------------------------------------------|---|---|
+| _id              | id      | Unique identifier for the meter; assigned and shared meters gets a new unique _id                                        |   |   |
+| root._id         | id      | Reference to the root meter; remains same for assigned and shared meters.                                                |   |   |
+| root.holder._id  | id      | Reference to the root holder of the meter, eg. Vattenfall or Fortum.                                                     |   |   |
+| root.holder.name | string  | Name of the root holder                                                                                                  |   |   |
+| holder.name      | string  | Name of the holder, usually a user with a subscription on the meter.                                                     |   |   |
+| address          | string  | The address.                                                                                                             |   |   |
+| active           | boolean | If the holder of the meter consider it active. Active meters may be subjected to payments, depending on the users' plan. |   |   |
+
+
+
+A meter always belongs to an account, which 
+
+
+
+## Meters collection [/contracts]
 
 ### Get a meter [GET]
 
