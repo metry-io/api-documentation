@@ -106,7 +106,10 @@ reference itself, and is used to updated meta-information about the meter such a
 
 You can list all meters accessible by the authenticated user. By using query params you can limit
 
-+ Parameters (Collection Parameters)
++ Parameters
+
+    + limit (number, optional) - The maximum number of results to return. Cannot be higher than 300`
+    + skip (number, optional) - Number of documents to skip.
 
 ### List meters [GET]
 
@@ -242,11 +245,6 @@ thanks to **shared_with** will also be insluded in the aggregation.
             }
 
 # Data Structures
-
-## Collection Parameters (object)
-+ limit (number, optional) - The maximum number of results to return. Cannot be higher than 300`
-+ skip (number, optional) - Number of documents to skip.
-
 
 ## Meter Base (object)
 + _id: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
