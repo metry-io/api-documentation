@@ -129,36 +129,11 @@ Consumption is the use of energy or other metrics for a meter. Consumption is av
             
 ## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
+We support the following granularities: hour, day and month, but we cannot gurantee that it is available for every meter.
 
-<h3>Supported Granularirt</h3>
-Even though we support a metric, it is not guranteed to be available.
-<table>
-  <tr>
-    <td>energy</td><td>Amount of energy used, always measured in kWh</td>
-  </tr>
-  <tr>
-    <td>flow</td><td>Amount of fluid used, always measured in m<sup>3</sup></td>
-  </tr>
-  <tr>
-    <td>power</td><td>Averge power, measured in kW. The timeframe is the same as the requested granularity.</td>
-  </tr>
-</table>
+The following metrics (unit) are supported: energy (kWh), flow (m<sup>3</sup>) and power (kW). Power always represents the average power.
 
-<h3>Supported Metrics</h3>
-Even though we support a metric, it is not guranteed to be available.
-<table>
-  <tr>
-    <td>energy</td><td>Amount of energy used, always measured in kWh</td>
-  </tr>
-  <tr>
-    <td>flow</td><td>Amount of fluid used, always measured in m<sup>3</sup></td>
-  </tr>
-  <tr>
-    <td>power</td><td>Averge power, measured in kW. The timeframe is the same as the requested granularity.</td>
-  </tr>
-</table>
-
-If consumption data is found, then **all data points are returned** including missing ones and points that are in the future.
+The response with consumption **values will always match your query**. Missing values are replaced with <code>NULL</code>
 
 ### Get consumption for a meter [GET]
 
