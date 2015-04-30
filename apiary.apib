@@ -115,28 +115,7 @@ You can list all meters accessible by the authenticated user. By using query par
 
     + Body
 
-            {
-               "code":200,
-               "message":"OK",
-               "data":{
-                  "meter_id":"521c72ad2e90ff0700000000",
-                  "user_id":"504debb13145a70a4a000000",
-                  "address":"Johannebergsgatan 18",
-                  "name":"My Summer House",
-                  "tags":["foo", "bar"],
-                  "refused":false,
-                  "active":true,
-                  "force_access":false,
-                  "owner_id":"521c72ad2e90ff0700003040",
-                  "owner_name":"Göteborg energi",
-                  "ean":"753999166938765849",
-                  "type":"electricity",
-                  "user_name":"Joe Smith",
-                  "user_username":"joe@example.com",
-                  "_identifier":"753999166938765849 for Joe Smith",
-                  "_id":"52652cc1df62328455000006"
-               }
-            }
+            {"code":200,"message":"OK","profiling":null,"count":4,"skip":0,"limit":50,"next_page":null,"previous_page":null,"additional_meta":{"$and":[{"active":true},{"revoked":{"$ne":true}}],"deleted":{"$ne":true},"$or":[{"holder_id":{"$id":"521e0be2dedcde8459000000"}},{"root.holder._id":{"$id":"521e0be2dedcde8459000000"}}]},"data":[{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"512dfd2303e6ec0700000001","holder":{"_id":"512dfd2303e6ec0700000001","name":"\u00d6resundskraft AB"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"512dfd2303e6ec0700000001","name":"\u00d6resundskraft AB","username":"kraft-o-meter@oresundskraft.se"},"children":[],"control_level":"subscribed","generation":1,"address":"","timezone":"Etc\/GMT-1","name":null,"tags":[],"revoked":false,"active":true,"ean":"735999156006018689","type":"heat","consumption_stats":{"energy":{"hour":{"count":22391,"first":2012100100,"last":2015042123,"max":47,"min":0,"sum":116443.47199831},"day":{"count":932,"first":20121001,"last":20150421,"max":340,"min":0,"sum":116279.47199831},"month":{"count":29,"first":201210,"last":201503,"max":7373,"min":310,"sum":108876.47199831}}},"deleted":false,"_status ":"not_connected","_identifier":"735999156006018689","_is_owner":true,"_id":"54b38fbbe608f857008b580c"},{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"50e5e3413145a7d94a000000","holder":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB","username":null},"children":[],"control_level":"subscribed","generation":1,"address":"Bruksvallarna 2","timezone":"Etc\/GMT-1","name":"Fj\u00e4llen i Bruksvallarna","tags":["5656"],"revoked":false,"active":true,"ean":"FRI_735999249000268027","type":"electricity","consumption_stats":{"energy":{"hour":{"count":14592,"first":20150416,"last":2015042923,"max":12.13,"min":0,"sum":25033.41},"day":{"count":608,"first":20130901,"last":20150429,"max":148.3,"min":0,"sum":25033.41},"month":{"count":19,"first":201309,"last":201503,"max":2373.65,"min":324.47,"sum":23578.38}}},"deleted":false,"_status ":"connected","_identifier":"Fj\u00e4llen i Bruksvallarna (Bruksvallarna 2)","_is_owner":true,"_id":"526f7711a158318a068b475f"},{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"5268c832dedcde9d1d0000df","holder":{"_id":"5268c832dedcde9d1d0000df","name":"G\u00f6teborg Energi"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"5268c832dedcde9d1d0000df","name":"G\u00f6teborg Energi","username":null},"children":[],"control_level":"subscribed","generation":1,"address":"Johannebergsgatan 18","timezone":"Etc\/GMT-1","name":"Hemma i l\u00e4gh","tags":[],"revoked":false,"active":true,"ean":"735999166200899267","type":"electricity","consumption_stats":{"energy":{"hour":{"count":15264,"first":2013080100,"last":2015042923,"max":2.71,"min":0,"sum":2755.6579999999},"day":{"count":636,"first":20130801,"last":20150429,"max":13.57,"min":0.9,"sum":2755.658},"month":{"count":20,"first":201308,"last":201503,"max":181.18,"min":82.72,"sum":2654.748}}},"deleted":false,"_status ":"connected","_identifier":"Hemma i l\u00e4gh (Johannebergsgatan 18)","_is_owner":true,"_id":"526532d1df62320401000b52"},{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"512dfd2303e6ec0700000001","holder":{"_id":"512dfd2303e6ec0700000001","name":"\u00d6resundskraft AB"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"512dfd2303e6ec0700000001","name":"\u00d6resundskraft AB","username":"kraft-o-meter@oresundskraft.se"},"children":[],"control_level":"subscribed","generation":1,"address":"Rosenv\u00e4gen 3","timezone":"Etc\/GMT-1","name":null,"tags":[],"revoked":false,"active":true,"ean":"735999124006000256","type":"heat","consumption_stats":{"energy":{"hour":{"count":24023,"first":2012080100,"last":2015042823,"max":24,"min":0,"sum":62245},"day":{"count":1000,"first":20120801,"last":20150428,"max":152,"min":0,"sum":62245},"month":{"count":31,"first":201208,"last":201503,"max":3634,"min":0,"sum":59624.471998248}}},"deleted":false,"_status ":"connected","_identifier":"Rosenv\u00e4gen 3 (735999124006000256)","_is_owner":true,"_id":"54857ae52f7f914f008ef84a"}]}
             
 ## Meter resource [/meters/{id}]
 
@@ -170,84 +149,7 @@ You can list all meters accessible by the authenticated user. By using query par
         
     + Body
 
-            {  
-               "code":200,
-               "message":"OK",
-               "profiling":null,
-               "data":{  
-                  "holder":{  
-                     "_id":"5295ffce8d790c4272000008",
-                     "name":"eGain",
-                     "username":"cs@egain.se"
-                  },
-                  "root":{  
-                     "_id":"551d6eede9cf4860008b5052",
-                     "holder":{  
-                        "_id":"51078d650d9cdbbe73000019",
-                        "name":"Fortum Distribution AB"
-                     }
-                  },
-                  "robot":{  
-                     "_id":null,
-                     "name":null,
-                     "key":null
-                  },
-                  "assigner":{  
-                     "_id":"52cff8104a25203d7e8b4617",
-                     "name":"Bertil Str\u00f6mberg Byggnads AB ",
-                     "username":"ekonomi.bsbab@comhem.se"
-                  },
-                  "children":[  
-            
-                  ],
-                  "address":"Mellanbergsv\u00e4gen 44 lnr:1202 obj.nr:0018 129 30 H\u00c4GERSTEN",
-                  "timezone":"Etc\/GMT-1",
-                  "control_level":"subscribed",
-                  "generation":2,
-                  "name":"Bertil Str\u00f6mberg Fastighets AB  ",
-                  "tags":[  
-            
-                  ],
-                  "revoked":false,
-                  "active":false,
-                  "ean":"735999102105114647",
-                  "import_ids":null,
-                  "type":"electricity",
-                  "consumption_stats":{  
-                     "energy":{  
-                        "hour":{  
-                           "count":0,
-                           "first":null,
-                           "last":null,
-                           "max":0,
-                           "min":null,
-                           "sum":0
-                        },
-                        "day":{  
-                           "count":0,
-                           "first":null,
-                           "last":null,
-                           "max":0,
-                           "min":null,
-                           "sum":0
-                        },
-                        "month":{  
-                           "count":51,
-                           "first":201101,
-                           "last":201503,
-                           "max":204,
-                           "min":0,
-                           "sum":6583
-                        }
-                     }
-                  },
-                  "deleted":false,
-                  "_status ":"inactive",
-                  "_identifier":"Bertil Str\u00f6mberg Fastighets AB   (Mellanbergsv\u00e4gen 44 lnr:1202 obj.nr:0018 129 30 H\u00c4GERSTEN)",
-                  "_is_owner":false,
-                  "_id":"55300dc9f82bd3080094a0d2"
-               }
-            }
+            {"code":200,"message":"OK","profiling":null,"data":{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"526f3ba944fa0f0700000000","holder":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB"}},"robot":{"_id":null,"name":null,"key":null},"assigner":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB","username":null},"children":[],"address":"Bruksvallarna 2","timezone":"Etc\/GMT-1","control_level":"subscribed","generation":1,"name":"Fj\u00e4llen i Bruksvallarna","tags":["5656"],"revoked":false,"active":true,"ean":"FRI_735999249000268027","import_ids":null,"type":"electricity","consumption_stats":{"energy":{"hour":{"count":14592,"first":20150416,"last":2015042923,"max":12.13,"min":0,"sum":25033.41},"day":{"count":608,"first":20130901,"last":20150429,"max":148.3,"min":0,"sum":25033.41},"month":{"count":19,"first":201309,"last":201503,"max":2373.65,"min":324.47,"sum":23578.38}}},"deleted":false,"_status ":"connected","_identifier":"Fj\u00e4llen i Bruksvallarna (Bruksvallarna 2)","_is_owner":true,"_id":"526f7711a158318a068b475f"}}
             
             
 
