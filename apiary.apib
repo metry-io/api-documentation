@@ -12,7 +12,7 @@ To get started we recommend you to install a tool for making HTTP requests such 
 We will use Postman in this example. 
 
 1. Enter the following URL https://app.energimolnet.se/api/2.0/meters
-2. Add a new Header with name <code>Authorization</code> and value <code>OAuth 2f9bf2cccd808358e6850e41c5a765ed</code>
+2. Add a new Header with name <code>Authorization</code> and value <code>Bearer 2f9bf2cccd808358e6850e41c5a765ed</code>
 3. Click Send and you'll see a list of available contracts for the **authenticated user**.
 
 Here's a <a href="https://raw.githubusercontent.com/energimolnet/api-documentation/master/images/Postman.png" >screenshot</a> of what it should look like.
@@ -22,11 +22,11 @@ The URL told the API to return all available contracts. I this case there was ju
 
 To get information about the authenticated user try https://app.energimolnet.se/api/2.0/accounts/me.
 
-**NOTE:** In this example we are using an API-token to access a user's data. API-tokens are only to be used by the user and never shared with anyone else. To build apps for other users, then use OAuth and the Code-flow to obtain refresh_tokens and access_tokens.
+**NOTE:** In this example we are using an private access token to access a user's data. Private access-tokens should never shared with anyone else. To build apps for other users, then use OAuth2 and the Code-flow to obtain refresh_tokens and access_tokens.
 
 
-## Authentication
-We use OAuth2 to authenticate users and manages access to third parties. 
+## OAuth2 Authentication
+We use **OAuth2** to authenticate users and manages access to third parties. 
 Currently we do not offer documentation on OAuth2, we have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>. 
 
 # Group Accounts
@@ -54,29 +54,6 @@ Tip: Use alias "me" to reference the currently authorized user.
     + Body
     
             {"code":200,"message":"OK","profiling":null,"data":{"_id":"51c14e184a25203f5f000059","name":"Demokonto","username":"demo@demo.se","registration_form":{"enabled":null,"trusted":null,"validate_contracts":true,"css":"","terms":null,"intro_html":"","error_message":"","failure_message":"","logo_path":"","validation_key":null,"validation_secret":null,"welcome_email":null,"error_email":null,"failure_email":null},"plan":null,"role":"user","active":null,"grid_areas":null,"ean_prefixes":null,"ediel_number":null,"sub_accounts_count":0,"sub_accounts":[]}}
-
-### Update a User resource [PUT]
-
-+ Parameters
-    + id (required, string, `53294e5ae9cada3306001735`) ... The id of the user to get info about
-
-
-+ Request (application/json)
-
-    + Body
-
-            { "name" : "New name" }
-
-
-+ Response 200
-
-    + Body
-    
-            {"code":200,"message":"OK","profiling":null,"data":{"_id":"51c14e184a25203f5f000059","name":"New name","username":"demo@demo.se","registration_form":{"enabled":null,"trusted":null,"validate_contracts":true,"css":"","terms":null,"intro_html":"","error_message":"","failure_message":"","logo_path":"","validation_key":null,"validation_secret":null,"welcome_email":null,"error_email":null,"failure_email":null},"plan":null,"role":"user","active":null,"grid_areas":null,"ean_prefixes":null,"ediel_number":null,"sub_accounts_count":0,"sub_accounts":[]}}
-
-
-
-            }
             
 # Group Meters
 
