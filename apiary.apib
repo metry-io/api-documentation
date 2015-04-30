@@ -103,6 +103,7 @@ reference itself, and is used to updated meta-information about the meter such a
  
 
 ## Meters collection [/meters?limit={limit}&skip={skip}]
+
 You can list all meters accessible by the authenticated user. By using query params you can limit
 
 + Parameters (Collection Parameters)
@@ -243,10 +244,8 @@ thanks to **shared_with** will also be insluded in the aggregation.
 # Data Structures
 
 ## Collection Parameters (object)
-+ limit (number, optional) - The maximum number of results to return. Cannot be higher than 300.
-    + Default: `50`
++ limit (number, optional) - The maximum number of results to return. Cannot be higher than 300`
 + skip (number, optional) - Number of documents to skip.
-    + Default: `0`
 
 
 ## Meter Base (object)
