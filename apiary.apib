@@ -90,17 +90,6 @@ Assigned or shared meters references a root meter, and it is good practice to us
 **root._id** as unique identifer in your own applications. The **_id** field only represents the
 reference itself, and is used to updated meta-information about the meter such as name, tags or if the meter is active or not.
 
-
-| Attribute            | Type    | Description                                                                                                              |   |   |
-|------------------|---------|--------------------------------------------------------------------------------------------------------------------------|---|---|
-| _id              | id      | Unique identifier for the meter; assigned and shared meters gets a new unique _id                                        |   |   |
-| root._id         | id      | Reference to the root meter; remains same for assigned and shared meters.                                                |   |   |
-| root.holder._id  | id      | Reference to the root holder of the meter, eg. Vattenfall or Fortum.                                                     |   |   |
-| root.holder.name | string  | Name of the root holder                                                                                                  |   |   |
-| holder.name      | string  | Name of the holder, usually a user with a subscription on the meter.                                                     |   |   |
-| address          | string  | The address.                                                                                                             |   |   |
-| active           | boolean | If the holder of the meter consider it active. Active meters may be subjected to payments, depending on the users' plan. |   |   |
-
 ## Meters collection [/meters]
 
 You can list all meters accessible by the authenticated user. By using query params you can limit
@@ -154,20 +143,20 @@ You can list all meters accessible by the authenticated user. By using query par
 + Response 200
 
     + Attributes (object)
-        + _id: 55300dc9f82bd8080094a212 (string) - The id for the meter
+        + _id: 55300dc9f82bd8080094a212 (string, required) - The id for the meter
         + type: electricity, heat, cooling, gas, water (string) - What type of consumption the meter represents.
         + name: Pumphuset vid sjön (string) - Meta information
         + address: Klackvägen 12 (string) - Meta information
         + tags: ["foo", "bar"] (array) - Meta information
-        + holder: Account resource (object) - Holder of the meter.
+        + holder: Account resource (object, required) - Holder of the meter.
         + assigner: Account resource (object) - Who assigned the meter to the holder; authorized to revoke access at anytime.
-        + control_level: owned, subscribed, shared (string) - The level of control the holder has on the meter. "Owned" represents the highest level of control.
+        + control_level: owned, subscribed, shared (string, required) - The level of control the holder has on the meter. "Owned" represents the highest level of control.
         + robot: ... (object) - Reference to the robot managing the meter. The robot updates consumption and handles revocation automatically.
-        + active: true (boolean) - Active meters has access to consumption values.
-        + revoked: false (boolean) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled at the root holder.
+        + active: true (boolean, required) - Active meters has access to consumption values.
+        + revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled at the root holder.
         + consumption_stats: ... (object) - Information about what data that is available for the meter.
-        + root: ... (object) - Reference to the root meter; remains same for assigned and shared meters
-        + timezone: ... (string) - Timezone the meter is located in. Used to defined consumption aggregation from hour to day.
+        + root: ... (object, required) - Reference to the root meter; remains same for assigned and shared meters
+        + timezone: ... (string, required) - Timezone the meter is located in. Used to defined consumption aggregation from hour to day.
         
         
     + Body
