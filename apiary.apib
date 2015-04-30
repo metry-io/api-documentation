@@ -126,10 +126,12 @@ You can list all meters accessible by the authenticated user. By using query par
 
 Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularity month, day and hour, however, it is important to understand that the availability differs depnding on meter and other external factors.
 
-+ Attributes
-    + type: electricity, heat, cooling, gas, water (string) - What type of consumption the meter represents.
+            
+## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
-<h3>Metrics</h3>
+
+<h3>Supported Granularirt</h3>
+Even though we support a metric, it is not guranteed to be available.
 <table>
   <tr>
     <td>energy</td><td>Amount of energy used, always measured in kWh</td>
@@ -141,10 +143,21 @@ Consumption is the use of energy or other metrics for a meter. Consumption is av
     <td>power</td><td>Averge power, measured in kW. The timeframe is the same as the requested granularity.</td>
   </tr>
 </table>
-            
-## Consumption for a meter [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
-Consumption values can be fetch
+<h3>Supported Metrics</h3>
+Even though we support a metric, it is not guranteed to be available.
+<table>
+  <tr>
+    <td>energy</td><td>Amount of energy used, always measured in kWh</td>
+  </tr>
+  <tr>
+    <td>flow</td><td>Amount of fluid used, always measured in m<sup>3</sup></td>
+  </tr>
+  <tr>
+    <td>power</td><td>Averge power, measured in kW. The timeframe is the same as the requested granularity.</td>
+  </tr>
+</table>
+
 If consumption data is found, then **all data points are returned** including missing ones and points that are in the future.
 
 ### Get consumption for a meter [GET]
@@ -179,27 +192,6 @@ If consumption data is found, then **all data points are returned** including mi
                 ]
             }
 
-## Aggregated consumptions [/consumptions/account/{account_id}/{metric}/{granularity}/{period}]
-
-You can also get aggregated consumptions for all meters accessable by an account holder. If you 
-pass a developer's <code>account_id</code>, you will get the aggregated values for all meters that the developer has 
-access to thanks to granted access using **shared_with**.
-
-Passing an owner's account_id will return aggregated values for meters that has that owner as owner.
-
-Passing an user's accound_id will return aggregated valus for all meters accessable by that user, that is: meters accessable
-thanks to **shared_with** will also be insluded in the aggregation.
-
-### Get aggregated consumption for an account [GET]
-
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-               "code":200,
-               "message":"Deleted"
-            }
 
 # Data Structures
 
