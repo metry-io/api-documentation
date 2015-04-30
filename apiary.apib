@@ -124,7 +124,10 @@ You can list all meters accessible by the authenticated user. By using query par
 
 # Group Consumption
 
-Consumption is the use of energy or other metrics for a meter. Consumption is measured by the granularity month, day and hour but the availabilty depends and the consumption feed from the meter's owner.
+Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularity month, day and hour, however, it is important to understand that the availability differs depnding on meter and other external factors.
+
++ Attributes
+    + type: electricity, heat, cooling, gas, water (string) - What type of consumption the meter represents.
 
 <h3>Metrics</h3>
 <table>
@@ -138,55 +141,10 @@ Consumption is the use of energy or other metrics for a meter. Consumption is me
     <td>power</td><td>Averge power, measured in kW. The timeframe is the same as the requested granularity.</td>
   </tr>
 </table>
-
-## Preview consumption for a meter [/consumptions/{meter_id}?metrics={metrics}]
-
-Returns a preview of what consumption data that is available for the meter.
-
-### Preview consumption for a meter [GET]
-
-+ Parameters
-    + meter_id (required, string, `53294e5ae9cada3306001735`) ... The id of the meter to get preview consumption for
-    + metrics (optional, string `energy,flow,power`) ... Limts the response to one or more metrics seperated by commas. If not specified all available metrics are returned.
-    
-+ Response 200 (application/json)
-
-    + Body
-    
-            {
-                "code": 200,
-                "message": "OK",
-                "data": [
-                    {
-                        "energy" : {
-                            "hour": {
-                                "first" : 2010020102,
-                                "last" : 2014040320,
-                                "max" : 34.21,
-                                "min" : 0.4,
-                                "count" : 35402
-                            },
-                            "day": {
-                                "first" : 20090320,
-                                "last" : 20140403,
-                                "max" : 4535.21,
-                                "min" : 322.4,
-                                "count" : 1202
-                            },
-                            "month": {
-                                "first" : 200602,
-                                "last" : 201404,
-                                "max" : 34432.21,
-                                "min" : 834.4,
-                                "count" : 254
-                            },
-                        }
-                    }
-                ]
-            }
             
 ## Consumption for a meter [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
+Consumption values can be fetch
 If consumption data is found, then **all data points are returned** including missing ones and points that are in the future.
 
 ### Get consumption for a meter [GET]
