@@ -11,28 +11,23 @@ To get started we recommend you to install a tool for making HTTP requests such 
 
 We will use Postman in this example. 
 
-1. Enter the following URL <code>https://app.energimolnet.se/api/2.0/users/me/contracts</code>
+1. Enter the following URL https://app.energimolnet.se/api/2.0/meters
 2. Add a new Header with name <code>Authorization</code> and value <code>OAuth 2f9bf2cccd808358e6850e41c5a765ed</code>
 3. Click Send and you'll see a list of available contracts for the **authenticated user**.
 
 Here's a <a href="https://raw.githubusercontent.com/energimolnet/api-documentation/master/images/Postman.png" >screenshot</a> of what it should look like.
 
-<h4>So, what exactly happened here? </h4>
+<h3>So, what exactly happened here? </h3>
 The URL told the API to return all available contracts. I this case there was just one. The Authorization header tells **who is being authenticated** which determines what contracts will be returned. In this example we use a demo-account which has the consumption for Energimolnet's office.
 
-To get information about the authenticated user try <code>https://app.energimolnet.se/api/2.0/users/me</code>.
+To get information about the authenticated user try https://app.energimolnet.se/api/2.0/accounts/me.
 
 **NOTE:** In this example we are using an API-token to access a user's data. API-tokens are only to be used by the user and never shared with anyone else. To build apps for other users, then use OAuth and the Code-flow to obtain refresh_tokens and access_tokens.
 
 
 ## Authentication
 We use OAuth2 to authenticate users and manages access to third parties. 
-
-NOTE: This API is under development and may change any time.
-
-## Examples
-
-We have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>. 
+Currently we do not offer documentation on OAuth2, we have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>. 
 
 # Group Accounts
 
