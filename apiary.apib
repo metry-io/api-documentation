@@ -53,7 +53,9 @@ Tip: Use alias "me" to reference the currently authorized user.
         
 
 + Response 200
-
+    
+    + Attributes (Account Base)
+    
     + Body
     
             {"code":200,"message":"OK","profiling":null,"data":{"_id":"51c14e184a25203f5f000059","name":"Demokonto","username":"demo@demo.se","registration_form":{"enabled":null,"trusted":null,"validate_contracts":true,"css":"","terms":null,"intro_html":"","error_message":"","failure_message":"","logo_path":"","validation_key":null,"validation_secret":null,"welcome_email":null,"error_email":null,"failure_email":null},"plan":null,"role":"user","active":null,"grid_areas":null,"ean_prefixes":null,"ediel_number":null,"sub_accounts_count":0,"sub_accounts":[]}}
@@ -129,9 +131,9 @@ Consumption is the use of energy or other metrics for a meter. Consumption is av
             
 ## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
-We support the following granularities: hour, day and month, but we cannot gurantee that it is available for every meter.
+We support the following **granularities**: hour, day and month, but we cannot gurantee that it is available for every meter.
 
-The following metrics (unit) are supported: energy (kWh), flow (m<sup>3</sup>) and power (kW). Power always represents the average power.
+The following **metrics** are supported: energy (kWh), flow (m<sup>3</sup>) and power (kW). Power always represents the average power. Not that  metric availability varies between meters.
 
 The response with consumption **values will always match your query**. Missing values are replaced with <code>NULL</code>
 
@@ -143,7 +145,7 @@ The response with consumption **values will always match your query**. Missing v
     + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as 
     long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
     All date will be interpreted using the meters timezone.
-    + metrics (optional, string `energy,flow`) ... Limts the response to one or more metrics seperated by commas. If not specified all available metrics are returned.
+    + metrics (optional, string `energy,flow,power`) ... Limts the response to one or more metrics seperated by commas. If not specified all available metrics are returned.
     
 + Response 200 (application/json)
 
@@ -169,6 +171,12 @@ The response with consumption **values will always match your query**. Missing v
 
 
 # Data Structures
+
+## Account Base (object)
++ _id: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the account.
++ name: Torsten Freyhazzle (string) - Name of the user
++ username: Torsten Freyhazzle (string) - Email, also used as sign in identity.
+
 
 ## Meter Base (object)
 + _id: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
