@@ -91,7 +91,7 @@ Assigned or shared meters references a root meter, and it is good practice to us
 reference itself, and is used to updated meta-information about the meter such as name, tags or if the meter is active or not.
 
 
-| Atribute            | Type    | Description                                                                                                              |   |   |
+| Attribute            | Type    | Description                                                                                                              |   |   |
 |------------------|---------|--------------------------------------------------------------------------------------------------------------------------|---|---|
 | _id              | id      | Unique identifier for the meter; assigned and shared meters gets a new unique _id                                        |   |   |
 | root._id         | id      | Reference to the root meter; remains same for assigned and shared meters.                                                |   |   |
@@ -101,16 +101,17 @@ reference itself, and is used to updated meta-information about the meter such a
 | address          | string  | The address.                                                                                                             |   |   |
 | active           | boolean | If the holder of the meter consider it active. Active meters may be subjected to payments, depending on the users' plan. |   |   |
 
-## Meters collection [/contracts]
+## Meters collection [/meters]
 
-### Get a meter [GET]
+You can list all meters accessible by the authenticated user. By using query params you can limit
+
+### List meters [GET]
 
 + Request (application/json)
 
     + Header
 
             Authorization: Bearer <your-access-token>
-    
 
 + Response 200
 
@@ -139,8 +140,9 @@ reference itself, and is used to updated meta-information about the meter such a
                }
             }
             
-            
-### Update a meter [PUT]
+## Meter resource [/meters/{id}]
+
+### Get meter [GET]
 
 + Request (application/json)
 
@@ -148,37 +150,97 @@ reference itself, and is used to updated meta-information about the meter such a
 
             Authorization: Bearer <your-access-token>
     
-    + Body
-
-            {
-                "name" : "My Summer House",
-                "tags" : ["foo", "bar"] 
-            }
 
 + Response 200
 
+    + Attributes (object)
+        + _id: 55300dc9f82bd8080094a212 (string) - The id for the meter
+        + holder: Account resource (object) - Holder of the meter.
+        + active: true (boolean) - Active meters has access to consumption values.
+        + revoked: false (boolean) - If revoked the assigner of the meter has decided to deny the holder access. Often the holder no longer has a subscription on the meter with the root holder.
+        + root._id: 55300dc9f82bd8080394a252 (string) - Reference to the root meter; remains same for assigned and shared meters
+        + root.holder.name: Fortum (string) - Root holder of the meter, usually a utility.
+        + timezone: * (string) - Timezone the meter is located in. Used to defined consumption aggregation from hour to day.
+        + redeem_by (number) - Date after which the coupon can no longer be redeemed
+        
     + Body
 
-            {
+            {  
                "code":200,
                "message":"OK",
-               "data":{
-                  "meter_id":"521c72ad2e90ff0700000000",
-                  "user_id":"504debb13145a70a4a000000",
-                  "address":"Johannebergsgatan 18",
-                  "name":"My Summer House",
-                  "tags":["foo", "bar"],
-                  "refused":false,
-                  "active":true,
-                  "force_access":false,
-                  "owner_id":"521c72ad2e90ff0700003040",
-                  "owner_name":"Göteborg energi",
-                  "ean":"753999166938765849",
+               "profiling":null,
+               "data":{  
+                  "holder":{  
+                     "_id":"5295ffce8d790c4272000008",
+                     "name":"eGain",
+                     "username":"cs@egain.se"
+                  },
+                  "root":{  
+                     "_id":"551d6eede9cf4860008b5052",
+                     "holder":{  
+                        "_id":"51078d650d9cdbbe73000019",
+                        "name":"Fortum Distribution AB"
+                     }
+                  },
+                  "robot":{  
+                     "_id":null,
+                     "name":null,
+                     "key":null
+                  },
+                  "assigner":{  
+                     "_id":"52cff8104a25203d7e8b4617",
+                     "name":"Bertil Str\u00f6mberg Byggnads AB ",
+                     "username":"ekonomi.bsbab@comhem.se"
+                  },
+                  "children":[  
+            
+                  ],
+                  "address":"Mellanbergsv\u00e4gen 44 lnr:1202 obj.nr:0018 129 30 H\u00c4GERSTEN",
+                  "timezone":"Etc\/GMT-1",
+                  "control_level":"subscribed",
+                  "generation":2,
+                  "name":"Bertil Str\u00f6mberg Fastighets AB  ",
+                  "tags":[  
+            
+                  ],
+                  "revoked":false,
+                  "active":false,
+                  "ean":"735999102105114647",
+                  "import_ids":null,
                   "type":"electricity",
-                  "user_name":"Joe Smith",
-                  "user_username":"joe@example.com",
-                  "_identifier":"753999166938765849 for Joe Smith",
-                  "_id":"52652cc1df62328455000006"
+                  "consumption_stats":{  
+                     "energy":{  
+                        "hour":{  
+                           "count":0,
+                           "first":null,
+                           "last":null,
+                           "max":0,
+                           "min":null,
+                           "sum":0
+                        },
+                        "day":{  
+                           "count":0,
+                           "first":null,
+                           "last":null,
+                           "max":0,
+                           "min":null,
+                           "sum":0
+                        },
+                        "month":{  
+                           "count":51,
+                           "first":201101,
+                           "last":201503,
+                           "max":204,
+                           "min":0,
+                           "sum":6583
+                        }
+                     }
+                  },
+                  "deleted":false,
+                  "_status ":"inactive",
+                  "_identifier":"Bertil Str\u00f6mberg Fastighets AB   (Mellanbergsv\u00e4gen 44 lnr:1202 obj.nr:0018 129 30 H\u00c4GERSTEN)",
+                  "_is_owner":false,
+                  "_id":"55300dc9f82bd3080094a0d2"
                }
             }
             
