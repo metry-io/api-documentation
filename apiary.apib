@@ -90,14 +90,23 @@ Assigned or shared meters references a root meter, and it is good practice to us
 **root._id** as unique identifer in your own applications. The **_id** field only represents the
 reference itself, and is used to updated meta-information about the meter such as name, tags or if the meter is active or not.
 
-## Meters collection [/meters]
+## Meters collection [/meters?limit={limit}&skip={skip}]
 
 You can list all meters accessible by the authenticated user. By using query params you can limit
 
 ### List meters [GET]
 
++ Parameters
+
+    + limit (number, optional) - The maximum number of results to return. Cannot be higher than 300.
+        + Default: `50`
+    + skip (number, optional) - Number of documents to skip.
+        + Default: `0`
+        
 + Request (application/json)
 
+
+        
     + Header
 
             Authorization: Bearer <your-access-token>
