@@ -2,30 +2,35 @@ FORMAT: 1A
 HOST: https://app.energimolnet.se/api/2.0/
 
 # Energimolnet API v2
-Energimolnet collects energy data from any source available. Once collected, developers can easily access it for any purpose and start making amazing stuff.
+Energimolnet collects consumption data from **subscribed meters** managed by utilities, as well as **local meters** managed your self or your own organization. 
+As a developer you can access this data and build amazing apps, for anyone that share its data with you or your services.
 
 
-## Get started
+## Getting started
 
-To get started we recommend you to install a tool for making HTTP requests such as <a href="https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo" target="_BLANK">Advanced Rest Client</a> or <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm" target="_BLANK">Postman</a> for Chrome. This is a good way to understand the API *before you start programming*.
+**Try this link:** https://app.energimolnet.se/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-We will use Postman in this example. 
+<h3>So, what happend here?</h3>
+You just made a request to our API and requested basic information about the authenticated user!
 
-1. Enter the following URL https://app.energimolnet.se/api/2.0/meters
-2. Add a new Header with name <code>Authorization</code> and value <code>Bearer 2f9bf2cccd808358e6850e41c5a765ed</code>
-3. Click Send and you'll see a list of available contracts for the **authenticated user**.
+<h3>What about the energy consumption?</h3>
+To fetch the energy consumption, we first need to see what meters the user has:
 
-Here's a <a href="https://raw.githubusercontent.com/energimolnet/api-documentation/master/images/Postman.png" >screenshot</a> of what it should look like.
+https://app.energimolnet.se/api/v2/meters?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-<h3>So, what exactly happened here? </h3>
-The URL told the API to return all available contracts. I this case there was just one. The Authorization header tells **who is being authenticated** which determines what contracts will be returned. In this example we use a demo-account which has the consumption for Energimolnet's office.
+And to see the consumption for 2015, you just type...
 
-To get information about the authenticated user try https://app.energimolnet.se/api/2.0/accounts/me.
+https://app.energimolnet.se/api/v2/consumptions/554367a2d16a0060008b4892/month/2015?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-**NOTE:** In this example we are using an private access token to access a user's data. Private access-tokens should never shared with anyone else. To build apps for other users, then use OAuth2 and the Code-flow to obtain refresh_tokens and access_tokens.
+That's it! Now you have a basic understand of how our API works. Just scroll down to dig into the details! We're always available at support@energimolnet.se.
 
+## Authentication
 
-## OAuth2 Authentication
+### Private access tokens
+Private access-tokens should never shared with anyone else. To build apps for other users, then use OAuth2 and the Code-flow to obtain refresh_tokens and access_tokens.
+
+### OAuth2 Authentication
+
 We use **OAuth2** to authenticate users and manages access to third parties. 
 Currently we do not offer documentation on OAuth2, we have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>. 
 
