@@ -94,14 +94,30 @@ reference itself, and is used to updated meta-information about the meter such a
     + Attributes (Meter Base)
  
 
-## Meters collection [/meters?limit={limit}&skip={skip}]
+## Meters collection [/meters?limit={limit}&skip={skip}&sort={sort}]
 
 You can list all meters accessible by the authenticated user. By using query params you can limit
+
+### Filtering results
+You can filter results by adding query params, for instance:
+
+    .../meters?active=true
+    
+... will only list active meters.
+
+You can add multiple query params. For **dates and numbers** you can use greater than and less than characters. For instance
+
+    .../meters?consumption_stats.energy.month.last=<201503&active=true
+    
+This filter will only list *active* meters where *last month value is before March 2015*.
+
+**NOTE!** Query params that are not recognized will be *silently ignored*, so make sure you spell them correctly!
 
 + Parameters
 
     + limit (number, optional) - The maximum number of results to return. Cannot be higher than 300`
     + skip (number, optional) - Number of documents to skip.
+    + sort (text, optional) - What fields to sort the results in.
 
 ### List meters [GET]
 
