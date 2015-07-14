@@ -94,7 +94,7 @@ reference itself, and is used to updated meta-information about the meter such a
     + Attributes (Meter Base)
  
 
-## Meters collection [/meters?limit={limit}&skip={skip}&sort={sort}]
+## Meters collection [/meters]
 
 You can list all meters accessible by the authenticated user.
 
@@ -113,23 +113,15 @@ This filter will only list *active* meters where *last month value is before Mar
 
 **NOTE!** Query params that are not recognized will be *silently ignored*, so make sure you spell them correctly!
 
-+ Parameters
-
-    + limit (number, optional)
-        The maximum number of results to return. Cannot be higher than 300`
-    + skip (number, optional)
-        Number of documents to skip.
-    + sort (text, optional)
-        What fields to sort the results in.
-    + metric: grid (string)
-        name of the calculation item that will be added to the calculated metric name. 
-    + granularity_out: hour (string)
-        what granularity the calculation will out put.
-    + components: object (array[Calculation Component])
-        A component is the smallest part in a calculated metric. Normally 2 components are used to describe a cost, one component for the fixed cost and one that depends on the energy consumption. Be seperating a calculation item into multiple components it is posible to seperate the results.
-
 
 ### List meters [GET]
+
++ Parameters
+    + active: true (bolean)
+    + name: Home sweet home (number)
+    + address: Queenstreet 43 (string)
+    + tags: foo,bar (string)
+        Search for tags. Use comma to seperate multiple tags.
 
 + Response 200  (application/json)
     + Attributes (Meter Base)
