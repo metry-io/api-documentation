@@ -115,9 +115,19 @@ This filter will only list *active* meters where *last month value is before Mar
 
 + Parameters
 
-    + limit (number, optional) - The maximum number of results to return. Cannot be higher than 300`
-    + skip (number, optional) - Number of documents to skip.
-    + sort (text, optional) - What fields to sort the results in.
+    + limit (number, optional)
+        The maximum number of results to return. Cannot be higher than 300`
+    + skip (number, optional)
+        Number of documents to skip.
+    + sort (text, optional)
+        What fields to sort the results in.
+    + metric: grid (string)
+        name of the calculation item that will be added to the calculated metric name. 
+    + granularity_out: hour (string)
+        what granularity the calculation will out put.
+    + components: object (array[Calculation Component])
+        A component is the smallest part in a calculated metric. Normally 2 components are used to describe a cost, one component for the fixed cost and one that depends on the energy consumption. Be seperating a calculation item into multiple components it is posible to seperate the results.
+
 
 ### List meters [GET]
 
