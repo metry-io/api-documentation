@@ -47,6 +47,11 @@ the Code-flow to obtain *short-lived* access_tokens.
 We use **OAuth2** to authenticate users and manages access to third parties. 
 Currently we do not offer documentation on OAuth2, we have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>. 
 
+## List responses and pagination
+
+All lists are paginated, and shows 50 items per request. You can advance to next pages by adding query params **skip** and the number 
+of items you want to skip (typically 50, 100, 150 and so on). 
+
 # Group Accounts
 
 ## Accounts resource [/accounts/{id}]
