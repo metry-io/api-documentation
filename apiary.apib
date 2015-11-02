@@ -1,15 +1,15 @@
 FORMAT: 1A
-HOST: https://app.energimolnet.se/api/2.0/
+HOST: https://app.metry.io/api/2.0/
 
-# Energimolnet API v2
-Energimolnet collects consumption data from **subscribed meters** managed by utilities, as well as **local meters** managed by organizations or people. 
+# Metry API v2
+Metry collects consumption data from **subscribed meters** managed by utilities, as well as **local meters** managed by organizations or people. 
 Developers can access this data to build apps that **help people and organizations save energy**. Or just something that makes energy usage a little bit more exciting.
 
 ## Getting started
 
-Copy the link below into a new tab in your <a href="https://app.energimolnet.se/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e" target=_blank>web browser</a> 
+Copy the link below into a new tab in your <a href="https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e" target=_blank>web browser</a> 
 
-    https://app.energimolnet.se/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+    https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 <h3>So, what happend here?</h3>
 You just made a request to our API and **requested basic information** about the authenticated user!
@@ -17,13 +17,13 @@ You just made a request to our API and **requested basic information** about the
 <h3>What about the energy consumption?</h3>
 To fetch the energy consumption, we first need to see what meters the user has:
 
-    https://app.energimolnet.se/api/v2/meters?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+    https://app.metry.io/api/v2/meters?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 And to see the **consumption for 2015**, you just type...
 
-    https://app.energimolnet.se/api/v2/consumptions/554367a2d16a0060008b4892/month/2015?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+    https://app.metry.io/api/v2/consumptions/554367a2d16a0060008b4892/month/2015?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-That's it! Now you have a basic understanding of how our API works. Just scroll down to dig into the details! We're always available at support@energimolnet.se, if you have any questions.
+That's it! Now you have a basic understanding of how our API works. Just scroll down to dig into the details! We're always available at support@metry.io, if you have any questions.
 
 ## Authentication
 
@@ -35,7 +35,7 @@ You **should** pass an access token in a Authorization-header
 
 You can also pass the access-token in the URL (not recommended)
 
-    https://app.energimolnet.se/api/v2/accounts/me?access_token=<your-private-access-token>
+    https://app.metry.io/api/v2/accounts/me?access_token=<your-private-access-token>
 
 ### Private access tokens
 Private access-tokens are used to access data for your own account, and should never be 
