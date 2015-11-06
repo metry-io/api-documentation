@@ -150,6 +150,8 @@ The following **metrics** are supported: energy (kWh), flow (m<sup>3</sup>) and 
 
 The response with consumption **values will always match your query**. Missing values are replaced with <code>NULL</code>
 
+Each period in the response will have a `start_date` and `end_date` property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the `period` input parameter. The `period` parameter is always interpreted in the meter's local timezone.
+
 ### Get consumption for a meter [GET]
 
 + Parameters
