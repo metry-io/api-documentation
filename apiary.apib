@@ -52,6 +52,37 @@ Currently we do not offer documentation on OAuth2, we have created a simple <a h
 All lists are paginated, and shows 50 items per request. You can advance to next pages by adding query params **skip** and the number 
 of items you want to skip (typically 50, 100, 150 and so on). 
 
+## Error handling
+
+The Metry API attempts to return appropriate HTTP status codes for every request. A 2xx status code indicates success, whereas a 4xx or 5xx status code indicates an error.
+
+### Status codes
+| Status code   | Description  |
+|---|---|
+| 200  | Success  |
+| 400 | Validation error: An accompanying error message will explain further |
+| 401  | Authentication error: The oAuth credentials were missing, incorrect or expired  |
+| 403  | Authentication error: The current authenticated user has no access to this resource  |
+| 404  | Invalid endpoint: The endpoint requested is invalid or the resource requested, such as a metric, does not exists.   |
+| 405  | The HTTP method used for this endpoint is invalid. |
+| 5xx  | An error has occurred within Metry.io and the request couldn’t be completed. Metry.io has been notified about the problem |
+| 503 | We're experiencing temporary server issues. Please try again |
+
+### Error messages
+When an API request fails, it will be accompanied with a explanatory message. For example, an error might look like this:
+```
+{
+code: 404,
+message: "Resource not found"
+}
+```
+
+### Future compatibility
+For future compatibility, please interpret the following HTTP status code ranges:
+
+**200–299** as success<br>
+**400–499** as client request errors<br>
+**500–599** as server errors
 
 # Group Accounts
 
