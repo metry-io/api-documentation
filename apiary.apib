@@ -216,6 +216,70 @@ Each period in the response will have a `start_date` and `end_date` property. No
                 ]
             }
 
+# Group Readings
+
+Readings are the exact timestamped values for a meter.
+
+## Get readings [/readings/{meter_id}/{period}?metrics={metrics}]
+
+Each period in the response will have a start_date and end_date property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the period input parameter. The period parameter is always interpreted in the meter's local timezone.
+
+### Reading status
+The `status` for a reading value can be `recorded`, `interpolated` or `meter_change`.
+
+* **recorded:** The value has been recorded exactly at the given point.
+* **interpolated:** The value is interpolated based on the surrounded recorded values
+* **meter_change:** The meter has changed, the last value can be found in `last`.  A meter change reading is the reading that occurred after a meter change.
+
+### Get readings for a meter [GET]
+
++ Parameters
+    + meter_id (required, string, `53294e5ae9cada3306001735`) ... The id of the meter to get reading data for
+    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as 
+    long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
+    All date will be interpreted using the meters timezone.
+    + metrics (optional, string `energy,flow,power`) ... Limts the response to one or more metrics seperated by commas. If not specified metric energy is returned.
+    
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "data": [
+                    {
+                        "periods" : [
+                            {
+                                "start_date" : "2016-01-01T14:00:00+0001",
+                                "end_date" : "2016-01-01T15:00:00+0001",
+                                "energy": [
+                                    {
+                                        "time" : "2016-01-01T14:00:00+001",
+                                        "value" : 12345.11,
+                                        "status" : "recorded",
+                                        "counter" : null
+                                    },
+                                    {
+                                        "time" : "2016-01-01T15:00:00+001",
+                                        "value" : 12365.11,
+                                        "status" : "interpolated",
+                                        "counter" : null
+                                    },
+                                    {
+                                        "time" : "2016-01-01T15:13:00+001",
+                                        "value" : 12369.94,
+                                        "status" : "recorded",
+                                        "counter" : null
+                                    }
+                                ]
+                            }
+                        ],
+                        "meter_id" : "53185731df62324818000007"
+                    }
+                ]
+            }
+
 
 # Data Structures
 
@@ -240,4 +304,3 @@ Each period in the response will have a `start_date` and `end_date` property. No
 + consumption_stats: ... (object) - Information about what data that is available for the meter.
 + root: ... (object, required) - Reference to the root meter; remains same for assigned and shared meters
 + timezone: ... (string, required) - Timezone the meter is located in. Used to defined consumption aggregation from hour to day.
-
