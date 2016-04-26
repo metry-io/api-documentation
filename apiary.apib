@@ -2,12 +2,12 @@ FORMAT: 1A
 HOST: https://app.metry.io/api/2.0/
 
 # Metry API v2
-Metry collects consumption data from **subscribed meters** managed by utilities, as well as **local meters** managed by organizations or people. 
+Metry collects consumption data from **subscribed meters** managed by utilities, as well as **local meters** managed by organizations or people.
 Developers can access this data to build apps that **help people and organizations save energy**. Or just something that makes energy usage a little bit more exciting.
 
 ## Getting started
 
-Copy the link below into a new tab in your <a href="https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e" target=_blank>web browser</a> 
+Copy the link below into a new tab in your <a href="https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e" target=_blank>web browser</a>
 
     https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
@@ -38,19 +38,19 @@ You can also pass the access-token in the URL (not recommended)
     https://app.metry.io/api/v2/accounts/me?access_token=<your-private-access-token>
 
 ### Private access tokens
-Private access-tokens are used to access data for your own account, and should never be 
-shared with anyone else. To build apps for other users, then use OAuth2 and 
+Private access-tokens are used to access data for your own account, and should never be
+shared with anyone else. To build apps for other users, then use OAuth2 and
 the Code-flow to obtain *short-lived* access_tokens.
 
 ### OAuth2 Authentication
 
-We use **OAuth2** to authenticate users and manages access to third parties. 
-Currently we do not offer documentation on OAuth2, we have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>. 
+We use **OAuth2** to authenticate users and manages access to third parties.
+Currently we do not offer documentation on OAuth2, we have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>.
 
 ## List responses and pagination
 
-All lists are paginated, and shows 50 items per request. You can advance to next pages by adding query params **skip** and the number 
-of items you want to skip (typically 50, 100, 150 and so on). 
+All lists are paginated, and shows 50 items per request. You can advance to next pages by adding query params **skip** and the number
+of items you want to skip (typically 50, 100, 150 and so on).
 
 ## Error handling
 
@@ -96,20 +96,20 @@ Tip: Use alias "me" to reference the currently authorized user.
     + id (required, string, `53294e5ae9cada3306001735`) ... The id of the account to get info about
 
 + Request
-    
+
     + Headers
-            
+
             Authorization: OAuth 2f9bf2cccd808358e6850e41c5a765ed
-        
+
 
 + Response 200
-    
+
     + Attributes (Account Base)
-    
+
     + Body
-    
+
             {"code":200,"message":"OK","profiling":null,"data":{"_id":"51c14e184a25203f5f000059","name":"Demokonto","username":"demo@demo.se","registration_form":{"enabled":null,"trusted":null,"validate_contracts":true,"css":"","terms":null,"intro_html":"","error_message":"","failure_message":"","logo_path":"","validation_key":null,"validation_secret":null,"welcome_email":null,"error_email":null,"failure_email":null},"plan":null,"role":"user","active":null,"grid_areas":null,"ean_prefixes":null,"ediel_number":null,"sub_accounts_count":0,"sub_accounts":[]}}
-            
+
 # Group Meters
 
 A meter represents a physical device that measures consumption from a utility such as heat, cooling or electricity.
@@ -123,13 +123,13 @@ reference itself, and is used to updated meta-information about the meter such a
 
 + Parameters
     + id (string, requires) - Id of the meter.
-         
+
 
 ### Get a meter [GET]
 
 + Response 200 (application/json)
     + Attributes (Meter Base)
- 
+
 
 ## Meters collection [/meters]
 
@@ -139,13 +139,13 @@ You can list all meters accessible by the authenticated user.
 You can filter results by adding query params, for instance:
 
     .../meters?active=true
-    
+
 ... will only list active meters.
 
 You can add multiple query params. For **dates and numbers** you can use greater than and less than characters. For instance
 
     .../meters?consumption_stats.energy.month.last=<201503&active=true
-    
+
 This filter will only list *active* meters where *last month value is before March 2015*.
 
 **NOTE!** Query params that are not recognized will be *silently ignored*, so make sure you spell them correctly!
@@ -162,18 +162,18 @@ This filter will only list *active* meters where *last month value is before Mar
 
 + Response 200  (application/json)
     + Attributes (Meter Base)
-    
+
     + Body
-            
+
             {"code":200,"message":"OK","profiling":null,"count":2,"skip":0,"limit":50,"next_page":null,"previous_page":null,"data":[{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"50e5e3413145a7d94a000000","holder":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB","username":null},"children":[],"control_level":"subscribed","generation":1,"address":"Bruksvallarna 2","timezone":"Etc\/GMT-1","name":"Fj\u00e4llen i Bruksvallarna","tags":["5656"],"revoked":false,"active":true,"ean":"FRI_735999249000268027","type":"electricity","consumption_stats":{"energy":{"hour":{"count":14592,"first":20150416,"last":2015042923,"max":12.13,"min":0,"sum":25033.41},"day":{"count":608,"first":20130901,"last":20150429,"max":148.3,"min":0,"sum":25033.41},"month":{"count":19,"first":201309,"last":201503,"max":2373.65,"min":324.47,"sum":23578.38}}},"deleted":false,"_status ":"connected","_identifier":"Fj\u00e4llen i Bruksvallarna (Bruksvallarna 2)","_is_owner":true,"_id":"526f7711a158318a068b475f"},{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"5268c832dedcde9d1d0000df","holder":{"_id":"5268c832dedcde9d1d0000df","name":"G\u00f6teborg Energi"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"5268c832dedcde9d1d0000df","name":"G\u00f6teborg Energi","username":null},"children":[],"control_level":"subscribed","generation":1,"address":"Johannebergsgatan 18","timezone":"Etc\/GMT-1","name":"Hemma i l\u00e4gh","tags":[],"revoked":false,"active":true,"ean":"735999166200899267","type":"electricity","consumption_stats":{"energy":{"hour":{"count":15264,"first":2013080100,"last":2015042923,"max":2.71,"min":0,"sum":2755.6579999999},"day":{"count":636,"first":20130801,"last":20150429,"max":13.57,"min":0.9,"sum":2755.658},"month":{"count":20,"first":201308,"last":201503,"max":181.18,"min":82.72,"sum":2654.748}}},"deleted":false,"_status ":"connected","_identifier":"Hemma i l\u00e4gh (Johannebergsgatan 18)","_is_owner":true,"_id":"526532d1df62320401000b52"}]}
-            
+
 
 
 # Group Consumption
 
 Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularity month, day and hour, however, it is important to understand that the availability differs depnding on meter and other external factors.
 
-            
+
 ## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
 We support the following **granularities**: hour, day and month, but we cannot gurantee that it is available for every meter.
@@ -189,15 +189,15 @@ Each period in the response will have a `start_date` and `end_date` property. No
 + Parameters
     + meter_id (required, string, `53294e5ae9cada3306001735`) ... The id of the meter to get consumption data for
     + granularity (required, string `month`) ... The granularity to get consumption data for (month, day or hour)
-    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as 
+    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
     long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
     All date will be interpreted using the meters timezone.
     + metrics (optional, string `energy,flow,power`) ... Limts the response to one or more metrics seperated by commas. If not specified metric energy is returned.
-    
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "code": 200,
                 "message": "OK",
@@ -231,19 +231,28 @@ The `status` for a reading value can be `recorded`, `interpolated` or `meter_cha
 * **interpolated:** The value is interpolated based on the surrounded recorded values
 * **meter_change:** The meter has changed. A meter change reading is the reading that occurred after a meter change.
 
+### Readings blocked
+As new readings are stored in Metry, the system automatically tries to find anomalous readings that could suggest that the incoming readings are incorrect.
+
+If an anomaly is found, then the meter attribute `readings_blocked` will be set to `true`. This prevents new consumption values from being calculated from that point forward and that no readings will be interpolated until the meter attribute `readings_blocked` is changed back to `false`.
+
+This attribute is also included in the response when requesting readings as seen in the example response.
+
+Importing readings from Metry when readings are blocked is possible but should be avoided until the user has resolved the issue with the anomalous reading and unblocked readings. 
+
 ### Get readings for a meter [GET]
 
 + Parameters
     + meter_id (required, string, `53294e5ae9cada3306001735`) ... The id of the meter to get reading data for
-    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as 
+    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
     long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
     All date will be interpreted using the meters timezone.
     + metrics (optional, string `energy,flow,power`) ... Limts the response to one or more metrics seperated by commas. If not specified metric energy is returned.
-    
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "code": 200,
                 "message": "OK",
