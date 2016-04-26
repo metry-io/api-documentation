@@ -238,7 +238,7 @@ If an anomaly is found, then the meter attribute `readings_blocked` will be set 
 
 This attribute is also included in the response when requesting readings as seen in the example response.
 
-Importing readings from Metry when readings are blocked is possible but should be avoided until the user has resolved the issue with the anomalous reading and unblocked readings. 
+Importing readings from Metry when readings are blocked is possible but should be avoided until the user has resolved the issue with the anomalous reading and unblocked readings.
 
 ### Get readings for a meter [GET]
 
@@ -284,6 +284,7 @@ Importing readings from Metry when readings are blocked is possible but should b
                                 ]
                             }
                         ],
+                        "readings_blocked": false,
                         "meter_id" : "53185731df62324818000007"
                     }
                 ]
