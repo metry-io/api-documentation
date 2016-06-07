@@ -23,29 +23,57 @@ And to see the **consumption for 2015**, you just type...
 
     https://app.metry.io/api/v2/consumptions/554367a2d16a0060008b4892/month/2015?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-That's it! Now you have a basic understanding of how our API works. Just scroll down to dig into the details! We're always available at support@metry.io, if you have any questions.
+That's it! Now you have a basic understanding of how our API works. Just scroll down to dig into the details! 
+If you need help during your development process you're more than welcome to contact us at [support@metry.io](mailto:support@metry.io).
 
-## Authentication
+### Good to know
 
-Access to the API requires access-tokens, either a private or a short-lived obtained via OAuth2 protocol.
+* API endpoint: https://app.metry.io/api/v2/
+* Version numbers may update in the future, older versions will be supported for a period of time.
+* All API traffic must be made over SSL (https://)
 
-You **should** pass an access token in a Authorization-header
+## API Authentication
+
+The Metry API requires authentication - specifically requests made on behalf of a user. 
+Authenticated requests require an access_token. These tokens are unique to a user and should be stored securely. 
+
+There are two methods to authenticate to the API:
+* **Private Access Token Authentication.** Used for single user authentication.
+* **OAuth2 Authentication.** Used for app developers that allow many Metry accounts.
+
+### Private access tokens
+Private access-tokens are used to access data for your own account, and should never be
+shared with anyone else. You should request your private access token in the Metry Portal ([https://app.metry.io](https://app.metry.io)).
+
+You **should** pass the access token in a Authorization-header
 
     Authorization: Bearer <access-token>
 
 You can also pass the access-token in the URL (not recommended)
 
-    https://app.metry.io/api/v2/accounts/me?access_token=<your-private-access-token>
+    https://app.metry.io/api/v2/accounts/me?access_token=<access-token>
 
-### Private access tokens
-Private access-tokens are used to access data for your own account, and should never be
-shared with anyone else. To build apps for other users, then use OAuth2 and
-the Code-flow to obtain *short-lived* access_tokens.
 
 ### OAuth2 Authentication
 
-We use **OAuth2** to authenticate users and manages access to third parties.
-Currently we do not offer documentation on OAuth2, we have created a simple <a href="https://github.com/energimolnet/energimolnet-js-oauth-demo">Javascript</a> that demonstrates how the OAuth2 flow can be implemented. Check out the <a href="http://energimolnet-oauth-demo.s3-website-eu-west-1.amazonaws.com/">demo</a>.
+The Metry API uses the standard OAuth 2.0 protocol for simple, but effective authentication and authorization to third parties.
+
+As an app developer, you should direct your users to login with Metry and grant access to your app. This will give you the users `refresh_token`, which should be used to request the `access_token`.
+The refresh token should be stored on your end with the same security in mind as a password. The access_token itself will expire after 1 hour and could be refresh with the `refresh_token`, just as any other OAuth2 implementation.
+
+To make this implementation as smooth as possible for you, we've created a javascript library to connect the user. This will also demonstrate a general OAuth2 flow.
+See the Github repository on https://github.com/metry-io/metry-oauth-connect and try the demo on http://metry-oauth-connect-demo.s3-website-eu-west-1.amazonaws.com/
+
+To get started you need to request a `client_id` and `client_secret`. Please contact our support ([support@metry.io](mailto:support@metry.io)) and tell us a bit about your app.
+
+### Metry oAuth 2.0 endpoints
+If you decide to roll your own implementation, keep in mind the oAuth endpoints for Metry:
+
+| Description   | Url           |
+| ------------- | ------------- |
+| Host                 | https://app.metry.io/  |
+| oAuth 2.0 Authorize  | https://app.metry.io/oauth/authorize  |
+| oAuth 2.0 Token      | https://app.metry.io/oauth/token  |
 
 ## List responses and pagination
 
@@ -122,12 +150,12 @@ reference itself, and is used to updated meta-information about the meter such a
 ## Meter [/meters/{id}]
 
 + Parameters
-    + id (string, requires) - Id of the meter.
+    + id (string, required) - Id of the meter.
 
 
 ### Get a meter [GET]
 
-+ Response 200 (application/json)
++ Response 200
     + Attributes (Meter Base)
 
 
@@ -160,12 +188,8 @@ This filter will only list *active* meters where *last month value is before Mar
     + tags: foo,bar (string)
         Search for tags. Use comma to seperate multiple tags.
 
-+ Response 200  (application/json)
++ Response 200
     + Attributes (Meter Base)
-
-    + Body
-
-            {"code":200,"message":"OK","profiling":null,"count":2,"skip":0,"limit":50,"next_page":null,"previous_page":null,"data":[{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"50e5e3413145a7d94a000000","holder":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"50e5e3413145a7d94a000000","name":"H\u00e4rje\u00e5ns N\u00e4t AB","username":null},"children":[],"control_level":"subscribed","generation":1,"address":"Bruksvallarna 2","timezone":"Etc\/GMT-1","name":"Fj\u00e4llen i Bruksvallarna","tags":["5656"],"revoked":false,"active":true,"ean":"FRI_735999249000268027","type":"electricity","consumption_stats":{"energy":{"hour":{"count":14592,"first":20150416,"last":2015042923,"max":12.13,"min":0,"sum":25033.41},"day":{"count":608,"first":20130901,"last":20150429,"max":148.3,"min":0,"sum":25033.41},"month":{"count":19,"first":201309,"last":201503,"max":2373.65,"min":324.47,"sum":23578.38}}},"deleted":false,"_status ":"connected","_identifier":"Fj\u00e4llen i Bruksvallarna (Bruksvallarna 2)","_is_owner":true,"_id":"526f7711a158318a068b475f"},{"holder":{"_id":"521e0be2dedcde8459000000","name":"Magnus L\u00fcttkens","username":"luttkens@gmail.com"},"root":{"_id":"5268c832dedcde9d1d0000df","holder":{"_id":"5268c832dedcde9d1d0000df","name":"G\u00f6teborg Energi"}},"robot":{"_id":null,"name":null},"assigner":{"_id":"5268c832dedcde9d1d0000df","name":"G\u00f6teborg Energi","username":null},"children":[],"control_level":"subscribed","generation":1,"address":"Johannebergsgatan 18","timezone":"Etc\/GMT-1","name":"Hemma i l\u00e4gh","tags":[],"revoked":false,"active":true,"ean":"735999166200899267","type":"electricity","consumption_stats":{"energy":{"hour":{"count":15264,"first":2013080100,"last":2015042923,"max":2.71,"min":0,"sum":2755.6579999999},"day":{"count":636,"first":20130801,"last":20150429,"max":13.57,"min":0.9,"sum":2755.658},"month":{"count":20,"first":201308,"last":201503,"max":181.18,"min":82.72,"sum":2654.748}}},"deleted":false,"_status ":"connected","_identifier":"Hemma i l\u00e4gh (Johannebergsgatan 18)","_is_owner":true,"_id":"526532d1df62320401000b52"}]}
 
 
 
