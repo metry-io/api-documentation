@@ -61,9 +61,11 @@ The Metry API uses the standard OAuth 2.0 protocol for simple, but effective aut
 As an app developer, you should direct your users to login with Metry and grant access to your app. This will give you the users `refresh_token`, which should be used to request the `access_token`.
 The refresh token should be stored on your end with the same security in mind as a password. The access_token itself will expire after 1 hour and could be refresh with the `refresh_token`, just as any other OAuth2 implementation.
 
-To make this implementation as smooth as possible for you, we've created a javascript library to connect the user. This will also demonstrate a general OAuth2 flow.
+### Metry OAuth Connect
+To make this implementation as smooth as possible, we've created a javascript library to connect the user. This will also demonstrate a general OAuth2 flow.
 See the Github repository on https://github.com/metry-io/metry-oauth-connect and try the demo on http://metry-oauth-connect-demo.s3-website-eu-west-1.amazonaws.com/
 
+### ClientID and ClientSecret
 To get started you need to request a `client_id` and `client_secret`. Please contact our support ([support@metry.io](mailto:support@metry.io)) and tell us a bit about your app.
 
 ### Metry oAuth 2.0 endpoints
