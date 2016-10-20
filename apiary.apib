@@ -11,7 +11,7 @@ Copy the link below into a new tab in your <a href="https://app.metry.io/api/v2/
 
     https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-<h3>So, what happend here?</h3>
+<h3>So, what happened here?</h3>
 You just made a request to our API and **requested basic information** about the authenticated user!
 
 <h3>What about the energy consumption?</h3>
@@ -29,7 +29,7 @@ If you need help during your development process you're more than welcome to con
 ### Good to know
 
 * API endpoint: https://app.metry.io/api/v2/
-* Version numbers may update in the future, older versions will be supported for a period of time.
+* Version numbers may be updated in the future, older versions will be supported for a period of time.
 * All API traffic must be made over SSL (https://)
 
 ## API Authentication
@@ -45,7 +45,7 @@ There are two methods to authenticate to the API:
 Private access-tokens are used to access data for your own account, and should never be
 shared with anyone else. You should request your private access token in the Metry Portal ([https://app.metry.io](https://app.metry.io)).
 
-You **should** pass the access token in a Authorization-header
+You **should** pass the access token in an Authorization-header
 
     Authorization: Bearer <access-token>
 
@@ -99,7 +99,7 @@ The Metry API attempts to return appropriate HTTP status codes for every request
 | 503 | We're experiencing temporary server issues. Please try again |
 
 ### Error messages
-When an API request fails, it will be accompanied with a explanatory message. For example, an error might look like this:
+When an API request fails, it will be accompanied with an explanatory message. For example, an error might look like this:
 ```
 {
 code: 404,
@@ -146,7 +146,7 @@ A meter represents a physical device that measures consumption from a utility su
 Each meter has a holder who can **assign** or **share** the meter to other accounts.
 
 Assigned or shared meters references a root meter, and it is good practice to use the
-**root._id** as unique identifer in your own applications. The **_id** field only represents the
+**root._id** as unique identifier in your own applications. The **_id** field only represents the
 reference itself, and is used to updated meta-information about the meter such as name, tags or if the meter is active or not.
 
 ## Meter [/meters/{id}]
@@ -184,11 +184,11 @@ This filter will only list *active* meters where *last month value is before Mar
 ### List meters [GET]
 
 + Parameters
-    + active: true (bolean)
+    + active: true (boolean)
     + name: Home sweet home (number)
     + address: Queenstreet 43 (string)
     + tags: foo,bar (string)
-        Search for tags. Use comma to seperate multiple tags.
+        Search for tags. Use comma to separate multiple tags.
 
 + Response 200
     + Attributes (Meter Base)
@@ -197,12 +197,12 @@ This filter will only list *active* meters where *last month value is before Mar
 
 # Group Consumption
 
-Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularity month, day and hour, however, it is important to understand that the availability differs depnding on meter and other external factors.
+Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularity month, day and hour, however, it is important to understand that the availability differs depending on meter and other external factors.
 
 
 ## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
-We support the following **granularities**: hour, day and month, but we cannot gurantee that it is available for every meter.
+We support the following **granularities**: hour, day and month, but we cannot guarantee that it is available for every meter.
 
 The following **metrics** are supported: energy (kWh), flow (m<sup>3</sup>) and power (kW). Power always represents the average power. Note that  metric availability varies between meters.
 
@@ -217,8 +217,8 @@ Each period in the response will have a `start_date` and `end_date` property. No
     + granularity (required, string `month`) ... The granularity to get consumption data for (month, day or hour)
     + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
     long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
-    All date will be interpreted using the meters timezone.
-    + metrics (optional, string `energy,flow,power`) ... Limts the response to one or more metrics seperated by commas. If not specified metric energy is returned.
+    All date will be interpreted using the meters time zone.
+    + metrics (optional, string `energy,flow,power`) ... Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
 
 + Response 200 (application/json)
 
@@ -273,7 +273,7 @@ Importing readings from Metry when readings are blocked is possible but should b
     + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
     long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
     All date will be interpreted using the meters timezone.
-    + metrics (optional, string `energy,flow,power`) ... Limts the response to one or more metrics seperated by commas. If not specified metric energy is returned.
+    + metrics (optional, string `energy,flow,power`) ... Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
 
 + Response 200 (application/json)
 
