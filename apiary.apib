@@ -168,13 +168,13 @@ You can list all meters accessible by the authenticated user.
 ### Filtering results
 You can filter results by adding query params, for instance:
 
-    .../meters?active=true
+    .../meters?box=active
 
 ... will only list active meters.
 
 You can add multiple query params. For **dates and numbers** you can use greater than and less than characters. For instance
 
-    .../meters?consumption_stats.energy.month.last=<201503&active=true
+    .../meters?consumption_stats.energy.month.last=<201503&box=active
 
 This filter will only list *active* meters where *last month value is before March 2015*.
 
@@ -184,7 +184,7 @@ This filter will only list *active* meters where *last month value is before Mar
 ### List meters [GET]
 
 + Parameters
-    + active: true (boolean)
+    + box: active (stringFix)
     + name: Home sweet home (number)
     + address: Queenstreet 43 (string)
     + tags: foo,bar (string)
