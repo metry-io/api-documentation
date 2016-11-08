@@ -123,13 +123,13 @@ For future compatibility, please interpret the following HTTP status code ranges
 Tip: Use alias "me" to reference the currently authorized user.
 
 + Parameters
-    + id (required, string, `53294e5ae9cada3306001735`) ... The id of the account to get info about
+    + id (required, string, `5543677f37c6b65f008b46e4`) ... The id of the account to get info about
 
 + Request
 
     + Headers
 
-            Authorization: OAuth 2f9bf2cccd808358e6850e41c5a765ed
+            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 
 + Response 200
@@ -138,7 +138,7 @@ Tip: Use alias "me" to reference the currently authorized user.
 
     + Body
 
-            {"code":200,"message":"OK","profiling":null,"data":{"_id":"51c14e184a25203f5f000059","name":"Demokonto","username":"demo@demo.se","registration_form":{"enabled":null,"trusted":null,"validate_contracts":true,"css":"","terms":null,"intro_html":"","error_message":"","failure_message":"","logo_path":"","validation_key":null,"validation_secret":null,"welcome_email":null,"error_email":null,"failure_email":null},"plan":null,"role":"user","active":null,"grid_areas":null,"ean_prefixes":null,"ediel_number":null,"sub_accounts_count":0,"sub_accounts":[]}}
+            {"code":200,"message":"OK","profiling":null,"data":{"_id":"5543677f37c6b65f008b46e4","name":"Example account","username":"someone@example","plan":"free","role":"user","auth_assignments":["demo"],"two_factor_auth":false,"active":true,"2fa":false,"sub_accounts_count":a1,"sub_accounts":[{"_id":"565f0344c6db1f57008b5573","name":"Demo - Private Customer","username":"utility-private-customer@metry.io","plan":"free","role":"user","auth_assignments":["demo"],"two_factor_auth":false,"active":true,"2fa":false,"sub_accounts_count":0,"sub_accounts":[],"created":"2015-12-02T14:42:12+0000","locale_string":null,"language":"en","plans":{},"is_organization":false,"features":{},"features_available":["manual_meter","third_party_meter","subscribed_meter","sub_meter"],"product_plan":"private","entity_type":null,"data_availability":null,"municipalities":null,"representation":null,"trial_expires_at":null,"manager":{"_id":"5543677f37c6b65f008b46e4","username":"someone@example","name":"Example account"}}],"created":"2015-05-01T11:46:07+0000","locale_string":null,"language":"en","plans":{},"is_organization":false,"features":{},"features_available":["manual_meter","third_party_meter","subscribed_meter","sub_meter"],"product_plan":"private","entity_type":null,"data_availability":null,"municipalities":null,"representation":null,"trial_expires_at":null}}
 
 # Group Meters
 
@@ -320,10 +320,15 @@ Importing readings from Metry when readings are blocked is possible but should b
 # Data Structures
 
 ## Account Base (object)
-+ _id: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the account.
-+ name: Torsten Freyhazzle (string) - Name of the user
-+ username: Torsten Freyhazzle (string) - Email, also used as sign in identity.
-
++ _id: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
++ name: "Example account" (string) - Name of the user
++ username: "someone@example" (string) - Email, also used as sign in identity.
++ sub_accounts: [] (array) - An array of sub accounts of the current account 
++ created: "2015-05-01T11:46:07+0000" - date time when the account was created
++ locale_string: "sv-SE" (string) - locale string representing language and country
++ language: "en" (string) - string representing the accounts language preference
++ is_organization: true (boolean) - is this an organization account
++ entity_type: "business" (enum) - the type of entity that this account represents
 
 ## Meter Base (object)
 + _id: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
