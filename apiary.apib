@@ -116,6 +116,8 @@ For future compatibility, please interpret the following HTTP status code ranges
 
 # Group Accounts
 
+An account represents a person, buisiness or orginaization that uses the Metry platform.
+
 ## Accounts resource [/accounts/{id}]
 
 ### Get an account [GET]
@@ -138,7 +140,67 @@ Tip: Use alias "me" to reference the currently authorized user.
 
     + Body
 
-            {"code":200,"message":"OK","profiling":null,"data":{"_id":"5543677f37c6b65f008b46e4","name":"Example account","username":"someone@example","plan":"free","role":"user","auth_assignments":["demo"],"two_factor_auth":false,"active":true,"2fa":false,"sub_accounts_count":a1,"sub_accounts":[{"_id":"565f0344c6db1f57008b5573","name":"Demo - Private Customer","username":"utility-private-customer@metry.io","plan":"free","role":"user","auth_assignments":["demo"],"two_factor_auth":false,"active":true,"2fa":false,"sub_accounts_count":0,"sub_accounts":[],"created":"2015-12-02T14:42:12+0000","locale_string":null,"language":"en","plans":{},"is_organization":false,"features":{},"features_available":["manual_meter","third_party_meter","subscribed_meter","sub_meter"],"product_plan":"private","entity_type":null,"data_availability":null,"municipalities":null,"representation":null,"trial_expires_at":null,"manager":{"_id":"5543677f37c6b65f008b46e4","username":"someone@example","name":"Example account"}}],"created":"2015-05-01T11:46:07+0000","locale_string":null,"language":"en","plans":{},"is_organization":false,"features":{},"features_available":["manual_meter","third_party_meter","subscribed_meter","sub_meter"],"product_plan":"private","entity_type":null,"data_availability":null,"municipalities":null,"representation":null,"trial_expires_at":null}}
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": {
+                    "_id": "5543677f37c6b65f008b46e4",
+                    "name": "Example account",
+                    "username": "someone@example",
+                    "plan": "free",
+                    "role": "user",
+                    "auth_assignments": ["demo"],
+                    "two_factor_auth": false,
+                    "active": true,
+                    "2fa": false,
+                    "sub_accounts_count": 1,
+                    "sub_accounts": [{
+                        "_id": "565f0344c6db1f57008b5573",
+                        "name": "Demo - Private Customer",
+                        "username": "utility-private-customer@metry.io",
+                        "plan": "free",
+                        "role": "user",
+                        "auth_assignments": ["demo"],
+                        "two_factor_auth": false,
+                        "active": true,
+                        "2fa": false,
+                        "sub_accounts_count": 0,
+                        "sub_accounts": [],
+                        "created": "2015-12-02T14:42:12+0000",
+                        "locale_string": null,
+                        "language": "en",
+                        "plans": {},
+                        "is_organization": false,
+                        "features": {},
+                        "features_available": ["manual_meter", "third_party_meter", "subscribed_meter", "sub_meter"],
+                        "product_plan": "private",
+                        "entity_type": null,
+                        "data_availability": null,
+                        "municipalities": null,
+                        "representation": null,
+                        "trial_expires_at": null,
+                        "manager": {
+                            "_id": "5543677f37c6b65f008b46e4",
+                            "username": "someone@example",
+                            "name": "Example account"
+                        }
+                    }],
+                    "created": "2015-05-01T11:46:07+0000",
+                    "locale_string": null,
+                    "language": "en",
+                    "plans": {},
+                    "is_organization": false,
+                    "features": {},
+                    "features_available": ["manual_meter", "third_party_meter", "subscribed_meter", "sub_meter"],
+                    "product_plan": "private",
+                    "entity_type": null,
+                    "data_availability": null,
+                    "municipalities": null,
+                    "representation": null,
+                    "trial_expires_at": null
+                }
+            }
 
 # Group Meters
 
@@ -157,11 +219,118 @@ reference itself, and is used to updated meta-information about the meter such a
 
 ### Get a meter [GET]
 
++ Parameters
+    + id (required, string, `554367a2d16a0060008b4892`) ... The id of the account to get info about
+
++ Request
+
+    + Headers
+
+            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
 + Response 200
     + Attributes (Meter Base)
+    
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": {
+                    "_id": "554367a2d16a0060008b4892"
+                    "holder": {
+                        "_id": "5543677f37c6b65f008b46e4",
+                        "name": "Example account",
+                        "username": "someone@example"
+                    },
+                    "root": {
+                        "_id": "5200c44bcd8fff0700000359",
+                        "holder": {
+                            "_id": "5268c832dedcde9d1d0000df",
+                            "name": "Göteborg Energi"
+                        }
+                    },
+                    "robot": {
+                        "_id": null
+                    },
+                    "assigner": {
+                        "_id": "5268c832dedcde9d1d0000df",
+                        "name": "Göteborg Energi",
+                        "username": null
+                    },
+                    "created": "2015-05-01T11:46:42+0000",
+                    "children": [],
+                    "address": "Föreningsgatan 8B",
+                    "timezone": "Etc/GMT-1",
+                    "control_level": "subscribed",
+                    "generation": 1,
+                    "name": null,
+                    "tags": [],
+                    "box": "active",
+                    "revoked": false,
+                    "active": true,
+                    "metrics": [
+                        "energy"
+                    ],
+                    "ean": "735999166203131142",
+                    "import_ids": null,
+                    "type": "electricity",
+                    "consumption_stats": {
+                        "energy": {
+                            "hour": {
+                            "count": 27144,
+                                "first": 2013080100,
+                                "last": 2016110723,
+                                "max": 4.84,
+                                "min": 0,
+                                "sum": 15209.457
+                            },
+                            "day": {
+                                "count": 1131,
+                                "first": 20130801,
+                                "last": 20161107,
+                                "max": 33.26,
+                                "min": 0.01,
+                                "sum": 15209.457
+                            },
+                            "month": {
+                                "count": 35,
+                                "first": 201308,
+                                "last": 201610,
+                                "max": 707.46,
+                                "min": 169.64,
+                                "sum": 14873.193
+                            }
+                        }
+                    },
+                    "expected_granularity": "hour",
+                    "readings_conflicts_stats": null,
+                    "readings_stats": {
+                        "energy": {
+                            "count": 119,
+                            "first": "2016-07-12T23:00:00+0000",
+                            "first_value": "28388.71",
+                            "last": "2016-11-07T23:00:00+0000",
+                            "last_value": "NULL"
+                        }
+                    },
+                    "deleted": false,
+                    "has_active_complaints": false,
+                    "active_complaint_sent": null,
+                    "active_complaint": null,
+                    "has_feed": true,
+                    "feed_heartbeats": null,
+                    "feed_ids": [],
+                    "is_merged": false,
+                    "_status ": "connected",
+                    "_identifier": "Föreningsgatan 8B (735999166203131142)",
+                    "_is_owner": true,
+                }
+            }
 
 
-## Meters collection [/meters]
+## Meters collection [/meters{?box,name,address,tags,control_level,generation,type,metrics,ean}]
 
 You can list all meters accessible by the authenticated user.
 
@@ -184,11 +353,14 @@ This filter will only list *active* meters where *last month value is before Mar
 ### List meters [GET]
 
 + Parameters
-    + box: active (string)
-    + name: Home sweet home (number)
-    + address: Queenstreet 43 (string)
-    + tags: foo,bar (string)
-        Search for tags. Use comma to separate multiple tags.
+    + address: Klackvägen%2012 (optional, string)
+    + `control_level`: owned, subscribed, shared, manual (enum [string], optional)
+    + generation: 1 (number, optional)
+    + tags: bar (array[string], optional) - Meta information.
+    + box: active (enum [string], optional)
+    + type: electricity, heat, cooling, gas, water (enum, optional) - What type of consumption the meter represents.
+    + metrics: energy, power, flow, price (enum [string], optional) - Which metrics the meter is recording data in.
+    + ean: 7501054530107 (number, optional) - An International Article Number that uniquely identifies the physical meter
 
 + Response 200
     + Attributes (Meter Base)
@@ -320,28 +492,50 @@ Importing readings from Metry when readings are blocked is possible but should b
 # Data Structures
 
 ## Account Base (object)
-+ _id: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
-+ name: "Example account" (string) - Name of the user
-+ username: "someone@example" (string) - Email, also used as sign in identity.
-+ sub_accounts: [] (array) - An array of sub accounts of the current account 
-+ created: "2015-05-01T11:46:07+0000" - date time when the account was created
-+ locale_string: "sv-SE" (string) - locale string representing language and country
-+ language: "en" (string) - string representing the accounts language preference
-+ is_organization: true (boolean) - is this an organization account
-+ entity_type: "business" (enum) - the type of entity that this account represents
++ `_id`: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
++ name: Example account (string) - Name of the user
++ username: someone@example (string) - Email, also used as sign in identity.
++ `sub_accounts`: (array[object]) - An array of sub accounts of the current account 
++ created: `2015-05-01T11:46:07+0000` (string) - Date time string when the account was created
++ `locale_string`: `sv-SE` (string) - Locale string representing language and country
++ language: en (string) - Represents the accounts language preference
++ `is_organization`: true (boolean) - Is this an organization account
++ `entity_type`:  person, business, `utility_provider`, `metering_operator`, hardware, landlord, `facility_manager` (enum [string]) - The type of entity that this account represents
 
 ## Meter Base (object)
-+ _id: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
-+ type: electricity, heat, cooling, gas, water (string) - What type of consumption the meter represents.
-+ name: Pumphuset vid sjön (string) - Meta information
-+ address: Klackvägen 12 (string) - Meta information
-+ tags: ["foo", "bar"] (array) - Meta information
-+ holder: Account resource (object, required) - Holder of the meter.
-+ assigner: Account resource (object) - Who assigned the meter to the holder; authorized to revoke access at anytime.
-+ control_level: owned, subscribed, shared (string, required) - The level of control the holder has on the meter. "Owned" represents the highest level of control.
-+ robot: ... (object) - Reference to the robot managing the meter. The robot updates consumption and handles revocation automatically.
-+ active: true (boolean, required) - Active meters has access to consumption values.
-+ revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled at the root holder.
-+ consumption_stats: ... (object) - Information about what data that is available for the meter.
-+ root: ... (object, required) - Reference to the root meter; remains same for assigned and shared meters
-+ timezone: ... (string, required) - Timezone the meter is located in. Used to defined consumption aggregation from hour to day.
++ `_id`: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
++ holder: (object, required) - An account that is the holder of the meter.
+    + `_id`: (string, required) - Unique identifier for the account.
+    + name: (string) - Name of the user.
+    + username: (string) - Email, also used as sign in identity.
++ root: (object, required) - Reference to the root meter; remains the same for assigned and shared meters.
+    + `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
+    + holder: (object, required) - An account that is the holder of the root meter.
+        + `_id`: (string, required) - Unique identifier for the account.
+        + name: (string) - Name of the user.
++ assigner: (object) - The account that assigned the meter to it's holder; authorized to revoke access at anytime.
+    + `_id`: 58231fa2c18edcbe1acf824b (string, required) - Unique identifier for the account.
+    + name: (string) - Name of the user.
+    + username: (string) - Email, also used as sign in identity.
++ created: `2015-05-01T11:46:07+0000` (string) - date time string when a meter was created.
++ children: (array) - An array of Meters that are children of the current meter.
+    + meter: (object)
+        + `_id`: 58231fadc18edcbe1acf824d (string) - Unique identifier for the meter.
+        + holder: (object) - An account that is the holder of the meter.
+            + `_id`: 58231fb5c18edcbe1acf824e (string, required) - Unique identifier for the account.
+            + name: (string) - Name of the user.
+            + username: (string) - Email, also used as sign in identity.
++ address: Klackvägen 12 (string) - Meta information.
++ timezone: `Etc/GMT-1` (string, required) - Timezone the meter is located in. Used to define consumption aggregation from hour to day.
++ `control_level`: owned, subscribed, shared, manual (enum [string], required) - The level of control the holder has on the meter. "Owned" represents the highest level of control.
++ generation: 1 (number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
++ name: Pumphuset vid sjön (string) - Meta information.
++ tags: foo, bar (array[string]) - Meta information.
++ box: inbox, ignored, active (enum [string]) - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.  
++ revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled by the root holder.
++ type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
++ metrics: energy, power, flow, price (enum [string]) - Which metrics the meter is recording data in.
++ ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical meter
++ consumption_stats: {} (object) - A summary of consumption data for each metric this meter is recording.
++ readings_stats: {} (object) - A summary of readings data for this meter.
++ has_active_complaints: true (boolean) - is there an active issue open for this meter regarding missing consumption values.
