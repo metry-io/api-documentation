@@ -136,7 +136,7 @@ Tip: Use alias "me" to reference the currently authorized user.
 
 + Response 200
 
-    + Attributes (Account Base)
+    + Attributes (Account)
 
     + Body
 
@@ -229,7 +229,7 @@ reference itself, and is used to updated meta-information about the meter such a
             Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 + Response 200
-    + Attributes (Meter Base)
+    + Attributes (Meter)
     
     + Body
     
@@ -353,23 +353,29 @@ This filter will only list *active* meters where *last month value is before Mar
 ### List meters [GET]
 
 + Parameters
-    + address: Klackvägen%2012 (optional, string)
-    + `control_level`: owned, subscribed, shared, manual (enum [string], optional)
-    + generation: 1 (number, optional)
-    + tags: bar (array[string], optional) - Meta information.
-    + box: active (enum [string], optional)
-    + type: electricity, heat, cooling, gas, water (enum, optional) - What type of consumption the meter represents.
-    + metrics: energy, power, flow, price (enum [string], optional) - Which metrics the meter is recording data in.
-    + ean: 7501054530107 (number, optional) - An International Article Number that uniquely identifies the physical meter
+    + address: Kungsgatan 2 (optional, string)
+    + name: Home sweet home (optional, string)
+    + `control_level`: subscribed (optional, enum [string])
+    + generation: 1 (optional, number)
+    + tags: bar (optional, array[string]) - Meta information.
+    + box: active (optional, enum [string])
+    + type: electricity (optional, enum) - What type of consumption the meter represents.
+    + metrics: energy (optional, enum [string]) - Which metrics the meter is recording data in.
+    + ean: 7501054530107 (optional, number) - An International Article Number that uniquely identifies the physical meter
+
++ Request
+    + Headers
+    
+            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 + Response 200
-    + Attributes (Meter Base)
+    + Attributes (Meter)
 
 
 
 # Group Consumption
 
-Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularity month, day and hour, however, it is important to understand that the availability differs depending on meter and other external factors.
+Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularities month, day and hour, however, it is important to understand that the availability differs depending on the meter and other external factors.
 
 
 ## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
@@ -380,17 +386,17 @@ The following **metrics** are supported: energy (kWh), flow (m<sup>3</sup>) and 
 
 The response with consumption **values will always match your query**. Missing values are replaced with <code>NULL</code>
 
-Each period in the response will have a `start_date` and `end_date` property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the `period` input parameter. The `period` parameter is always interpreted in the meter's local timezone.
+Each period in the response will have a `start_date` and `end_date` property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the `period` input parameter. The `period` parameter is always interpreted using the meter's local timezone.
 
 ### Get consumption for a meter [GET]
 
 + Parameters
-    + meter_id (required, string, `53294e5ae9cada3306001735`) ... The id of the meter to get consumption data for
-    + granularity (required, string `month`) ... The granularity to get consumption data for (month, day or hour)
-    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
+    + meter_id: 53294e5ae9cada3306001735 (required, string) - The id of the meter to get consumption data for
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
     long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
     All date will be interpreted using the meters time zone.
-    + metrics (optional, string `energy,flow,power`) ... Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
 
 + Response 200 (application/json)
 
@@ -489,42 +495,148 @@ Importing readings from Metry when readings are blocked is possible but should b
             }
 
 
+# Group Open Data Channels
+
+Open data channels represent collections of meters and consumption data that can be viewed without requiring authorization.
+Via the open channel resource you can see which open channels are available then list the available meters for that channel.  Once the meter ids have been obtained their consumption data can be fetched via the consumption resource.  When requesting data for meters that are part of an open channel no authentication is required
+
+## Open channels [/open_channels?name={name}&granularities={granularities}&metrics={metrics}]
+
+### List open channels [GET]
+
++ Parameters
+    + name: SOLution (optional, string) - the name of the open channel
+    + granularities: hour (optional, enum[string]) - the granularities available in the open channel
+    + metrics: energy (optional, enum[string]) - the metrics available in the open channel
++ Response 200 (application/json)
+    + Attributes (Open Channel)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "next_page": null,
+                "previous_page": null,
+                "additional_meta": [],
+                "data": [
+                    {
+                        "_id": "5825d2ff6ae4ce006252ee5d",
+                        "name": "SOLution",
+                        "granularities": [
+                            "month",
+                            "day",
+                            "hour"
+                        ],
+                        "periods": [
+                            "2012-"
+                        ],
+                        "metrics": [
+                            "energy"
+                        ]
+                    }
+                ]
+            }
+    
+
+## Open channel meters [/open_channels/{id}/meters/]
+
++ Parameters
+    + id (string, required) - Id of the open channel.
+
+### List open channel meters [GET]
+
++ Parameters
+    + id (required, string, `5825d2ff6ae4ce006252ee5d`) ... The id of the open channel to list meters for
++ Response 200 (application/json)
+    + Attributes (Open Channel Meter)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "next_page": null,
+                "previous_page": null,
+                "additional_meta": [],
+                "data": [
+                    {
+                        "owner": {
+                            "_id": "5268c832dedcde9d1d0000df",
+                            "name": "Göteborg Energi"
+                        },
+                        "name": "Konsumtion ingen prod",
+                        "timezone": "Etc/GMT-1",
+                        "address": "Energigatan 13",
+                        "generation": 0,
+                        "metrics": [
+                            "energy"
+                        ],
+                        "type": "electricity",
+                        "consumption_stats": {
+                            "energy": {
+                                "hour": {
+                                    "count": 27745,
+                                    "sum": 47672.922,
+                                    "max": 9.76,
+                                    "last": 2016103100,
+                                    "min": 0,
+                                    "first": 2013090100
+                                },
+                                "day": {
+                                    "count": 1156,
+                                    "sum": 47671.922,
+                                    "max": 127.69,
+                                    "last": 20161030,
+                                    "min": 4.81,
+                                    "first": 20130901
+                                },
+                                "month": {
+                                    "count": 37,
+                                    "sum": 46565.792,
+                                    "max": 2579.43,
+                                    "last": 201609,
+                                    "min": 371.22,
+                                    "first": 201309
+                                }
+                            }
+                        },
+                        "open_channel_ids": [
+                            "5825d2ff6ae4ce006252ee5d"
+                        ],
+                        "_id": "58248fe1de22ae0062035d1a"
+                    }
+                ]
+            }
+
 # Data Structures
 
-## Account Base (object)
+## Account (object)
 + `_id`: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
 + name: Example account (string) - Name of the user
-+ username: someone@example (string) - Email, also used as sign in identity.
-+ `sub_accounts`: (array[object]) - An array of sub accounts of the current account 
++ username: someone@example.com (string) - Email, also used as sign in identity.
++ `sub_accounts`: (array[Account]) - An array of sub accounts of the current account 
 + created: `2015-05-01T11:46:07+0000` (string) - Date time string when the account was created
 + `locale_string`: `sv-SE` (string) - Locale string representing language and country
 + language: en (string) - Represents the accounts language preference
 + `is_organization`: true (boolean) - Is this an organization account
 + `entity_type`:  person, business, `utility_provider`, `metering_operator`, hardware, landlord, `facility_manager` (enum [string]) - The type of entity that this account represents
 
-## Meter Base (object)
+## Meter (object)
 + `_id`: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
-+ holder: (object, required) - An account that is the holder of the meter.
-    + `_id`: (string, required) - Unique identifier for the account.
-    + name: (string) - Name of the user.
-    + username: (string) - Email, also used as sign in identity.
++ holder: (Holder With Username) - An account that is the holder of the meter.
 + root: (object, required) - Reference to the root meter; remains the same for assigned and shared meters.
     + `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
-    + holder: (object, required) - An account that is the holder of the root meter.
-        + `_id`: (string, required) - Unique identifier for the account.
-        + name: (string) - Name of the user.
-+ assigner: (object) - The account that assigned the meter to it's holder; authorized to revoke access at anytime.
-    + `_id`: 58231fa2c18edcbe1acf824b (string, required) - Unique identifier for the account.
-    + name: (string) - Name of the user.
-    + username: (string) - Email, also used as sign in identity.
+    + holder: (Holder, required) - An account that is the holder of the root meter.
++ assigner: (Holder With Username) - The account that assigned the meter to it's holder; authorized to revoke access at anytime.
 + created: `2015-05-01T11:46:07+0000` (string) - date time string when a meter was created.
-+ children: (array) - An array of Meters that are children of the current meter.
-    + meter: (object)
-        + `_id`: 58231fadc18edcbe1acf824d (string) - Unique identifier for the meter.
-        + holder: (object) - An account that is the holder of the meter.
-            + `_id`: 58231fb5c18edcbe1acf824e (string, required) - Unique identifier for the account.
-            + name: (string) - Name of the user.
-            + username: (string) - Email, also used as sign in identity.
++ children: (array[Child Meter]) - An array of Meters that are children of the current meter.
 + address: Klackvägen 12 (string) - Meta information.
 + timezone: `Etc/GMT-1` (string, required) - Timezone the meter is located in. Used to define consumption aggregation from hour to day.
 + `control_level`: owned, subscribed, shared, manual (enum [string], required) - The level of control the holder has on the meter. "Owned" represents the highest level of control.
@@ -534,8 +646,37 @@ Importing readings from Metry when readings are blocked is possible but should b
 + box: inbox, ignored, active (enum [string]) - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.  
 + revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled by the root holder.
 + type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
-+ metrics: energy, power, flow, price (enum [string]) - Which metrics the meter is recording data in.
++ metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
 + ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical meter
 + consumption_stats: {} (object) - A summary of consumption data for each metric this meter is recording.
 + readings_stats: {} (object) - A summary of readings data for this meter.
 + has_active_complaints: true (boolean) - is there an active issue open for this meter regarding missing consumption values.
+
+## Holder (object)
++ `_id`: 58233c51c18edcbe1acf824f (string, required) - Unique identifier for the account.
++ name: Example holder (string) - Name of the user.
+
+## Holder With Username (Holder)
++ username: someone@example.com (string) - Email, also used as sign in identity.
+
+## Child Meter (object)
++ `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
++ holder: (Holder With Username) - An account that is the holder of the meter.
+
+## Open Channel (object)
++ `_id`: 5825d2ff6ae4ce006252ee5d (string, required) - Unique identifier for the open channel
++ name: SOLution (string) - the name of the open channel
++ granularities: hour, day, month (enum[string]) - the granularities available in the open channel
++ metrics: energy, power, flow (enum[string]) - the metrics available in the open channel
+
+## Open Channel Meter (object)
++ `_id`: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
++ owner: (Holder, required) - An account that is the owner of this meter.
++ name: Pumphuset vid sjön (string) - Meta information.
++ timezone: `Etc/GMT-1` (string, required) - Timezone the meter is located in. Used to define consumption aggregation from hour to day.
++ address: Klackvägen 12 (string) - Meta information.
++ generation: 1 (number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
++ metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
++ type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
++ consumption_stats: {} (object) - A summary of consumption data for each metric this meter is recording.
++ open_channel_ids: (array[string]) - An array of open channel ids that this meter is included in
