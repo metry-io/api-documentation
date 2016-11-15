@@ -131,7 +131,7 @@ Tip: Use alias "me" to reference the currently authorized user.
 
     + Headers
 
-            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 
 + Response 200
@@ -147,58 +147,27 @@ Tip: Use alias "me" to reference the currently authorized user.
                 "data": {
                     "_id": "5543677f37c6b65f008b46e4",
                     "name": "Example account",
-                    "username": "someone@example",
-                    "plan": "free",
-                    "role": "user",
-                    "auth_assignments": ["demo"],
-                    "two_factor_auth": false,
-                    "active": true,
-                    "2fa": false,
+                    "username": "someone@example.com",
                     "sub_accounts_count": 1,
-                    "sub_accounts": [{
-                        "_id": "565f0344c6db1f57008b5573",
-                        "name": "Demo - Private Customer",
-                        "username": "utility-private-customer@metry.io",
-                        "plan": "free",
-                        "role": "user",
-                        "auth_assignments": ["demo"],
-                        "two_factor_auth": false,
-                        "active": true,
-                        "2fa": false,
-                        "sub_accounts_count": 0,
-                        "sub_accounts": [],
-                        "created": "2015-12-02T14:42:12+0000",
-                        "locale_string": null,
-                        "language": "en",
-                        "plans": {},
-                        "is_organization": false,
-                        "features": {},
-                        "features_available": ["manual_meter", "third_party_meter", "subscribed_meter", "sub_meter"],
-                        "product_plan": "private",
-                        "entity_type": null,
-                        "data_availability": null,
-                        "municipalities": null,
-                        "representation": null,
-                        "trial_expires_at": null,
-                        "manager": {
-                            "_id": "5543677f37c6b65f008b46e4",
-                            "username": "someone@example",
-                            "name": "Example account"
+                    "sub_accounts": [
+                        {
+                            "_id": "565f0344c6db1f57008b5573",
+                            "name": "Demo - Private Customer",
+                            "username": "utility-private-customer@metry.io",
+                            "sub_accounts_count": 0,
+                            "sub_accounts": [],
+                            "created": "2015-12-02T14:42:12+0000",
+                            "locale_string": null,
+                            "language": "en",
+                            "is_organization": false,
+                            "entity_type": null
                         }
-                    }],
+                    ],
                     "created": "2015-05-01T11:46:07+0000",
                     "locale_string": null,
                     "language": "en",
-                    "plans": {},
                     "is_organization": false,
-                    "features": {},
-                    "features_available": ["manual_meter", "third_party_meter", "subscribed_meter", "sub_meter"],
-                    "product_plan": "private",
-                    "entity_type": null,
-                    "data_availability": null,
-                    "municipalities": null,
-                    "representation": null,
-                    "trial_expires_at": null
+                    "entity_type": null
                 }
             }
 
@@ -220,13 +189,13 @@ reference itself, and is used to updated meta-information about the meter such a
 ### Get a meter [GET]
 
 + Parameters
-    + id (required, string, `554367a2d16a0060008b4892`) ... The id of the account to get info about
+    + id: 5825c85d22c8aa00606b9dd5 (required, string) - The id of the account to get info about
 
 + Request
 
     + Headers
 
-            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 + Response 200
     + Attributes (Meter)
@@ -238,99 +207,75 @@ reference itself, and is used to updated meta-information about the meter such a
                 "message": "OK",
                 "profiling": null,
                 "data": {
-                    "_id": "554367a2d16a0060008b4892"
+                    "_id": "5825c85d22c8aa00606b9dd5",
+                    "ean": "1200004",
+                    "name": null,
                     "holder": {
-                        "_id": "5543677f37c6b65f008b46e4",
+                       "_id": "5543677f37c6b65f008b46e4",
                         "name": "Example account",
-                        "username": "someone@example"
+                        "username": "someone@example.com"
                     },
                     "root": {
-                        "_id": "5200c44bcd8fff0700000359",
+                        "_id": "577fdd960c8a335c008b466f",
                         "holder": {
-                            "_id": "5268c832dedcde9d1d0000df",
-                            "name": "Göteborg Energi"
-                        }
-                    },
-                    "robot": {
-                        "_id": null
+                            "_id": "577fd0170c8a335c008b45fe",
+                            "name": "Rob Harvey Utility Company"
+                       }   
                     },
                     "assigner": {
-                        "_id": "5268c832dedcde9d1d0000df",
-                        "name": "Göteborg Energi",
+                        "_id": "577fd0170c8a335c008b45fe",  
+                        "name": "Rob Harvey Utility Company",
                         "username": null
                     },
-                    "created": "2015-05-01T11:46:42+0000",
+                    "created": "2016-11-11T13:32:13+0000",
                     "children": [],
-                    "address": "Föreningsgatan 8B",
+                    "address": "Gränsvägen 12B",
                     "timezone": "Etc/GMT-1",
-                    "control_level": "subscribed",
+                    "control_level": "shared",
                     "generation": 1,
-                    "name": null,
                     "tags": [],
                     "box": "active",
                     "revoked": false,
-                    "active": true,
                     "metrics": [
                         "energy"
                     ],
-                    "ean": "735999166203131142",
-                    "import_ids": null,
-                    "type": "electricity",
+                    "type": "cooling",
                     "consumption_stats": {
                         "energy": {
+                            "month": {
+                                "count": 22,
+                                "sum": 659440,
+                                "max": 92560,
+                                "last": 201610,
+                                "min": 9730,
+                                "first": 201501
+                            },
                             "hour": {
-                            "count": 27144,
-                                "first": 2013080100,
-                                "last": 2016110723,
-                                "max": 4.84,
-                                "min": 0,
-                                "sum": 15209.457
+                                "first": null,
+                                "last": null,
+                                "sum": null,
+                                "max": null,
+                                "min": null,
+                                "count": 0
                             },
                             "day": {
-                                "count": 1131,
-                                "first": 20130801,
-                                "last": 20161107,
-                                "max": 33.26,
-                                "min": 0.01,
-                                "sum": 15209.457
-                            },
-                            "month": {
-                                "count": 35,
-                                "first": 201308,
-                                "last": 201610,
-                                "max": 707.46,
-                                "min": 169.64,
-                                "sum": 14873.193
+                                "first": null,
+                                "last": null,
+                                "sum": null,
+                                "max": null,
+                                "min": null,
+                                "count": 0
                             }
                         }
                     },
-                    "expected_granularity": "hour",
-                    "readings_conflicts_stats": null,
-                    "readings_stats": {
-                        "energy": {
-                            "count": 119,
-                            "first": "2016-07-12T23:00:00+0000",
-                            "first_value": "28388.71",
-                            "last": "2016-11-07T23:00:00+0000",
-                            "last_value": "NULL"
-                        }
-                    },
-                    "deleted": false,
+                    "readings_stats": null,
                     "has_active_complaints": false,
-                    "active_complaint_sent": null,
-                    "active_complaint": null,
-                    "has_feed": true,
-                    "feed_heartbeats": null,
-                    "feed_ids": [],
-                    "is_merged": false,
-                    "_status ": "connected",
-                    "_identifier": "Föreningsgatan 8B (735999166203131142)",
-                    "_is_owner": true,
+                    "representation": null,
+                    "open_channel_ids": null
                 }
             }
 
-
-## Meters collection [/meters{?box,name,address,tags,control_level,generation,type,metrics,ean}]
+## Meters collection [/meters{?box,name,address,tags,control_level,generation,type,metrics,ean,representation}]
 
 You can list all meters accessible by the authenticated user.
 
@@ -353,20 +298,21 @@ This filter will only list *active* meters where *last month value is before Mar
 ### List meters [GET]
 
 + Parameters
-    + address: Kungsgatan 2 (optional, string)
-    + name: Home sweet home (optional, string)
+    + address: Kungsgatan 2 (optional, string) - Meta information.
+    + name: Home sweet home (optional, string) - Meta information.
     + `control_level`: subscribed (optional, enum [string])
-    + generation: 1 (optional, number)
+    + generation: 1 (optional, number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
     + tags: bar (optional, array[string]) - Meta information.
-    + box: active (optional, enum [string])
+    + box: active (optional, enum [string]) - - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.
     + type: electricity (optional, enum) - What type of consumption the meter represents.
     + metrics: energy (optional, enum [string]) - Which metrics the meter is recording data in.
     + ean: 7501054530107 (optional, number) - An International Article Number that uniquely identifies the physical meter
+    + representation: production (optional, enum [string]) - Does this meter record energy consumption or production
 
 + Request
     + Headers
     
-            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 + Response 200
     + Attributes (Meter)
@@ -391,15 +337,18 @@ Each period in the response will have a `start_date` and `end_date` property. No
 ### Get consumption for a meter [GET]
 
 + Parameters
-    + meter_id: 53294e5ae9cada3306001735 (required, string) - The id of the meter to get consumption data for
+    + meter_id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get consumption data for
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
-    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
-    long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
-    All date will be interpreted using the meters time zone.
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
 
-+ Response 200 (application/json)
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
++ Response 200 (application/json)
+    + Attributes (Consumption)
     + Body
 
             {
@@ -415,10 +364,52 @@ Each period in the response will have a `start_date` and `end_date` property. No
                                 "flow": [1,2,3,4,5,6,7,8,9,10,11]
                             }
                         ],
-                        "meter_id": "53185731df62324818000007"
+                        "meter_id": "5825c6f6de22ae00632e86f3"
                     }
                 ]
             }
+
+## Get Consumption For Multiple Meters [/consumptions/multi/{granularity}/{period}{?meters,metrics}]
+
+Request consumptions data for an array of meters.
+
+### Get consumption for a multiple meter [GET]
+
++ Parameters
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + meters: `5825c6f6de22ae00632e86f3,5825c76920fe9b006308e412` (required, array[string]) - An array of meters to return consumptions data for
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+
++ Request
+    + Headers
+    
+            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+            
++ Response 200
+    + Attributes (Consumption)
+    
+## Get Sum of Consumptions For Multiple Meters [/consumptions/sum/{granularity}/{period}{?meters,metrics}]
+
+Request consumptions data for an array of meters.
+
+### Get sum of consumptions for a multiple meter [GET]
+
+Will return a sum of consumptions for the requested meters for each requested period. 
+
++ Parameters
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + meters: `5825c6f6de22ae00632e86f3,5825c76920fe9b006308e412` (required, array[string]) - An array of meters to return consumptions data for
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+
++ Request
+    + Headers
+    
+            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+            
++ Response 200
+    + Attributes (Consumption)
 
 # Group Readings
 
@@ -651,6 +642,7 @@ Via the open channel resource you can see which open channels are available then
 + consumption_stats: {} (object) - A summary of consumption data for each metric this meter is recording.
 + readings_stats: {} (object) - A summary of readings data for this meter.
 + has_active_complaints: true (boolean) - is there an active issue open for this meter regarding missing consumption values.
++ representation: consumption, production, `net_consumption`, `net_production`, sensor (enum [string]) - Does this meter record energy consumption or production
 
 ## Holder (object)
 + `_id`: 58233c51c18edcbe1acf824f (string, required) - Unique identifier for the account.
@@ -662,6 +654,8 @@ Via the open channel resource you can see which open channels are available then
 ## Child Meter (object)
 + `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
 + holder: (Holder With Username) - An account that is the holder of the meter.
+
+## Consumption (object)
 
 ## Open Channel (object)
 + `_id`: 5825d2ff6ae4ce006252ee5d (string, required) - Unique identifier for the open channel
