@@ -535,17 +535,20 @@ List and filter the available open data channels
             }
     
 
-## Open channel meters [/open_channels/{id}/meters/]
+## Open channel meters [/open_channels/{id}/meters/{?address,name,generation,type,metrics,representation}]
 
 List and filter the available meters for a given open data channels
-
-+ Parameters
-    + id (string, required) - Id of the open channel.
 
 ### List open channel meters [GET]
 
 + Parameters
-    + id (required, string, `5825d2ff6ae4ce006252ee5d`) ... The id of the open channel to list meters for
+    + id: 5825d2ff6ae4ce006252ee5d (required, string) - The id of the open channel to list meters for
+    + address: Kungsgatan 2 (optional, string) - Meta information.
+    + name: Bruttomätning villa (optional, string) - Meta information.
+    + generation: 1 (optional, number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
+    + type: electricity (optional, enum) - What type of consumption the meter represents.
+    + metrics: energy (optional, enum [string]) - Which metrics the meter is recording data in.
+    + representation: production (optional, enum [string]) - Does this meter record energy consumption or production
 + Response 200 (application/json)
     + Attributes (Open Channel Meter)
     + Body
@@ -562,6 +565,7 @@ List and filter the available meters for a given open data channels
                 "additional_meta": [],
                 "data": [
                     {
+                        "_id": "58248fe1de22ae0062035d1a",
                         "owner": {
                             "_id": "5268c832dedcde9d1d0000df",
                             "name": "Göteborg Energi"
@@ -605,7 +609,7 @@ List and filter the available meters for a given open data channels
                         "open_channel_ids": [
                             "5825d2ff6ae4ce006252ee5d"
                         ],
-                        "_id": "58248fe1de22ae0062035d1a"
+                        "representation": "consumption"
                     }
                 ]
             }
