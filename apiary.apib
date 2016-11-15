@@ -493,6 +493,8 @@ Via the open channel resource you can see which open channels are available then
 
 ## Open channels [/open_channels?name={name}&granularities={granularities}&metrics={metrics}]
 
+List and filter the available open data channels 
+
 ### List open channels [GET]
 
 + Parameters
@@ -534,6 +536,8 @@ Via the open channel resource you can see which open channels are available then
     
 
 ## Open channel meters [/open_channels/{id}/meters/]
+
+List and filter the available meters for a given open data channels
 
 + Parameters
     + id (string, required) - Id of the open channel.
@@ -612,7 +616,7 @@ Via the open channel resource you can see which open channels are available then
 + `_id`: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
 + name: Example account (string) - Name of the user
 + username: someone@example.com (string) - Email, also used as sign in identity.
-+ `sub_accounts`: (array[Account]) - An array of sub accounts of the current account 
++ `sub_accounts`: [] (array[Account]) - An array of sub accounts of the current account 
 + created: `2015-05-01T11:46:07+0000` (string) - Date time string when the account was created
 + `locale_string`: `sv-SE` (string) - Locale string representing language and country
 + language: en (string) - Represents the accounts language preference
@@ -639,8 +643,8 @@ Via the open channel resource you can see which open channels are available then
 + type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
 + metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
 + ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical meter
-+ consumption_stats: {} (object) - A summary of consumption data for each metric this meter is recording.
-+ readings_stats: {} (object) - A summary of readings data for this meter.
++ consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
++ readings_stats: (object) - A summary of readings data for this meter.
 + has_active_complaints: true (boolean) - is there an active issue open for this meter regarding missing consumption values.
 + representation: consumption, production, `net_consumption`, `net_production`, sensor (enum [string]) - Does this meter record energy consumption or production
 
@@ -672,5 +676,5 @@ Via the open channel resource you can see which open channels are available then
 + generation: 1 (number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
 + metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
 + type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
-+ consumption_stats: {} (object) - A summary of consumption data for each metric this meter is recording.
++ consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
 + open_channel_ids: (array[string]) - An array of open channel ids that this meter is included in
