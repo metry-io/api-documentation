@@ -644,13 +644,14 @@ List and filter the available meters for a given open data channels
 + tags: foo, bar (array[string]) - Meta information.
 + box: inbox, ignored, active (enum [string]) - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.  
 + revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled by the root holder.
-+ type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
++ type: electricity, heat, cooling, gas,hold to meter  water (enum) - What type of consumption the meter represents.
 + metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
 + ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical meter
 + consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
 + readings_stats: (object) - A summary of readings data for this meter.
 + has_active_complaints: true (boolean) - is there an active issue open for this meter regarding missing consumption values.
 + representation: consumption, production, `net_consumption`, `net_production`, sensor (enum [string]) - Does this meter record energy consumption or production
++ on_hold: false (boolean) - The holder has decided to set this meter as on hold and exclude it from statistics, if for example it is a new meter that has not yet started to record consumption
 
 ## Holder (object)
 + `_id`: 58233c51c18edcbe1acf824f (string, required) - Unique identifier for the account.
