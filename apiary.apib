@@ -43,13 +43,13 @@ There are two methods to authenticate to the API:
 
 ### Private access tokens
 Private access-tokens are used to access data for your own account, and should never be
-shared with anyone else. You should request your private access token in the Metry Portal ([https://app.metry.io](https://app.metry.io)).
+shared with anyone else. You can access your private access token in the Metry Portal ([https://app.metry.io](https://app.metry.io)).
 
 You **should** pass the access token in an Authorization-header
 
     Authorization: Bearer <access-token>
 
-You can also pass the access-token in the URL (not recommended)
+You can also pass the access-token in the URL (but this is not recommended for security reasons)
 
     https://app.metry.io/api/v2/accounts/me?access_token=<access-token>
 
