@@ -59,7 +59,7 @@ You can also pass the access-token in the URL (but this is not recommended for s
 The Metry API uses the standard OAuth 2.0 protocol for simple, but effective authentication and authorization to third parties.
 
 As an app developer, you should direct your users to login with Metry and grant access to your app. This will give you the users `refresh_token`, which should be used to request the `access_token`.
-The refresh token should be stored on your end with the same security in mind as a password. The access_token itself will expire after 1 hour and could be refresh with the `refresh_token`, just as any other OAuth2 implementation.
+The refresh token should be stored on your end with the same security in mind as a password. The `access_token` itself will expire after 1 hour at which point the `refresh_token` should be used to fetch a new `access_token`, just as any other OAuth2 implementation.
 
 ### Metry OAuth Connect
 To make this implementation as smooth as possible, we've created a javascript library to connect the user. This will also demonstrate a general OAuth2 flow.
@@ -317,6 +317,142 @@ This filter will only list *active* meters where *last month value is before Mar
 + Response 200
     + Attributes (Meter)
 
+# Group Trees
+
+Trees is a way to structure meters in a hierarchical structure. It is flexible so that users and applications can group meters however needed, for instance, by cities, properties, buildings, and other logical groups. Consumption requests can then be made on tree nodes to get the aggregated consumption or temperature of the underlying meters.
+
+This feature requires developer plan Ultimate. <a href="https://metry.io/sv/utvecklare/" target=_blank>Contact us to upgrade.</a>
+
+## Create [/trees]
+
+Create a new tree or add tree nodes to an existing tree. This requires the OAuth client to have the scope `write_trees`.
+
+### Create tree node [POST]
+
++ Request
+
+    + Attributes
+        + parent: null - The _id of the parent if added a node to a another node in an existing tree
+        + name: Kungsgatan - A name to put on the tree node
+ 
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": [],
+                "data": {
+                    "_id": "5927d86628592700964a702c",
+                    "name": "user node",
+                    "factor": 1,
+                    "children": [],
+                    "app_custom_fields": [],
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }
+            }
+
+## Tree node [/trees/{tree_id}]
+
+Update or delete a tree node. Application specific data can be specified on the tree node as custom fields which will only be available in your application. 
+
++ Parameters
+    + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
+
+### Update tree node [PUT]
+
++ Request
+
+    + Attributes
+        + parent: null - The _id of the parent if added a node to a another node in an existing tree
+        + name: Kungsgatan - A name to put on the tree node
+        + `app_custom_fields`: (object) - Custom key value pairs set by your application. 
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5927dd3b28592700ad6185dc",
+                    "name": "user node",
+                    "factor": 1,
+                    "app_custom_fields": {},
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }]
+            }
+
+### Delete tree node [DELETE]
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5927dd3b28592700ad6185dc",
+                    "name": "user node",
+                    "factor": 1,
+                    "app_custom_fields": [],
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }]
+            }
+
+## Trees collection [/trees{?parent,app_custom_fields}]
+
+List all of a user's trees or get a subtree by including the query parameter `parent` as the **_id** of the parent node.
+
+It is also possible to filter tree nodes based on app specific custom fields using the query parameter syntax `app_custom_fields.{your_field}={your_value}`
+
+### List trees [GET]
+
++ Parameters
+    + parent: 5927d86628592700964a702c (string) - The _id of the nodes parent. Use `null` to only get root nodes. Then use the _id of each root node to get the nodes below it.
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5927dd3b28592700ad6185dc",
+                    "name": "user node",
+                    "factor": 1,
+                    "app_custom_fields": [],
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }]
+            }
+           
+           
+           
 
 
 # Group Consumption
@@ -663,6 +799,17 @@ List and filter the available meters for a given open data channels
 ## Child Meter (object)
 + `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
 + holder: (Holder With Username) - An account that is the holder of the meter.
+
+## Tree (object)
++ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier root meter.
++ name: Kungsgatan (string) - A user defined name on the tree node
++ factor: 1 (number) - How much the node's consumption should contribute to the aggregated value.
++ `app_custom_fields`: (object) - Custom fields created by your app. The value of this property depends on what OAuth client the access token used belongs to.
++ parent: 58231f8ec18edcbe1acf8240 (string) - The name of the node's parent in the tree. If it is the root, parent is `null`.
++ location: [20.2282046, 67.854537] (array[number]) - Geographical coordinates of the tree node as longitude and latitude.
++ meters: [] (array[Meter Reference]) - Meters added to the node.  
+
+## Meter Reference (object
 
 ## Consumption (object)
 
