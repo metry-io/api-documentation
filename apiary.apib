@@ -418,6 +418,60 @@ Update or delete a tree node. Application specific data can be specified on the 
                 }]
             }
 
+## Tree node meters [/trees/{tree_id}/meters]
+Add the user's meters to tree nodes to aggregate values for the meters added by making consumption requests on the tree nodes.
+
+Note that to request consumption values for a tree node, every meter added in the tree need to be in box `active`.
+
++ Parameters
+    + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
+
+### Add a meter [POST]
+
++ Request
+
+    + Attributes
+        + `_id`: 5927dd3b28592700ad6185dc (string) - The _id of meter to add.
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+        
+        {
+            "code": 200,
+            "message": "OK",
+            "profiling": [],
+            "data": {
+                "_id": "592bc4d328592700c26532bf",
+                "name": "Kungsgatan",
+                "factor": 1,
+                "app_custom_fields": [],
+                "parent": null,
+                "meters": [{
+                    "_id": "592bc4d328592700c26532c0",
+                    "root_id": "592bc4d328592700c26532c0",
+                    "factor": 1
+                }],
+                "location": null,
+                "open_channel_ids": null
+            }
+        }
+
+## Tree node remove meter [/trees/{tree_id}/meters/{meter_id}]
+
+A meter reference can be removed from the tree node.
+
++ Parameters
+    + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
+    + meter_id: 5927d86628592700964a702d (string) - The _id of an addedd meter
+
+
+### Remove a meter [DELETE]
+
++ Response 200 (application/json)
+
+
+
 ## Trees collection [/trees{?parent,app_custom_fields}]
 
 List all of a user's trees or get a subtree by including the query parameter `parent` as the **_id** of the parent node.
@@ -441,7 +495,7 @@ It is also possible to filter tree nodes based on app specific custom fields usi
                 "limit": 50,
                 "data": [{
                     "_id": "5927dd3b28592700ad6185dc",
-                    "name": "user node",
+                    "name": "Kungsgatan",
                     "factor": 1,
                     "app_custom_fields": [],
                     "parent": null,
@@ -801,7 +855,7 @@ List and filter the available meters for a given open data channels
 + holder: (Holder With Username) - An account that is the holder of the meter.
 
 ## Tree (object)
-+ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier root meter.
++ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier tree node. It can be used instead of a meter id to request consumption values. 
 + name: Kungsgatan (string) - A user defined name on the tree node
 + factor: 1 (number) - How much the node's consumption should contribute to the aggregated value.
 + `app_custom_fields`: (object) - Custom fields created by your app. The value of this property depends on what OAuth client the access token used belongs to.
