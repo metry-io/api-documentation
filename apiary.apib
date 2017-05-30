@@ -134,7 +134,7 @@ Tip: Use alias "me" to reference the currently authorized user.
             Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 
-+ Response 200
++ Response 200 (application/json)
 
     + Attributes (Account)
 
@@ -197,7 +197,7 @@ reference itself, and is used to updated meta-information about the meter such a
 
             Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Meter)
     
     + Body
@@ -314,27 +314,31 @@ This filter will only list *active* meters where *last month value is before Mar
     
             Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Meter)
 
 # Group Trees
 
-Trees is a way to structure meters in a hierarchical structure. It is flexible so that users and applications can group meters however needed, for instance, by cities, properties, buildings, and other logical groups. Consumption requests can then be made on tree nodes to get the aggregated consumption or temperature of the underlying meters.
+Trees are a way to structure meters in a hierarchical structure. The implementation is intended to be as flexible as possible so that users and applications can group meters however needed, for instance, by cities, properties, buildings, and other logical groups. Consumption requests can then be made on tree nodes to get the aggregated consumption or temperature of the underlying meters.
 
 This feature requires developer plan Ultimate. <a href="https://metry.io/sv/utvecklare/" target=_blank>Contact us to upgrade.</a>
 
 ## Create [/trees]
 
-Create a new tree or add tree nodes to an existing tree. This requires the OAuth client to have the scope `write_trees`.
+Create a new tree or add tree nodes to an existing tree. 
+
+This requires an OAuth client with the the scope `write_trees`.
 
 ### Create tree node [POST]
 
-+ Request
+
+ 
++ Request (application/json)
 
     + Attributes
-        + parent: null - The _id of the parent if added a node to a another node in an existing tree
-        + name: Kungsgatan - A name to put on the tree node
- 
+        + parent: null (string) - The _id of the parent if adding as a child to another node in an existing tree
+        + name: Kungsgatan (string) - A name to put on the tree node
+    
 + Response 200 (application/json)
     + Attributes (Tree)
     + Body
@@ -356,7 +360,7 @@ Create a new tree or add tree nodes to an existing tree. This requires the OAuth
                 }
             }
 
-## Tree node [/trees/{tree_id}]
+## Modify a Tree node [/trees/{tree_id}]
 
 Update or delete a tree node. Application specific data can be specified on the tree node as custom fields which will only be available in your application. 
 
@@ -368,8 +372,8 @@ Update or delete a tree node. Application specific data can be specified on the 
 + Request
 
     + Attributes
-        + parent: null - The _id of the parent if added a node to a another node in an existing tree
-        + name: Kungsgatan - A name to put on the tree node
+        + parent: null (string) - The _id of the parent if adding as a child to another node in an existing tree
+        + name: Kungsgatan (string) - A name to put on the tree node
         + `app_custom_fields`: (object) - Custom key value pairs set by your application. 
 
 + Response 200 (application/json)
@@ -418,17 +422,17 @@ Update or delete a tree node. Application specific data can be specified on the 
                 }]
             }
 
-## Tree node meters [/trees/{tree_id}/meters]
-Add the user's meters to tree nodes to aggregate values for the meters added by making consumption requests on the tree nodes.
+## Add meters to a tree node [/trees/{tree_id}/meters]
+Add the user's meters to tree nodes so consumption requests can be made to a node to aggregate values for any meters on that tree node.
 
-Note that to request consumption values for a tree node, every meter added in the tree need to be in box `active`.
+Note that to request consumption values for a tree node, every meter added in the tree needs to be in box `active`.
 
 + Parameters
     + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
 
 ### Add a meter [POST]
 
-+ Request
++ Request (application/json)
 
     + Attributes
         + `_id`: 5927dd3b28592700ad6185dc (string) - The _id of meter to add.
@@ -457,9 +461,9 @@ Note that to request consumption values for a tree node, every meter added in th
             }
         }
 
-## Tree node remove meter [/trees/{tree_id}/meters/{meter_id}]
+## remove a meter from a Tree node [/trees/{tree_id}/meters/{meter_id}]
 
-A meter reference can be removed from the tree node.
+Remove a meter reference from a tree node
 
 + Parameters
     + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
@@ -469,8 +473,6 @@ A meter reference can be removed from the tree node.
 ### Remove a meter [DELETE]
 
 + Response 200 (application/json)
-
-
 
 ## Trees collection [/trees{?parent,app_custom_fields}]
 
@@ -511,18 +513,23 @@ It is also possible to filter tree nodes based on app specific custom fields usi
 
 # Group Consumption
 
-Consumption is the use of energy or other metrics for a meter. Consumption is available by the granularities month, day and hour, however, it is important to understand that the availability differs depending on the meter and other external factors.
+Consumption is the use of energy or other metrics for a meter or a tree node. Consumption is available by the granularities month, day and hour, however, it is important to understand that the availability differs depending on the meter/node and other external factors.
 
 
 ## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
 
 We support the following **granularities**: hour, day and month, but we cannot guarantee that it is available for every meter.
 
-The following **metrics** are supported: energy (kWh), flow (m<sup>3</sup>) and power (kW). Power always represents the average power. Note that  metric availability varies between meters.
+The following **metrics** are supported: energy (kWh), flow (m<sup>3</sup>) and temperature (°C). Note that  metric availability varies between meters/nodes.
 
 The response with consumption **values will always match your query**. Missing values are replaced with <code>NULL</code>
 
 Each period in the response will have a `start_date` and `end_date` property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the `period` input parameter. The `period` parameter is always interpreted using the meter's local timezone.
+
+<h3>
+It is important to note that when making consumption requests for tree nodes only the aggregated consumption for meters with box : active is returned.  
+This can be checked using the meter refrence of the node to make a get request the the meters endpoint.
+</h3>
 
 ### Get consumption for a meter [GET]
 
@@ -576,7 +583,7 @@ Request consumptions data for an array of meters.
     
             Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
             
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Consumption)
     
 ## Get Sum of Consumptions For Multiple Meters [/consumptions/sum/{granularity}/{period}{?meters,metrics}]
@@ -598,7 +605,7 @@ Will return a sum of consumptions for the requested meters for each requested pe
     
             Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
             
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Consumption)
 
 # Group Readings
