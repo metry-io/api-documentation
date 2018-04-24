@@ -516,7 +516,7 @@ It is also possible to filter tree nodes based on app specific custom fields usi
 Consumption is the use of energy or other metrics for a meter or a tree node. Consumption is available by the granularities month, day and hour, however, it is important to understand that the availability differs depending on the meter/node and other external factors.
 
 
-## Get Consumption [/consumptions/{meter_id}/{granularity}/{period}?metrics={metrics}]
+## Get Consumption [/consumptions/{id}/{granularity}/{period}?metrics={metrics}]
 
 We support the following **granularities**: hour, day and month, but we cannot guarantee that it is available for every meter.
 
@@ -526,15 +526,47 @@ The response with consumption **values will always match your query**. Missing v
 
 Each period in the response will have a `start_date` and `end_date` property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the `period` input parameter. The `period` parameter is always interpreted using the meter's local timezone.
 
-<h3>
-It is important to note that when making consumption requests for tree nodes only the aggregated consumption for meters with box : active is returned.  
-This can be checked using the meter refrence of the node to make a get request the the meters endpoint.
-</h3>
 
-### Get consumption for a meter [GET]
+### Meter [GET]
 
 + Parameters
-    + meter_id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get consumption data for
+    + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get consumption data for
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified, default metric is returned.
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Consumption)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": [
+                    {
+                        "periods" : [
+                            {
+                                "start_date" : "2013-01-01T00:00:00+0001",
+                                "end_date" : "2013-11-30T23:00:00+0001",
+                                "energy": [1,2,3,4,5,6,7,8,9,10,11],
+                                "flow": [1,2,3,4,5,6,7,8,9,10,11]
+                            }
+                        ],
+                        "meter_id": "5825c6f6de22ae00632e86f3"
+                    }
+                ]
+            }
+
+
+### Tree Node [GET]
+
++ Parameters
+    + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the tree node to get consumption data for. Only  aggregated consumption for meters wehre box is active are included in the sum.
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
     + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
@@ -565,12 +597,11 @@ This can be checked using the meter refrence of the node to make a get request t
                     }
                 ]
             }
+            
 
-## Get Consumption For Multiple Meters [/consumptions/multi/{granularity}/{period}{?meters,metrics}]
+## Multiple meters [/consumptions/multi/{granularity}/{period}?metrics={metrics}]
 
-Request consumptions data for an array of meters.
-
-### Get consumption for a multiple meter [GET]
+### Meter by meter  [GET]
 
 + Parameters
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
@@ -585,14 +616,47 @@ Request consumptions data for an array of meters.
             
 + Response 200 (application/json)
     + Attributes (Consumption)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": [
+                    {
+                        "meter_id": "526f7711a158318a068b475f",
+                        "periods": [
+                            {
+                                "energy": [
+                                    null,
+                                    57.037,
+                                    68.031
+                                ],
+                                "start_date": "2017-05-31T23:00:00+0000",
+                                "end_date": "2017-08-31T22:59:59+0000"
+                            }
+                        ]
+                    },
+                    {
+                        "meter_id": "56b06f2c81376f5a008b4b23",
+                        "periods": [
+                            {
+                                "energy": [
+                                    2369.78,
+                                    2236.336,
+                                    1488.188
+                                ],
+                                "start_date": "2017-05-31T23:00:00+0000",
+                                "end_date": "2017-08-31T22:59:59+0000"
+                            }
+                        ]
+                    }
+                ]
+            }
     
-## Get Sum of Consumptions For Multiple Meters [/consumptions/sum/{granularity}/{period}{?meters,metrics}]
+## Sum of meters [/consumptions/sum/{granularity}/{period}?metrics={metrics}]
 
-Request consumptions data for an array of meters.
-
-### Get sum of consumptions for a multiple meter [GET]
-
-Will return a sum of consumptions for the requested meters for each requested period. 
+### Sum of meters [GET]
 
 + Parameters
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
@@ -607,6 +671,36 @@ Will return a sum of consumptions for the requested meters for each requested pe
             
 + Response 200 (application/json)
     + Attributes (Consumption)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": [
+                    {
+                        "periods": [
+                            {
+                                "energy": [
+                                    2369.78,
+                                    2293.373,
+                                    1556.219
+                                ],
+                                "energy_quality": [
+                                    0.5,
+                                    1,
+                                    1
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+
+
+
+
+
 
 # Group Readings
 
