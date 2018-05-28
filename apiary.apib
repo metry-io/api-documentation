@@ -520,7 +520,14 @@ Consumption is the use of energy or other metrics for a meter or a tree node. Co
 
 We support the following **granularities**: hour, day and month, but we cannot guarantee that it is available for every meter.
 
-The following **metrics** are supported: energy (kWh), flow (m<sup>3</sup>) and temperature (°C). Note that  metric availability varies between meters/nodes.
+The following **metrics** are supported: 
+
+* energy (kWh)
+* flow (m<sup>3</sup>)
+* return_temperature (°C)
+* temperature (°C). 
+
+**Note:** Metric availability varies between meters/nodes.
 
 The response with consumption **values will always match your query**. Missing values are replaced with <code>NULL</code>
 
