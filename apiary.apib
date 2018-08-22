@@ -575,11 +575,14 @@ Each period in the response will have a `start_date` and `end_date` property. No
 
 ### Tree Node [GET]
 
+Requesting consumption for a tree node, returns the sum of the consumption of all the node´s meters per metric. Meters of tree node children are not included. To get the summed consumption for a specific type, add type=heat as a parameter to the url.
+
 + Parameters
     + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the tree node to get consumption data for. Only  aggregated consumption for meters wehre box is active are included in the sum.
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
     + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+    + type: heat (optional, string) - Returns the sum for meters that matches the type.
 
 + Request
     + Headers
@@ -710,6 +713,52 @@ Each period in the response will have a `start_date` and `end_date` property. No
 
 
 
+# Group Costs
+
+Data representing the cost of energy usage parsed from invoices. Costs are stored as time series data in the same way as consumptions and the api works similarly.
+
+
+
+## Get Costs [/costs/{id}/month/{period}?metrics={metrics}&account_id={account_id}]
+
+The only granularity available for costs is month.
+
+The following **metrics** are supported: 
+
+* retail_subscription
+* retail_usage
+* retail_undefined
+* retail_vat
+* retail_total
+
+* grid_subscription
+* grid_usage
+* grid_undefined
+* grid_vat
+* grid_total
+
+**Note:** Metric availability varies between meters.
+
+The response with cost **values will always match your query**. Missing values are replaced with <code>NULL</code>
+
+### Meter [GET]
+
++ Parameters
+    + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get cost data for
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + metrics: grid_total (optional, string) - Limits the response to one or more metrics separated by commas. If not specified, all metrics are returned.
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Consumption)
+    + Body
+
+            {
+            }
 
 
 # Group Readings
