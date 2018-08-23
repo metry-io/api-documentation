@@ -542,7 +542,7 @@ Each period in the response will have a `start_date` and `end_date` property. No
 + Parameters
     + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get consumption data for
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
-    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + Updated cost response : `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified, default metric is returned.
 
 + Request
@@ -719,7 +719,7 @@ Data representing the cost of energy usage parsed from invoices. Costs are store
 
 
 
-## Get Costs [/costs/{id}/month/{period}?metrics={metrics}&account_id={account_id}]
+## Get Costs [/costs/{id}/month/{period}?metrics={metrics}]
 
 The only granularity available for costs is month.
 
@@ -741,12 +741,12 @@ The following **metrics** are supported:
 
 The response with cost **values will always match your query**. Missing values are replaced with <code>NULL</code>
 
-### Meter [GET]
+### For a Meter [GET]
 
 + Parameters
-    + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get cost data for
-    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
-    + metrics: grid_total (optional, string) - Limits the response to one or more metrics separated by commas. If not specified, all metrics are returned.
+    + id: `5b7e64209b8cffjt9e114d3e` (required, string) - The id of the meter to get cost data for
+    + period: `2016` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + metrics: `retail_total,grid_total` (optional, enum [string]) - Limits the response to one or more metrics separated by commas. If not specified `retail_total` and `grid_total`.
 
 + Request
     + Headers
@@ -755,9 +755,32 @@ The response with cost **values will always match your query**. Missing values a
 
 + Response 200 (application/json)
     + Attributes (Consumption)
+        + account_id: (string) The account that the costs are held by.
+        + meter_id: (string) The id of the meter the cost data is for.
+        + currency: (string) The monetry unit the costs are recorded in.
+        + periods: (array[Cost])
+        
     + Body
 
             {
+                "code": 200,
+                "message": "OK",
+                "profiling": [],
+                "data": [
+                    {
+                        "account_id": "5b7e64f8tb8cfb009e114d3f",
+                        "meter_id": "5b7e64209b8cffjt9e114d3e",
+                        "currency": "SEK",
+                        "periods": [
+                            {
+                                "retail_total": [null, null, null, null, null, null, null, null, null, null, null, null],
+                                "grid_total": [345, 343, 321, 433, 345, 546, 234, 212, 256, 396, 194, 390],
+                                "start_date": "2015-12-31T23:00:00+0000",
+                                "end_date": "2016-12-31T22:59:59+0000"
+                            }
+                        ]
+                    }
+                ]
             }
 
 
@@ -1026,6 +1049,11 @@ List and filter the available meters for a given open data channels
 ## Meter Reference (object
 
 ## Consumption (object)
+
+## Cost (object)
++ metric: [] (array[number]) - The values for each requested metric
++ start_date: (string) - The start date of the period, an date time stromg in iso format 
++ end_date: (string) - The end date of the period, an date time string in iso format 
 
 ## Open Channel (object)
 + `_id`: 5825d2ff6ae4ce006252ee5d (string, required) - Unique identifier for the open channel
