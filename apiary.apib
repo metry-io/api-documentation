@@ -114,6 +114,9 @@ For future compatibility, please interpret the following HTTP status code ranges
 **400–499** as client request errors<br>
 **500–599** as server errors
 
+## Rate limiting
+If the rate of requests from a single client is greater than what we estimate to be reasonable which is about 10 requests/second, the API will temporarily respond with status code **429**. If your client does not make more than one request at a time, it is unlikely to be affected by this rate limit. The rate limit may change in the future if we see a need for it.
+
 # Group Accounts
 
 An account represents a person, buisiness or orginaization that uses the Metry platform.
@@ -736,6 +739,8 @@ The following **metrics** are supported:
 * grid_undefined
 * grid_vat
 * grid_total
+
+Learn more about the definition of each metric here (in Swedish only): https://metry.zendesk.com/hc/sv/articles/360005144654
 
 **Note:** Metric availability varies between meters.
 
