@@ -276,7 +276,10 @@ reference itself, and is used to updated meta-information about the meter such a
                     "readings_stats": null,
                     "has_active_complaints": false,
                     "representation": null,
-                    "open_channel_ids": null
+                    "open_channel_ids": null,
+                    "active_box_tree_paths": [
+                        [{"_id": "5bc8408d0cfb6200783c389d", "name": "Göteborg"}, {"_id": "5bc8408d0cfb6200783c389f", "name": "Kämpegatan 6"}]
+                    ]
                 }
             }
 
@@ -1033,6 +1036,7 @@ List and filter the available meters for a given open data channels
 + has_active_complaints: true (boolean) - is there an active issue open for this meter regarding missing consumption values.
 + representation: consumption, production, `net_consumption`, `net_production`, sensor (enum [string]) - Does this meter record energy consumption or production
 + on_hold: false (boolean) - The holder has decided to set this meter as on hold and exclude it from statistics, if for example it is a new meter that has not yet started to record consumption
++ `active_box_tree_paths`: (array[array[Tree reference]]) - A list paths to the meter in the tree in Metry for meters in active box. 
 
 ## Holder (object)
 + `_id`: 58233c51c18edcbe1acf824f (string, required) - Unique identifier for the account.
@@ -1053,6 +1057,10 @@ List and filter the available meters for a given open data channels
 + parent: 58231f8ec18edcbe1acf8240 (string) - The name of the node's parent in the tree. If it is the root, parent is `null`.
 + location: [20.2282046, 67.854537] (array[number]) - Geographical coordinates of the tree node as longitude and latitude.
 + meters: [] (array[Meter Reference]) - Meters added to the node.  
+
+## Tree reference (object)
++ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier tree node. It can be used instead of a meter id to request consumption values. 
++ name: Kungsgatan (string) - A user defined name on the tree node
 
 ## Meter Reference (object
 
