@@ -382,7 +382,8 @@ Update or delete a tree node. Application specific data can be specified on the 
     + Attributes
         + parent: null (string) - The _id of the parent if adding as a child to another node in an existing tree
         + name: Kungsgatan (string) - A name to put on the tree node
-        + `app_custom_fields`: (object) - Custom key value pairs set by your application. 
+        + `app_custom_fields`: (object) - Custom key value pairs set by a third party application.
+        + `custom_fields`: (object) - Custom key value pairs set by an internal integration.
 
 + Response 200 (application/json)
     + Attributes (Tree)
@@ -508,7 +509,8 @@ It is also possible to filter tree nodes based on app specific custom fields usi
                     "_id": "5927dd3b28592700ad6185dc",
                     "name": "Kungsgatan",
                     "factor": 1,
-                    "app_custom_fields": [],
+                    "app_custom_fields": {},
+                    "custom_fields": {"object_id": "13415-2345"}
                     "parent": null,
                     "meters": [],
                     "location": null,
@@ -1054,6 +1056,7 @@ List and filter the available meters for a given open data channels
 + name: Kungsgatan (string) - A user defined name on the tree node
 + factor: 1 (number) - How much the node's consumption should contribute to the aggregated value.
 + `app_custom_fields`: (object) - Custom fields created by your app. The value of this property depends on what OAuth client the access token used belongs to.
++ `custom_fields`: (object) - Custom fields created by an internal integration. To use custom fields in a third party application with an OAuth integration, use `app_custom_fields` 
 + parent: 58231f8ec18edcbe1acf8240 (string) - The name of the node's parent in the tree. If it is the root, parent is `null`.
 + location: [20.2282046, 67.854537] (array[number]) - Geographical coordinates of the tree node as longitude and latitude.
 + meters: [] (array[Meter Reference]) - Meters added to the node.  
