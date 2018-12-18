@@ -546,6 +546,7 @@ The response with consumption **values will always match your query**. Missing v
 
 Each period in the response will have a `start_date` and `end_date` property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the `period` input parameter. The `period` parameter is always interpreted using the meter's local timezone.
 
+**Note:** One request is limited 100000 values. To fetch data for a longer period, split the period into multiple requests.
 
 ### Meter [GET]
 
@@ -585,7 +586,7 @@ Each period in the response will have a `start_date` and `end_date` property. No
 
 ### Tree Node [GET]
 
-Requesting consumption for a tree node, returns the sum of the consumption of all the node´s meters per metric. Meters of tree node children are not included. To get the summed consumption for a specific type, add type=heat as a parameter to the url.
+Requesting consumption for a tree node returns the sum of the consumption of all the node's meters per metric. To get the summed consumption for a specific type, add type=heat as a parameter to the url.
 
 + Parameters
     + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the tree node to get consumption data for. Only  aggregated consumption for meters wehre box is active are included in the sum.
