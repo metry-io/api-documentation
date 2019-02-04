@@ -552,6 +552,7 @@ Each period in the response will have a `start_date` and `end_date` property. No
 
 + Parameters
     + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get consumption data for
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM, YYYYMMDD or YYYYMMDDHH as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
     + Updated cost response : `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified, default metric is returned.
@@ -739,13 +740,14 @@ The following **metrics** are supported:
 * retail_subscription
 * retail_usage
 * retail_undefined
-* retail_vat
 * retail_total
 
 * grid_subscription
+* grid_subscription_power
+* grid_subscription_return_temperature
+* grid_subscription_flow
 * grid_usage
 * grid_undefined
-* grid_vat
 * grid_total
 
 Learn more about the definition of each metric here (in Swedish only): https://metry.zendesk.com/hc/sv/articles/360005144654
@@ -825,7 +827,7 @@ Importing readings from Metry when readings are blocked is possible but should b
 
 + Parameters
     + meter_id (required, string, `53294e5ae9cada3306001735`) ... The id of the meter to get reading data for
-    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as
+    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM, YYYYMMDD or YYYYMMDDHH as
     long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
     All date will be interpreted using the meters timezone.
     + metrics (optional, string `energy,flow,power`) ... Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
