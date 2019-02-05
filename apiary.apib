@@ -61,6 +61,9 @@ The Metry API uses the standard OAuth 2.0 protocol for simple, but effective aut
 As an app developer, you should direct your users to login with Metry and grant access to your app. This will give you the users `refresh_token`, which should be used to request the `access_token`.
 The refresh token should be stored on your end with the same security in mind as a password. The `access_token` itself will expire after 1 hour at which point the `refresh_token` should be used to fetch a new `access_token`, just as any other OAuth2 implementation.
 
+**Read more about getting started with OAuth here:**
+https://support.metry.io/hc/en-us/articles/360009388753-Third-Party-Access-to-Energy-Data
+
 ### Metry OAuth Connect
 To make this implementation as smooth as possible, we've created a javascript library to connect the user. This will also demonstrate a general OAuth2 flow.
 See the Github repository on https://github.com/metry-io/metry-oauth-connect and try the demo on http://metry-oauth-connect-demo.s3-website-eu-west-1.amazonaws.com/
