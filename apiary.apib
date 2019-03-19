@@ -1049,12 +1049,11 @@ A stream is connected to the authenticated account and the OAuth client that cre
             
 ### List streams [GET /streams?resource={resource}&granularity={granularity}]
 
-+ Parameters (application/json)
-
-    + resource: consumption (enum[string], required) - The resource of data to stream.
++ Parameters
+    + resource: consumption (enum[string], optional) - Search for streams for a specific resource.
         + Members
             + `consumption`
-    + granularity: null (string, optional) - An optional filter to only get timeseries data with a specific granularity such as *month*, *day*, *hour*. This only applies to the resource "consumption".
+    + granularity: null (string, optional) - Search for streams limited to a certain granularity such as *month*, *day*, *hour*. 
 
 + Response 200 (application/json)
     + Attributes (Stream)
