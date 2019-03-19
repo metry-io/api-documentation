@@ -1017,6 +1017,8 @@ The supported resources are the following
 
 A client can create and delete streams. When a stream is created, all historical data will be pushed to the stream. 
 
+A stream is connected to the authenticated account and the OAuth client that creates it. This means that a third party application will need one stream for each Metry account connected to the application. 
+
 ### Create a stream [POST]
 
 + Request (application/json)
@@ -1044,6 +1046,38 @@ A client can create and delete streams. When a stream is created, all historical
                     "last_offset": null
                 }
             }
+            
+### List streams [GET /streams?resource={resource}&granularity={granularity}]
+
++ Parameters (application/json)
+
+    + resource: consumption (enum[string], required) - The resource of data to stream.
+        + Members
+            + `consumption`
+    + granularity: null (string, optional) - An optional filter to only get timeseries data with a specific granularity such as *month*, *day*, *hour*. This only applies to the resource "consumption".
+
++ Response 200 (application/json)
+    + Attributes (Stream)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5c90db77775578007d6da70a",
+                    "created": "2019-03-19T12:07:19+0000",
+                    "holder_id": "5c90db6977557800bc319526",
+                    "client_id": "5c90afaa7755780097006802",
+                    "resource": "consumption",
+                    "granularity": null,
+                    "last_offset": null
+                }]
+            }
+         
+            
             
 ### Delete a stream [DELETE /streams/{stream_id}]
 
