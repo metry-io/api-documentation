@@ -1128,7 +1128,7 @@ Only one client should consume one stream at a time. This means that parallel re
 If the response does not return any records, there is no more data currently in the stream. Data is usually added in Metry hourly or daily, so making additional requests immediately after receiving an empty response should be avoided; instead, wait at least 60 seconds before making a new request.
 
 #### Fault tolerance
-If the consumer crashes for any reason and is unable to completely process the batch, it can resume from the same last batch using that batch’s offset without losing any data. This provides an *at-least-once* guarantee for reading data. The client does not need to safe the offset itself. To resume, it can get the last offset from the stream by first fetching the stream from the API.
+If the consumer crashes for any reason and is unable to completely process the batch, it can resume from the same last batch using that batch’s offset without losing any data. This provides an *at-least-once* guarantee for reading data. The client does not need to store the offset itself. To resume, it can get the last offset from the stream by first fetching the stream from the API.
 
 The property `last_offset` on a stream is updated after making a request with a greater offset value than last time, indicating that the consumer has successfully processed the data from the last response. Processed data will eventually be deleted from the stream during a periodic cleanup process. 
 
