@@ -1053,7 +1053,7 @@ The client that created a stream can also consume the data from it. This works u
 #### Fault tolerance
 If the consumer crashes for any reason and is unable to completely process the batch, it can resume from the same last batch using that batch’s offset without losing any data. This provides an *at-least-once* guarantee for reading data.
 
-The property `last_offset` on a stream is updated after making a request with a greater offset value than last time, indicating that the consumer has successfully processed the data from the last response.
+The property `last_offset` on a stream is updated after making a request with a greater offset value than last time, indicating that the consumer has successfully processed the data from the last response. Processed data will eventually be deleted from the stream during a periodic cleanup process. 
 
 ### Consume a consumption stream [POST]
 
