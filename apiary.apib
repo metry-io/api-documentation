@@ -1119,7 +1119,7 @@ A stream is connected to the authenticated account and the OAuth client that cre
 
 ## Consuming streams [/streams/{stream_id}/consume]
 
-Consuming a stream works using an offset that is returned in each response. If no offset is specified in the request, such as when first starting to consume the stream, it will return the first data in the stream or from the last committed offset which is set after requesting with a greater offset.
+Consuming a stream is done using an offset that is returned in each response. If no offset is specified in the request, such as when first starting to consume the stream, it will return the first data in the stream or from the last offset which is set after requesting with a greater offset. A response does not necessarily include all data in the stream. This means that the client should keep track of the last offset locally in memory, making additional requests, updating the local last offset each time, until no more records are returned from the stream.
 
 #### Request rate limiting
 
