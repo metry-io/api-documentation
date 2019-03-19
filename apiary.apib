@@ -1008,7 +1008,7 @@ List and filter the available meters for a given open data channels
 
 # Group Streams
 
-Streams are used to continuously get new or updated data such as consumption values. This is ideally used when an application wants to continuously sync data in Metry to another system for persistent storage.
+Streams are used to continuously get new or updated data such as consumption values. These are ideally used when an application wants to continuously sync data from Metry to another system for persistent storage.
 
 The supported resources are the following
 * **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature*
@@ -1172,7 +1172,7 @@ The property `last_offset` on a stream is updated after making a request with a 
 
 ## Stream Batch (object)
 + offset: 1552987235155131904 (number) - The offset of the the batch of data. Use this value in upcoming requests to get the next data.
-+ resource: consumption (string) - The kind of resource the stream will include data. 
++ resource: consumption (string) - The data resource of the stream. 
 + records: [] (array[object]) - An array of records. The format of the data depends on the resource of the stream.
 
 ## Tree (object)
