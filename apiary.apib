@@ -1004,6 +1004,98 @@ List and filter the available meters for a given open data channels
                     }
                 ]
             }
+            
+
+# Group Streams
+
+Streams are used to continuously get new or updated data such as consumption values. This is ideally used when an application wants to continuously sync data in Metry to another system for persistent storage.
+
+The supported resources are the following
+* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature*
+
+## Manage streams [/streams]
+
+A client can create and delete streams. When a stream is created, all historical data will be pushed to the stream. 
+
+### Create a stream [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + resource: consumption (enum[string], required) - The resource of data to stream.
+            + Members
+                + `consumption`
+        + granularity: null (string, optional) - An optional filter to only get timeseries data with a specific granularity such as *month*, *day*, *hour*. This only applies to the resource "consumption".
+
++ Response 200 (application/json)
+    + Attributes (Stream)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "_id": "5c90afaf775578007d6da703",
+                    "created": "2019-03-19T09:00:31+0000",
+                    "holder_id": "5c90afa377557800970067f6",
+                    "client_id": "5c90afaa7755780097006802",
+                    "resource": "consumption",
+                    "granularity": null,
+                    "last_offset": null
+                }
+            }
+
+
+## Consuming streams [/streams/{stream_id}/consume]
+
+The client that created a stream can also consume the data from it. This works using an offset that is returned in each response. If no offset is specified in the request, such as when first starting to consume the stream, it will return the first data in the stream or from the second to last offset used in a request.
+
+#### Fault tolerance
+If the consumer crashes for any reason and is unable to completely process the batch, it can resume from the same last batch using that batch’s offset without losing any data. This provides an *at-least-once* guarantee for reading data.
+
+The property `last_offset` on a stream is updated after making a request with a greater offset value than last time, indicating that the consumer has successfully processed the data from the last response.
+
+### Consume a consumption stream [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + offset: 1552987235155131904 (number, optional) - The offset of the last received response. If this offset does not exist in the consumer, leaving it out or setting it to null will return the first data in the stream with an offset to use for upcoming requests.
+        
++ Response 200 (application/json)
+    + Attributes (Stream Batch)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "offset": 1552988044643025920,
+                    "resource": "consumption",
+                    "records": [{
+                        "meter": {
+                            "_id": "5c90bb1077557800b028b68a",
+                            "ean": "735999000000000000",
+                            "timezone": "Etc/GMT-1"
+                        },
+                        "values": [{
+                            "value": 0,
+                            "granularity": "hour",
+                            "metric": "flow",
+                            "updated": false,
+                            "period": "2017100100"
+                        }, {
+                            "value": 1,
+                            "granularity": "hour",
+                            "metric": "flow",
+                            "updated": false,
+                            "period": "2017100101"
+                        }]
+                    }]
+                }
+            }
+
+
 
 # Data Structures
 
@@ -1057,8 +1149,22 @@ List and filter the available meters for a given open data channels
 + `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
 + holder: (Holder With Username) - An account that is the holder of the meter.
 
+## Stream (object)
++ `_id`: 5c90afaf775578007d6da703 (string, required) - Unique identifier for the stream.
++ created: 2019-03-19T09:00:31+0000 (string) - When the stream was created in ISO 8601 format.
++ `holder_id`: 5c90afa377557800970067f6 (string) - A reference to the account holding the stream. It is from this account the data is coming.
++ `client_id`: 5c90afaa7755780097006802 (string, optional) - A reference to the OAuth client, usually a third party application that created the stream and has access to it.
++ resource: consumption (string) - The kind of resource the stream will include data. 
++ granularity: null (string, optional) - An optional filter for which granularity of data the stream will include for time series resources.
++ `last_offset`: 1552987235155131904 (number, optional) - The last committed offset on the stream set when consuming the stream with a greater offset value. This is used to resume the reading from a stream.
+
+## Stream Batch (object)
++ offset: 1552987235155131904 (number) - The offset of the the batch of data. Use this value in upcoming requests to get the next data.
++ resource: consumption (string) - The kind of resource the stream will include data. 
++ records: [] (array[object]) - An array of records. The format of the data depends on the resource of the stream.
+
 ## Tree (object)
-+ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier tree node. It can be used instead of a meter id to request consumption values. 
++ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier for the tree node. It can be used instead of a meter id to request consumption values. 
 + name: Kungsgatan (string) - A user defined name on the tree node
 + factor: 1 (number) - How much the node's consumption should contribute to the aggregated value.
 + `app_custom_fields`: (object) - Custom fields created by your app. The value of this property depends on what OAuth client the access token used belongs to.
