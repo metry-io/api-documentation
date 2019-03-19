@@ -1044,6 +1044,18 @@ A client can create and delete streams. When a stream is created, all historical
                     "last_offset": null
                 }
             }
+            
+### Delete a stream [DELETE /streams/{stream_id}]
+
++ Response 200 (application/json)
+    + Attributes
+    + Body
+    
+            {
+                "code": 200,
+                "message": "Deleted stream."
+            }
+
 
 
 ## Consuming streams [/streams/{stream_id}/consume]
@@ -1079,13 +1091,13 @@ The property `last_offset` on a stream is updated after making a request with a 
                             "timezone": "Etc/GMT-1"
                         },
                         "values": [{
-                            "value": 0,
+                            "value": 0.5312,
                             "granularity": "hour",
                             "metric": "flow",
                             "updated": false,
                             "period": "2017100100"
                         }, {
-                            "value": 1,
+                            "value": 1.3543,
                             "granularity": "hour",
                             "metric": "flow",
                             "updated": false,
