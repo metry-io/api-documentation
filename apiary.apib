@@ -1011,7 +1011,9 @@ List and filter the available meters for a given open data channels
 Streams are used to continuously get new or updated data such as consumption values. These are ideally used when an application wants to continuously sync data from Metry to another system for persistent storage.
 
 The supported resources are the following
-* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature*
+* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature*.
+* **invoices** Parsed data from invoices including invoice rows.
+
 
 ## Manage streams [/streams]
 
@@ -1027,6 +1029,7 @@ A stream is connected to the authenticated account and the OAuth client that cre
         + resource: consumption (enum[string], required) - The resource of data to stream.
             + Members
                 + `consumption`
+                + `invoices`
         + granularity: null (string, optional) - An optional filter to only get timeseries data with a specific granularity such as *month*, *day*, *hour*. This only applies to the resource "consumption".
 
 + Response 200 (application/json)
@@ -1077,6 +1080,7 @@ A stream is connected to the authenticated account and the OAuth client that cre
     + resource: consumption (enum[string], optional) - Search for streams for a specific resource.
         + Members
             + `consumption`
+            + `invoices`
     + granularity: null (string, optional) - Search for streams limited to a certain granularity such as *month*, *day*, *hour*. 
 
 + Response 200 (application/json)
@@ -1167,6 +1171,61 @@ The property `last_offset` on a stream is updated after making a request with a 
                             "metric": "flow",
                             "updated": false,
                             "period": "2017100101"
+                        }]
+                    }]
+                }
+            }
+
+
+### Consume an invoices stream [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + offset: 1552987235155131904 (number, optional) - The offset of the last received response. If this offset does not exist in the consumer, leaving it out or setting it to null will return the first data in the stream with an offset to use for upcoming requests.
+        
++ Response 200 (application/json)
+    + Attributes (Stream Batch)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "offset": 1552988044643025920,
+                    "resource": "invoices",
+                    "records": [{
+                        "_id": "5cb5b34380b432007b386523",
+                        "owner": {
+                            "_id": "510f9c9054e8ef0700000001",
+                            "name": "Vattenfall"
+                        },
+                        "results": [{
+                            "ean": "735999100057526501",
+                            "period": "20190101-20190131",
+                            "due_date": "2019-02-31T00:00:00+0100",
+                            "invoice_number": "1234525",
+                            "invoice_rows": [{
+                                "description": "Effekt",
+                                "amount": 522,
+                                "contract_type": "grid",
+                                "metric": "grid_subscription_power",
+                                "price": 6,
+                                "price_unit": "kr/kW",
+                                "quantity": 87,
+                                "quantity_unit": "kW,mnd",
+                                "period": "20190101-20190131"
+                            }, {
+                                "description": "Energi",
+                                "amount": 2170.884,
+                                "contract_type": "grid",
+                                "metric": "grid_usage",
+                                "price": 7.778,
+                                "price_unit": "öre/kWh",
+                                "quantity": 27912,
+                                "quantity_unit": "kWh",
+                                "period": "20190101-20190131"
+                            }]
                         }]
                     }]
                 }
