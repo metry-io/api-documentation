@@ -1011,7 +1011,7 @@ List and filter the available meters for a given open data channels
 Streams are used to continuously get new or updated data such as consumption values. These are ideally used when an application wants to continuously sync data from Metry to another system for persistent storage.
 
 The supported resources are the following
-* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature*.
+* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature* as well as all cost metrics. Cost values are included in consumption streams but are prefixed with *cost_*, such as *cost_retail_total*.
 * **invoices** Parsed data from invoices including invoice rows.
 
 
@@ -1124,6 +1124,9 @@ A stream is connected to the authenticated account and the OAuth client that cre
 ## Consuming streams [/streams/{stream_id}/consume]
 
 Consuming a stream is done using an offset that is returned in each response. If no offset is specified in the request, such as when first starting to consume the stream, it will return the first data in the stream or from the last offset which is set after requesting with a greater offset. A response does not necessarily include all data in the stream. This means that the client should keep track of the last offset locally in memory, making additional requests, updating the local last offset each time, until no more records are returned from the stream.
+
+**Read more about how to consume a stream with example code here:**
+https://support.metry.io/hc/en-us/articles/360020161673-Import-data-using-Streams
 
 #### Request rate limiting
 
