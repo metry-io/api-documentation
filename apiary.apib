@@ -38,8 +38,8 @@ The Metry API requires authentication - specifically requests made on behalf of 
 Authenticated requests require an access_token. These tokens are unique to a user and should be stored securely. 
 
 There are two methods to authenticate to the API:
-* **Private Access Token Authentication.** Used for single user authentication.
-* **OAuth2 Authentication.** Used for app developers that allow many Metry accounts.
+* **Private Access Token Authentication.** Used for internal integrations that are connected to a single Metry account. 
+* **OAuth2 Authentication.** Used for service provicers that build a system that potentially allow many Metry accounts to connect. Register as a developer to get started at https://app.metry.io/id/register/developer-user?plan=developer_hobby
 
 ### Private access tokens
 Private access-tokens are used to access data for your own account, and should never be
@@ -59,7 +59,7 @@ You can also pass the access-token in the URL (but this is not recommended for s
 The Metry API uses the standard OAuth 2.0 protocol for simple, but effective authentication and authorization to third parties.
 
 As an app developer, you should direct your users to login with Metry and grant access to your app. This will give you the users `refresh_token`, which should be used to request the `access_token`.
-The refresh token should be stored on your end with the same security in mind as a password. The `access_token` itself will expire after 1 hour at which point the `refresh_token` should be used to fetch a new `access_token`, just as any other OAuth2 implementation.
+The refresh token should be stored on your end with the same security in mind as a password. The `access_token` itself will expire after 1 hour at which point the `refresh_token` need to be used to fetch a new `access_token`, just as any other OAuth2 implementation.
 
 **Read more about getting started with OAuth here:**
 https://support.metry.io/hc/en-us/articles/360009388753-Third-Party-Access-to-Energy-Data
