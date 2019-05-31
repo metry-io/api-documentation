@@ -290,6 +290,8 @@ reference itself, and is used to updated meta-information about the meter such a
 
 You can list all meters accessible by the authenticated user.
 
+Note that the response will only contain 50 meters at a time. To get additional meters, specify the amount to skip as a query parameter such as `skip=50`
+
 ### Filtering results
 You can filter results by adding query params, for instance:
 
@@ -1211,6 +1213,9 @@ The property `last_offset` on a stream is updated after making a request with a 
                                 "grid_total": 2692.884
                             },
                             "invoice_number": "1234525",
+                            "total_vat": 673.221,
+                            "total_amount_excl_vat": 2692.884,
+                            "total_amount_due": 3366.105,
                             "invoice_rows": [{
                                 "description": "Effekt",
                                 "amount": 522,
