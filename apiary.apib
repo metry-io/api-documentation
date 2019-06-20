@@ -816,7 +816,7 @@ Invoices collected or uploaded can be listed including the parsed results. The p
 
 The response will only contain 50 invoices at a time. To get additional invoices, specify the amount to skip as a query parameter as `skip=50`.
 
-Invoices 
+Invoices that have successfully been parsed and interpreted will have the `status` property set to **completed**. Add this as a query parameter when listing invoices to not find invoices that for some reason could not be parsed `?status=completed`.   
 
 
 ### List invoices [GET]
@@ -833,11 +833,7 @@ Invoices
             Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
 
 + Response 200 (application/json)
-    + Attributes (Consumption)
-        + account_id: (string) The account that the costs are held by.
-        + meter_id: (string) The id of the meter the cost data is for.
-        + currency: (string) The monetry unit the costs are recorded in.
-        + periods: (array[Cost])
+
         
     + Body
 
