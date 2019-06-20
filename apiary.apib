@@ -807,6 +807,82 @@ The response with cost **values will always match your query**. Missing values a
             }
 
 
+# Group Invoices
+
+
+## Invoices collection [/invoices?status={status}&meter_ids={root_meter_id}&results.ean={ean}&results.invoice_number={invoice_number}]
+
+Invoices collected or uploaded can be listed including the parsed results. The parsed results include various fields that are extracted from the invoice and invoice rows describing the pricing components.
+
+The response will only contain 50 invoices at a time. To get additional invoices, specify the amount to skip as a query parameter as `skip=50`.
+
+Invoices 
+
+
+### List invoices [GET]
+
++ Parameters
+    + status: `completed` (string) - Filter invoices with a specific status. 
+    + meter_ids: `5b7e64209b8cffjt9e114d3e` (string) - The root ID of a meter to find invoices for a specific meter.
+    + results.ean: `735999100057526501` (string) -  The ID defined for the metering point by the utility provider parsed from the invoices.
+    + results.invoice_number: `1234525` (string) -  Find an invoice by the invoice number found on the invoice. 
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Consumption)
+        + account_id: (string) The account that the costs are held by.
+        + meter_id: (string) The id of the meter the cost data is for.
+        + currency: (string) The monetry unit the costs are recorded in.
+        + periods: (array[Cost])
+        
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": [],
+                "count": 1,
+                "limit": 50,
+                "skip":
+                "data": [{
+                    "ean": "735999100057526501",
+                    "period": "20190101-20190131",
+                    "due_date": "2019-02-31T00:00:00+0100",
+                    "metrics": {
+                        "grid_total": 2692.884
+                    },
+                    "invoice_number": "1234525",
+                    "total_vat": 673.221,
+                    "total_amount_excl_vat": 2692.884,
+                    "total_amount_due": 3366.105,
+                    "invoice_rows": [{
+                        "description": "Effekt",
+                        "amount": 522,
+                        "contract_type": "grid",
+                        "metric": "grid_subscription_power",
+                        "price": 6,
+                        "price_unit": "kr/kW",
+                        "quantity": 87,
+                        "quantity_unit": "kW,mnd",
+                        "period": "20190101-20190131"
+                    }, {
+                        "description": "Energi",
+                        "amount": 2170.884,
+                        "contract_type": "grid",
+                        "metric": "grid_usage",
+                        "price": 7.778,
+                        "price_unit": "öre/kWh",
+                        "quantity": 27912,
+                        "quantity_unit": "kWh",
+                        "period": "20190101-20190131"
+                    }]
+                }]
+            }
+
 # Group Readings
 
 Readings are the exact timestamped values for a meter.
