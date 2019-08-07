@@ -1318,6 +1318,68 @@ The property `last_offset` on a stream is updated after making a request with a 
             }
 
 
+# Group Exports
+Exports are used to continuously push streaming from Metry to another system as files instead of polling a stream. This is appropriate for integratios that prefer receiving data via files using techniques such as FTP, SMTP or webhooks. The export will periodically consume a stream given a set interval such as hourly or daily, write the data do a file for a configured file format and send the file given a configured target system. 
+
+There are existing file formats that can be used. If your system already support a specific file format that you prefer to use, Metry can create support for it. Contact support@metry.io to learn more. Pricing can vary.
+
+## Manage exports [/exports]
+
+Just like streams, exports are connected to the authenticated account and OAuth client that created it. Once an export is created, it will also create a stream and start exporting data. If it is unable to export the data for any reason, it will try again later and no data will be lost.
+
+### Create an export [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + format: {"name": "StreamStandard"} (string, required) - The file format used
+        + source_type: "stream" (string, required) - The source of data used. Currently only "stream" is supported. 
+        + frequency: "monthly"
+        + target: null (object, optional) - The target system for where to send exported files. 
+
++ Response 200 (application/json)
+    + Attributes (Stream)
+    + Body
+
+            {
+              "code": 200,
+              "message": "OK",
+              "data": {
+                "_id": "5d4addcc775578007d5ec953",
+                "created": "2019-08-07T14:18:52+0000",
+                "holder_id": "5d4addb677557800fa53a466",
+                "holder": {
+                  "_id": "5d4addb677557800fa53a466",
+                  "name": "Demo User",
+                  "username": "user@name.se"
+                },
+                "client_id": "5d0109c277557800c06dbd13",
+                "format": {
+                  "name": "StreamStandard",
+                  "params": null
+                },
+                "source_type": "stream",
+                "frequency": "monthly",
+                "target": {
+                  "type": "ftp",
+                  "ftp": {
+                    "host": "ftp.example.com",
+                    "port": 21,
+                    "username": "username",
+                    "password": "password",
+                    "path": null
+                  },
+                  "sftp": null,
+                  "smtp": null,
+                  "http": null,
+                  "aws_s3": null
+                },
+                "stream_id": "5d4addcc775578007d5ec955"
+              }
+            }
+
+
+
 
 # Data Structures
 
