@@ -1321,24 +1321,50 @@ The property `last_offset` on a stream is updated after making a request with a 
 # Group Exports
 Exports are used to continuously push streaming from Metry to another system as files instead of polling a stream. This is appropriate for integratios that prefer receiving data via files using techniques such as FTP, SMTP or webhooks. The export will periodically consume a stream given a set interval such as hourly or daily, write the data do a file for a configured file format and send the file given a configured target system. 
 
+### File formats
 There are existing file formats that can be used. If your system already support a specific file format that you prefer to use, Metry can create support for it. Contact support@metry.io to learn more. Pricing can vary.
+
+### Target systems
+Files can be sent to various targets and will require specific configuration parameters. The configuration should be passed as an object on the "target" property in the request body.
+
+#### FTP
+Put exported files on an FTP server.
+`{"ftp": {"host": "ftp.example.com", "port": 21, "username": "metry", "password": "metrypassword"}}`
+  
+#### SFTP
+Put exported files on an SFTP server.
+`{"sftp": {"host": "ftp.example.com", "port": 22, "username": "metry", "password": "metrypassword"}}`
+  
+#### SMTP
+Send exports to a specific email address.
+`{"smtp": {"email": "metryexports@example.com"}}`
+  
+#### HTTP
+Post files to a webserver using either HTTP or HTTPS. To prevent anybody from posting files, it is common to provide either basic authentication parameters in the url or a token as a query or path paramter.
+`{"http": {"url": "https://example.com/import?token=metrytoken"}}`
+
+
 
 ## Manage exports [/exports]
 
-Just like streams, exports are connected to the authenticated account and OAuth client that created it. Once an export is created, it will also create a stream and start exporting data. If it is unable to export the data for any reason, it will try again later and no data will be lost.
+Just like streams, exports are connected to the authenticated account and OAuth client that created it. Once the export configuration is created, it will automatically create a stream and start exporting data at the start of the next hour, day or month. 
 
 ### Create an export [POST]
 
 + Request (application/json)
 
     + Attributes
-        + format: {"name": "StreamStandard"} (string, required) - The file format used
-        + source_type: "stream" (string, required) - The source of data used. Currently only "stream" is supported. 
-        + frequency: "monthly"
-        + target: null (object, optional) - The target system for where to send exported files. 
+        + format: {"name": "StreamStandard"} (object, required) - The file format used
+        + source_type: stream (string, required) - The source of data used. Currently only "stream" is supported. 
+        + frequency: hourly (enum[string], required) - How frequently the export should be run. 
+            + Members
+                + `hourly`
+                + `daily`
+                + `monhtly`
+        + target: {} (object, required) - The target system for where to send exported files. 
 
 + Response 200 (application/json)
-    + Attributes (Stream)
+    + Attributes (Export)
     + Body
 
             {
@@ -1378,6 +1404,120 @@ Just like streams, exports are connected to the authenticated account and OAuth 
               }
             }
 
+### Get an export by ID [GET /exports/{export_id}]
+
+
++ Parameters
+    + `export_id`: 5c90db77775578007d6da70a (string) - The _id value of an export
++ Response 200 (application/json)
+    + Attributes (Export)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "_id": "5d4addcc775578007d5ec953",
+                    "created": "2019-08-07T14:18:52+0000",
+                    "holder_id": "5d4addb677557800fa53a466",
+                    "holder": {
+                      "_id": "5d4addb677557800fa53a466",
+                      "name": "Demo User",
+                      "username": "user@name.se"
+                    },
+                    "client_id": "5d0109c277557800c06dbd13",
+                    "format": {
+                      "name": "StreamStandard",
+                      "params": null
+                    },
+                    "source_type": "stream",
+                    "frequency": "monthly",
+                    "target": {
+                      "type": "ftp",
+                      "ftp": {
+                        "host": "ftp.example.com",
+                        "port": 21,
+                        "username": "username",
+                        "password": "password",
+                        "path": null
+                      },
+                      "sftp": null,
+                      "smtp": null,
+                      "http": null,
+                      "aws_s3": null
+                    },
+                    "stream_id": "5d4addcc775578007d5ec955"
+                  }
+            }         
+            
+### List exports [GET /exports?format.name={format_name}&frequency={frequency}]
+
++ Parameters
+    + format_name: {"name": "StreamStandard"} (object, required) - The file format used
+    + frequency: hourly (enum[string], required) - How frequently the export should be run. 
+        + Members
+            + `hourly`
+            + `daily`
+            + `monhtly`
+
++ Response 200 (application/json)
+    + Attributes (Export)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5d4addcc775578007d5ec953",
+                    "created": "2019-08-07T14:18:52+0000",
+                    "holder_id": "5d4addb677557800fa53a466",
+                    "holder": {
+                      "_id": "5d4addb677557800fa53a466",
+                      "name": "Demo User",
+                      "username": "user@name.se"
+                    },
+                    "client_id": "5d0109c277557800c06dbd13",
+                    "format": {
+                      "name": "StreamStandard",
+                      "params": null
+                    },
+                    "source_type": "stream",
+                    "frequency": "monthly",
+                    "target": {
+                      "type": "ftp",
+                      "ftp": {
+                        "host": "ftp.example.com",
+                        "port": 21,
+                        "username": "username",
+                        "password": "password",
+                        "path": null
+                      },
+                      "sftp": null,
+                      "smtp": null,
+                      "http": null,
+                      "aws_s3": null
+                    },
+                    "stream_id": "5d4addcc775578007d5ec955"
+                  }]
+            }
+         
+            
+            
+### Delete an export [DELETE /exports/{export_id}]
+
++ Parameters
+    + `export_id`: 5c90db77775578007d6da70a (string) - The _id value of an export
++ Response 200 (application/json)
+    + Attributes
+    + Body
+    
+            {
+                "code": 200,
+                "message": "Deleted export."
+            }
 
 
 
@@ -1441,6 +1581,19 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + resource: consumption (string) - The kind of resource the stream will include data. 
 + granularity: null (string, optional) - An optional filter for which granularity of data the stream will include for time series resources.
 + `last_offset`: 1552987235155131904 (number, optional) - The last committed offset on the stream set when consuming the stream with a greater offset value. This is used to resume the reading from a stream.
+
+## Export (object)
++ `_id`: 5c90afaf775578007d6da703 (string, required) - Unique identifier for the export.
++ created: 2019-03-19T09:00:31+0000 (string) - When the stream was created in ISO 8601 format.
++ `holder_id`: 5c90afa377557800970067f6 (string) - A reference to the account holding the stream. It is from this account the data is coming.
++ `client_id`: 5c90afaa7755780097006802 (string, optional) - A reference to the OAuth client, usually a third party application that created the stream and has access to it.
++ source_type: stream (string) - The source of data used. Currently only "stream" is supported. 
++ frequency: hourly (enum[string], required) - How frequently the export should be run. 
+    + Members
+        + `hourly`
+        + `daily`
+        + `monhtly`
++ target: null (object) - The target system for where to send exported files. 
 
 ## Stream Batch (object)
 + offset: 1552987235155131904 (number) - The offset of the the batch of data. Use this value in upcoming requests to get the next data.
