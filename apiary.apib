@@ -1340,9 +1340,17 @@ Send exports to a specific email address.
 `{"smtp": {"email": "metryexports@example.com"}}`
   
 #### HTTP
-Post files to a webserver using either HTTP or HTTPS. To prevent anybody from posting files, it is common to provide either basic authentication parameters in the url or a token as a query or path paramter.
+Post files to a webserver using either HTTP or HTTPS. To prevent anybody from posting files, it is common to provide either basic authentication parameters in the URL or a token as a query or path paramter.
 `{"http": {"url": "https://example.com/import?token=metrytoken"}}`
 
+#### AWS S3 bucket
+Put exported files in an AWS S3 bucket. You need to provide AWS credentials as an Access Key ID and Access Key Secret. It is recommended to create a new AWS IAM user for this which only has privileges to put files in the specified bucket.
+`{"aws_s3": {
+    "bucket": "metry_exports",
+    "access_key_id": "VKIIALKFJLKF33N12345IXS",
+    "access_key_secret": "V5FBggbBStxpkdUJg5d3GJg6VtdwR9BZbPy7nmy6"
+}}
+`
 
 
 ## Manage exports [/exports]
