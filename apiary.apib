@@ -1319,7 +1319,7 @@ The property `last_offset` on a stream is updated after making a request with a 
 
 
 # Group Exports
-Exports are used to continuously push streaming from Metry to another system as files instead of polling a stream. This is appropriate for integratios that prefer receiving data via files using techniques such as FTP, SMTP or webhooks. The export will periodically consume a stream given a set interval such as hourly or daily, write the data do a file for a configured file format and send the file given a configured target system. 
+Exports are used to continuously push data from Metry to another system as files instead of polling a stream. This is appropriate for integrations that prefer receiving data via files using for example FTP, SMTP or webhooks. The export will periodically consume a stream given a set interval such as hourly or daily, write the data do a file for a configured file format and send the file to your system. 
 
 ### File formats
 There are existing file formats that can be used. If your system already support a specific file format that you prefer to use, Metry can create support for it. Contact support@metry.io to learn more. Pricing can vary.
@@ -1329,22 +1329,27 @@ Files can be sent to various targets and will require specific configuration par
 
 #### FTP
 Put exported files on an FTP server.
+
 `{"ftp": {"host": "ftp.example.com", "port": 21, "username": "metry", "password": "metrypassword"}}`
   
 #### SFTP
 Put exported files on an SFTP server.
+
 `{"sftp": {"host": "ftp.example.com", "port": 22, "username": "metry", "password": "metrypassword"}}`
   
 #### SMTP
 Send exports to a specific email address.
+
 `{"smtp": {"email": "metryexports@example.com"}}`
   
 #### HTTP
 Post files to a webserver using either HTTP or HTTPS. To prevent anybody from posting files, it is common to provide either basic authentication parameters in the URL or a token as a query or path paramter.
+
 `{"http": {"url": "https://example.com/import?token=metrytoken"}}`
 
 #### AWS S3 bucket
 Put exported files in an AWS S3 bucket. You need to provide AWS credentials as an Access Key ID and Access Key Secret. It is recommended to create a new AWS IAM user for this which only has privileges to put files in the specified bucket.
+
 `{"aws_s3": {
     "bucket": "metry_exports",
     "access_key_id": "VKIIALKFJLKF33N12345IXS",
