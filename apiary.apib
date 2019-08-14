@@ -1565,7 +1565,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + tags: foo, bar (array[string]) - Meta information.
 + box: inbox, ignored, active (enum [string]) - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.  
 + revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled by the root holder.
-+ type: electricity, heat, cooling, gas,hold to meter  water (enum) - What type of consumption the meter represents.
++ type: electricity, heat, cooling, gas, hot_water, water (enum) - What type of consumption the meter represents.
 + metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
 + ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical meter
 + consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
