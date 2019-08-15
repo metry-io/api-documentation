@@ -1324,6 +1324,8 @@ Exports are used to continuously push data from Metry to another system as files
 ### File formats
 There are existing file formats that can be used. If your system already support a specific file format that you prefer to use, Metry can create support for it. Contact support@metry.io to learn more. Pricing can vary.
 
+* `ConsumptionCSV` <a href="https://support.metry.io/hc/en-us/articles/360008344960-Export-format-ConsumptionCSV">Documentation</a>
+
 ### Target systems
 Files can be sent to various targets and will require specific configuration parameters. The configuration should be passed as an object on the "target" property in the request body.
 
@@ -1367,7 +1369,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + Request (application/json)
 
     + Attributes
-        + format: {"name": "StreamStandard"} (object, required) - The file format used
+        + format: {"name": "ConsumptionCSV"} (object, required) - The file format used
         + source_type: stream (string, required) - The source of data used. Currently only "stream" is supported. 
         + frequency: hourly (enum[string], required) - How frequently the export should be run. 
             + Members
@@ -1394,7 +1396,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
                 },
                 "client_id": "5d0109c277557800c06dbd13",
                 "format": {
-                  "name": "StreamStandard",
+                  "name": "ConsumptionCSV",
                   "params": null
                 },
                 "source_type": "stream",
@@ -1440,7 +1442,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
                     },
                     "client_id": "5d0109c277557800c06dbd13",
                     "format": {
-                      "name": "StreamStandard",
+                      "name": "ConsumptionCSV",
                       "params": null
                     },
                     "source_type": "stream",
@@ -1466,7 +1468,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 ### List exports [GET /exports?format.name={format_name}&frequency={frequency}]
 
 + Parameters
-    + format_name: {"name": "StreamStandard"} (object, required) - The file format used
+    + format_name: {"name": "ConsumptionCSV"} (object, required) - The file format used
     + frequency: hourly (enum[string], required) - How frequently the export should be run. 
         + Members
             + `hourly`
@@ -1494,7 +1496,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
                     },
                     "client_id": "5d0109c277557800c06dbd13",
                     "format": {
-                      "name": "StreamStandard",
+                      "name": "ConsumptionCSV",
                       "params": null
                     },
                     "source_type": "stream",
