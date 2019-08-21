@@ -843,39 +843,51 @@ Invoices that have successfully been parsed and interpreted will have the `statu
                 "profiling": [],
                 "count": 1,
                 "limit": 50,
-                "skip":
+                "skip": 0,
                 "data": [{
-                    "ean": "735999100057526501",
-                    "period": "20190101-20190131",
-                    "due_date": "2019-02-31T00:00:00+0100",
-                    "metrics": {
-                        "grid_total": 2692.884
+                    "_id": "540da71a2c3d1c3c008b53682",
+                    "account": {
+                        "_id": "540da71a2c3d1c3c008b53684",
+                        "name": "Property Owner"
                     },
-                    "invoice_number": "1234525",
-                    "total_vat": 673.221,
-                    "total_amount_excl_vat": 2692.884,
-                    "total_amount_due": 3366.105,
-                    "invoice_rows": [{
-                        "description": "Effekt",
-                        "amount": 522,
-                        "contract_type": "grid",
-                        "metric": "grid_subscription_power",
-                        "price": 6,
-                        "price_unit": "kr/kW",
-                        "quantity": 87,
-                        "quantity_unit": "kW,mnd",
-                        "period": "20190101-20190131"
-                    }, {
-                        "description": "Energi",
-                        "amount": 2170.884,
-                        "contract_type": "grid",
-                        "metric": "grid_usage",
-                        "price": 7.778,
-                        "price_unit": "öre/kWh",
-                        "quantity": 27912,
-                        "quantity_unit": "kWh",
-                        "period": "20190101-20190131"
-                    }]
+                    "owner": {
+                        "_id": "540da71a2c3d1c3c008b53683",
+                        "name": "E.ON Sverige"
+                    },
+                    "status": "completed", 
+                    "results": [{
+                        "ean": "735999100057526501",
+                        "period": "20190101-20190131",
+                        "due_date": "2019-02-31T00:00:00+0100",
+                        "metrics": {
+                            "grid_total": 2692.884
+                        },
+                        "invoice_number": "1234525",
+                        "total_vat": 673.221,
+                        "total_amount_excl_vat": 2692.884,
+                        "total_amount_due": 3366.105,
+                        "invoice_rows": [{
+                            "description": "Effekt",
+                            "amount": 522,
+                            "contract_type": "grid",
+                            "metric": "grid_subscription_power",
+                            "price": 6,
+                            "price_unit": "kr/kW",
+                            "quantity": 87,
+                            "quantity_unit": "kW,mnd",
+                            "period": "20190101-20190131"
+                        }, {
+                            "description": "Energi",
+                            "amount": 2170.884,
+                            "contract_type": "grid",
+                            "metric": "grid_usage",
+                            "price": 7.778,
+                            "price_unit": "öre/kWh",
+                            "quantity": 27912,
+                            "quantity_unit": "kWh",
+                            "period": "20190101-20190131"
+                        }]
+                   }]
                 }]
             }
 
