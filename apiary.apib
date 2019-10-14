@@ -531,6 +531,7 @@ It is also possible to filter tree nodes based on app specific custom fields usi
 
 Consumption is the use of energy or other metrics for a meter or a tree node. Consumption is available by the granularities month, day and hour, however, it is important to understand that the availability differs depending on the meter/node and other external factors.
 
+It is only allowed to get consumption for meters that the user has activated and that are not revoked. If a request is made to a meter for which consumption the user does not have access, the response code will be **403 Forbidden**. To avoid this error, you can look on the attributes on the meter "box" and "revoked" to make sure that they have values that indicated that the user is allowed to get consumption values. "revoked" must be false and "box" must be either "active" or "temporary".
 
 ## Get Consumption [/consumptions/{id}/{granularity}/{period}?metrics={metrics}]
 
