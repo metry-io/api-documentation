@@ -64,6 +64,7 @@ The refresh token should be stored on your end with the same security in mind as
 **Read more about getting started with OAuth here:**
 https://support.metry.io/hc/en-us/articles/360009388753-Third-Party-Access-to-Energy-Data
 
+
 ### Metry OAuth Connect
 To make this implementation as smooth as possible, we've created a javascript library to connect the user. This will also demonstrate a general OAuth2 flow.
 See the Github repository on https://github.com/metry-io/metry-oauth-connect and try the demo on http://metry-oauth-connect-demo.s3-website-eu-west-1.amazonaws.com/
@@ -285,6 +286,26 @@ reference itself, and is used to updated meta-information about the meter such a
                     ]
                 }
             }
+
+### Update a meter [POST /meters/{meter_id}]
+
++ Parameters
+    + meter: 5927d86628592700964a702c (string) - The _id of the meter
+
++ Request (application/json)
+
+    + Attributes
+        + address: Klackvägen 12 (string) - Meta information.
+        + name: Pumphuset vid sjön (string) - Meta information.
+        + tags: foo, bar (array[string]) - Meta information.
+        + box: inbox, ignored, temporary, active (enum [string]) - Change the box on a meter to move it to another box. Meters need to be in box active or temporary to be able to get consumption from the meter.
+        + type: electricity, heat, cooling, gas, hot_water, water (enum) - What type of consumption the meter represents.
+        + ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical metering point.
+        + representation: consumption, production, `net_consumption`, `net_production`, sensor (enum [string]) - Does this meter record energy consumption or production
+
+
++ Response 200 (application/json)
+    + Attributes (Meter)
 
 ## Meters collection [/meters{?box,name,address,tags,control_level,generation,type,metrics,ean,representation}]
 
@@ -1546,7 +1567,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
                 "code": 200,
                 "message": "Deleted export."
             }
-
+            
 
 
 # Data Structures
