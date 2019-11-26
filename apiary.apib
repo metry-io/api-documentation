@@ -288,6 +288,7 @@ reference itself, and is used to updated meta-information about the meter such a
             }
 
 ### Update a meter [POST /meters/{meter_id}]
+Contact [support@metry.io](mailto:support@metry.io) to receive write access to meters. 
 
 + Parameters
     + meter: 5927d86628592700964a702c (string) - The _id of the meter
@@ -306,6 +307,7 @@ reference itself, and is used to updated meta-information about the meter such a
 
 + Response 200 (application/json)
     + Attributes (Meter)
+    
 
 ## Meters collection [/meters{?box,name,address,tags,control_level,generation,type,metrics,ean,representation}]
 
@@ -354,8 +356,6 @@ This filter will only list *active* meters where *last month value is before Mar
 # Group Trees
 
 Trees are a way to structure meters in a hierarchical structure. The implementation is intended to be as flexible as possible so that users and applications can group meters however needed, for instance, by cities, properties, buildings, and other logical groups. Consumption requests can then be made on tree nodes to get the aggregated consumption or temperature of the underlying meters.
-
-This feature requires developer plan Ultimate. <a href="https://metry.io/sv/utvecklare/" target=_blank>Contact us to upgrade.</a>
 
 ## Create [/trees]
 
