@@ -1075,6 +1075,7 @@ List and filter the available meters for a given open data channels
                         "name": "Konsumtion ingen prod",
                         "timezone": "Etc/GMT-1",
                         "address": "Energigatan 13",
+                        "location": [17.359470099999976, 58.10032929999999],
                         "generation": 0,
                         "metrics": [
                             "energy"
@@ -1594,6 +1595,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + created: `2015-05-01T11:46:07+0000` (string) - date time string when a meter was created.
 + children: (array[Child Meter]) - An array of Meters that are children of the current meter.
 + address: Klackvägen 12 (string) - Meta information.
++ location: [17.359470099999976, 58.10032929999999] (array[number]) - Geographic coordinates as longitude and latitude 
 + timezone: `Etc/GMT-1` (string, required) - Timezone the meter is located in. Used to define consumption aggregation from hour to day.
 + `control_level`: owned, subscribed, shared, manual (enum [string], required) - The level of control the holder has on the meter. "Owned" represents the highest level of control.
 + generation: 1 (number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
