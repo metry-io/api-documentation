@@ -1577,7 +1577,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + `_id`: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
 + name: Example account (string) - Name of the user
 + username: someone@example.com (string) - Email, also used as sign in identity.
-+ `sub_accounts`: [] (array[Account]) - An array of sub accounts of the current account 
++ `sub_accounts`: [] (array[Account]) - DEPRECATED An array of sub accounts of the current account. As some accounts have more subaccounts than what can easily be returned in a single request, we have removed them from this view. To fetch a paginated list of subaccounts, use instead /accounts/me/subaccount?offset=
 + created: `2015-05-01T11:46:07+0000` (string) - Date time string when the account was created
 + `locale_string`: `sv-SE` (string) - Locale string representing language and country
 + language: en (string) - Represents the accounts language preference
