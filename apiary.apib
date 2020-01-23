@@ -31,6 +31,7 @@ If you need help during your development process you're more than welcome to con
 * API endpoint: https://app.metry.io/api/v2/
 * Version numbers may be updated in the future, older versions will be supported for a period of time.
 * All API traffic must be made over SSL (https://)
+* You can find articles that will help you make your integration to Metry <a href="https://support.metry.io/hc/en-us/categories/360000328693-Developer-Resources">here</a>
 
 ## API Authentication
 
@@ -1577,7 +1578,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + `_id`: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
 + name: Example account (string) - Name of the user
 + username: someone@example.com (string) - Email, also used as sign in identity.
-+ `sub_accounts`: [] (array[Account]) - DEPRECATED An array of sub accounts of the current account. As some accounts have more subaccounts than what can easily be returned in a single request, we have removed them from this view. To fetch a paginated list of subaccounts, use instead /accounts/me/subaccount?offset=
++ `sub_accounts`: [] (array[Account]) - DEPRECATED An array of sub accounts of the current account. As some accounts have more subaccounts than what can easily be returned in a single request, we have removed them from this view. To fetch a paginated list of subaccounts, use instead /accounts/me/subaccounts?offset=
 + created: `2015-05-01T11:46:07+0000` (string) - Date time string when the account was created
 + `locale_string`: `sv-SE` (string) - Locale string representing language and country
 + language: en (string) - Represents the accounts language preference
