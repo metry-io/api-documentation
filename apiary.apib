@@ -1604,8 +1604,8 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + tags: foo, bar (array[string]) - Meta information.
 + box: inbox, ignored, active (enum [string]) - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.  
 + revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled by the root holder.
-+ type: electricity, heat, cooling, gas, hot_water, water (enum) - What type of consumption the meter represents.
-+ metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
++ type: electricity, heat, cooling, gas, hot_water, water, sensor (enum) - What type of consumption the meter represents.
++ metrics: energy, flow, energy_hightariff, energy_lowtariff, temperature, return_temperature, supply_temperature, tvoc, co2  (enum [string]) - Which metrics the meter is recording data in.
 + ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical meter
 + consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
 + readings_stats: (object) - A summary of readings data for this meter.
@@ -1679,7 +1679,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + `_id`: 5825d2ff6ae4ce006252ee5d (string, required) - Unique identifier for the open channel
 + name: SOLution (string) - the name of the open channel
 + granularities: hour, day, month (enum[string]) - the granularities available in the open channel
-+ metrics: energy, power, flow (enum[string]) - the metrics available in the open channel
++ metrics: energy, flow, energy_hightariff, energy_lowtariff, temperature, return_temperature, supply_temperature, tvoc, co2 (enum[string]) - the metrics available in the open channel
 
 ## Open Channel Meter (object)
 + `_id`: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
@@ -1688,7 +1688,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 + timezone: `Etc/GMT-1` (string, required) - Timezone the meter is located in. Used to define consumption aggregation from hour to day.
 + address: Klackvägen 12 (string) - Meta information.
 + generation: 1 (number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
-+ metrics: energy, power, flow  (enum [string]) - Which metrics the meter is recording data in.
++ metrics: energy, flow, energy_hightariff, energy_lowtariff, temperature, return_temperature, supply_temperature, tvoc, co2  (enum [string]) - Which metrics the meter is recording data in.
 + type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
 + consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
 + open_channel_ids: (array[string]) - An array of open channel ids that this meter is included in
