@@ -512,7 +512,7 @@ Remove a meter reference from a tree node
 ### Remove a meter [DELETE]
 
 + Response 200 (application/json)
-
+            
 ## Trees collection [/trees{?parent,app_custom_fields}]
 
 List all of a user's trees or get a subtree by including the query parameter `parent` as the **_id** of the parent node.
@@ -540,6 +540,7 @@ It is also possible to filter tree nodes based on app specific custom fields usi
                     "factor": 1,
                     "app_custom_fields": {},
                     "custom_fields": {"object_id": "13415-2345"}
+                    "custom_identifier": "A-4536432"
                     "parent": null,
                     "meters": [],
                     "location": null,
@@ -1671,6 +1672,7 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 ## Tree (object)
 + `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier for the tree node. It can be used instead of a meter id to request consumption values. 
 + name: Kungsgatan (string) - A user defined name on the tree node
++ custom_identifier: A-534523 (string) - A user defined custom identifier on the tree node
 + factor: 1 (number) - How much the node's consumption should contribute to the aggregated value.
 + `app_custom_fields`: (object) - Custom fields created by your app. The value of this property depends on what OAuth client the access token used belongs to.
 + `custom_fields`: (object) - Custom fields created by an internal integration. To use custom fields in a third party application with an OAuth integration, use `app_custom_fields` 
