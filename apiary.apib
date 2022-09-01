@@ -7,9 +7,11 @@ Developers can access this data to build apps that **help people and organizatio
 
 ## Getting started
 
-Copy the link below into a new tab in your <a href="https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e" target=_blank>web browser</a>
+Copy the command below into a terminal and run it.
 
-    https://app.metry.io/api/v2/accounts/me?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+```sh
+curl -H 'Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e' https://app.metry.io/api/v2/accounts/me
+```
 
 <h3>So, what happened here?</h3>
 You just made a request to our API and **requested basic information** about the authenticated user!
@@ -17,11 +19,15 @@ You just made a request to our API and **requested basic information** about the
 <h3>What about the energy consumption?</h3>
 To fetch the energy consumption, we first need to see what meters the user has:
 
-    https://app.metry.io/api/v2/meters?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+```sh
+curl -H 'Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e' https://app.metry.io/api/v2/meters
+```
 
-And to see the **consumption for 2015**, you just type...
+And to see the **consumption for 2022**, you type...
 
-    https://app.metry.io/api/v2/consumptions/5824790e3d214b006271c515/month/2015?access_token=9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+```sh
+curl -H 'Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e' https://app.metry.io/api/v2/consumptions/5824790e3d214b006271c515/month/2022
+```
 
 That's it! Now you have a basic understanding of how our API works. Just scroll down to dig into the details! 
 If you need help during your development process you're more than welcome to contact us at [support@metry.io](mailto:support@metry.io).
@@ -36,7 +42,7 @@ If you need help during your development process you're more than welcome to con
 ## API Authentication
 
 The Metry API requires authentication - specifically requests made on behalf of a user. 
-Authenticated requests require an access_token. These tokens are unique to a user and should be stored securely. 
+Authenticated requests require an access token. These tokens are unique to a user and should be stored securely.
 
 There are two methods to authenticate to the API:
 * **Private Access Token Authentication.** Used for internal integrations that are connected to a single Metry account. 
@@ -46,11 +52,11 @@ There are two methods to authenticate to the API:
 Private access-tokens are used to access data for your own account, and should never be
 shared with anyone else. You can access your private access token in the Metry Portal ([https://app.metry.io](https://app.metry.io)).
 
-You **should** pass the access token in an Authorization-header
+Pass the access token in an Authorization-header
 
     Authorization: Bearer <access-token>
 
-You can also pass the access-token in the URL (but this is not recommended for security reasons)
+It's still possible to pass the access-token in the URL, but be aware that we are planning to drop this feature.
 
     https://app.metry.io/api/v2/accounts/me?access_token=<access-token>
 
