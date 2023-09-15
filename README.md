@@ -1,4 +1,6 @@
 api-documentation
 =================
 
-Our API documentation for Energimolnet. Please help us to make it better!
+API documentation for Metry.
+
+Read it on https://metry.docs.apiary.io/
