@@ -1,6 +1,1719 @@
-api-documentation
-=================
+# Metry API v2
+Metry collects consumption data from **meters** managed by utilities, as well as **meters** managed by building owners.
+Developers can access this data to build apps that **help people and organizations save energy**. Or just something that makes energy usage a little bit more exciting.
 
-API documentation for Metry.
+## Getting started
 
-Read it on https://metry.docs.apiary.io/
+Copy the command below into a terminal and run it.
+
+```sh
+curl -H 'Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e' https://app.metry.io/api/v2/accounts/me
+```
+
+<h3>So, what happened here?</h3>
+You just made a request to our API and **requested basic information** about the authenticated user!
+
+<h3>What about the energy consumption?</h3>
+To fetch the energy consumption, we first need to see what meters the user has:
+
+```sh
+curl -H 'Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e' https://app.metry.io/api/v2/meters
+```
+
+And to see the **consumption for 2022**, you type...
+
+```sh
+curl -H 'Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e' https://app.metry.io/api/v2/consumptions/5824790e3d214b006271c515/month/2022
+```
+
+That's it! Now you have a basic understanding of how our API works. Just scroll down to dig into the details! 
+If you need help during your development process you're more than welcome to contact us at [support@metry.io](mailto:support@metry.io).
+
+### Good to know
+
+* API endpoint: https://app.metry.io/api/v2/
+* Version numbers may be updated in the future, older versions will be supported for a period of time.
+* All API traffic must be made over SSL (https://)
+* You can find articles that will help you make your integration to Metry <a href="https://support.metry.io/hc/en-us/categories/360000328693-Developer-Resources">here</a>
+
+## API Authentication
+
+The Metry API requires authentication - specifically requests made on behalf of a user. 
+Authenticated requests require an access token. These tokens are unique to a user and should be stored securely.
+
+There are two methods to authenticate to the API:
+* **Private Access Token Authentication.** Used for internal integrations that are connected to a single Metry account. 
+* **OAuth2 Authentication.** Used for service providers that build a system that potentially allow many Metry accounts to connect. Register as a developer to get started at https://app.metry.io/id/register/developer-user?plan=developer_hobby
+
+### Private access tokens
+Private access-tokens are used to access data for your own account, and should never be
+shared with anyone else. You can access your private access token in the Metry Portal ([https://app.metry.io](https://app.metry.io)).
+
+Pass the access token in an Authorization-header
+
+```
+Authorization: Bearer <access-token>
+```
+
+It's still possible to pass the access-token in the URL, but be aware that we are planning to drop this feature.
+
+```
+https://app.metry.io/api/v2/accounts/me?access_token=<access-token>
+```
+
+
+### OAuth2 Authentication
+
+The Metry API uses the standard OAuth 2.0 protocol for simple, but effective authentication and authorization to third parties.
+
+As an app developer, you should direct your users to login with Metry and grant access to your app. This will give you the users `refresh_token`, which should be used to request the `access_token`.
+The refresh token should be stored on your end with the same security in mind as a password. The `access_token` itself will expire after 1 hour at which point the `refresh_token` need to be used to fetch a new `access_token`, just as any other OAuth2 implementation.
+
+**Read more about getting started with OAuth here:**
+https://support.metry.io/hc/en-us/articles/360009388753-Third-Party-Access-to-Energy-Data
+
+
+### Metry OAuth Connect
+To make this implementation as smooth as possible, we've created a javascript library to connect the user. This will also demonstrate a general OAuth2 flow.
+See the Github repository on https://github.com/metry-io/metry-oauth-connect and try the demo on http://metry-oauth-connect-demo.s3-website-eu-west-1.amazonaws.com/
+
+### ClientID and ClientSecret
+To get started you need to request a `client_id` and `client_secret`. Please contact our support ([support@metry.io](mailto:support@metry.io)) and tell us a bit about your app.
+
+### Metry oAuth 2.0 endpoints
+If you decide to roll your own implementation, keep in mind the oAuth endpoints for Metry:
+
+| Description   | Url           |
+| ------------- | ------------- |
+| Host                 | https://app.metry.io/  |
+| oAuth 2.0 Authorize  | https://app.metry.io/oauth/authorize  |
+| oAuth 2.0 Token      | https://app.metry.io/oauth/token  |
+
+## List responses and pagination
+
+All lists are paginated, and shows 50 items per request. You can advance to next pages by adding query params **skip** and the number
+of items you want to skip (typically 50, 100, 150 and so on).
+
+## Error handling
+
+The Metry API attempts to return appropriate HTTP status codes for every request. A 2xx status code indicates success, whereas a 4xx or 5xx status code indicates an error.
+
+### Status codes
+| Status code   | Description  |
+|---|---|
+| 200  | Success  |
+| 400 | Validation error: An accompanying error message will explain further |
+| 401  | Authentication error: The oAuth credentials were missing, incorrect or expired  |
+| 403  | Authentication error: The current authenticated user has no access to this resource  |
+| 404  | Invalid endpoint: The endpoint requested is invalid or the resource requested, such as a meter, does not exists.   |
+| 405  | The HTTP method used for this endpoint is invalid. |
+| 429  | Too many requests: The client has exceeded our rate limiting threshold. |
+| 5xx  | An error has occurred within Metry.io and the request couldn't be completed. Metry.io has been notified about the problem |
+| 503 | We're experiencing temporary server issues. Please try again |
+
+### Error messages
+When an API request fails, it will be accompanied with an explanatory message. For example, an error might look like this:
+```
+{
+code: 404,
+message: "Resource not found"
+}
+```
+
+### Future compatibility
+For future compatibility, please interpret the following HTTP status code ranges:
+
+**200–299** as success<br>
+**400–499** as client request errors<br>
+**500–599** as server errors
+
+## Rate limiting
+If the rate of requests from a single client is greater than what we estimate to be reasonable which is about 10 requests/second, the API will temporarily respond with status code **429**. If your client does not make more than one request at a time, it is unlikely to be affected by this rate limit. The rate limit may change in the future if we see a need for it.
+
+# Group Accounts
+
+An account represents a person, business or organization that uses the Metry platform.
+
+## Accounts resource [/accounts/{id}]
+
+### Get an account [GET]
+
+Tip: Use alias "me" to reference the currently authorized user.
+
++ Parameters
+    + id (required, string, `5543677f37c6b65f008b46e4`) ... The id of the account to get info about
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
+
++ Response 200 (application/json)
+
+    + Attributes (Account)
+
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": {
+                    "_id": "5543677f37c6b65f008b46e4",
+                    "name": "Example account",
+                    "username": "someone@example.com",
+                    "sub_accounts_count": 1,
+                    "sub_accounts": [
+                        {
+                            "_id": "565f0344c6db1f57008b5573",
+                            "name": "Demo - Private Customer",
+                            "username": "utility-private-customer@metry.io",
+                            "sub_accounts_count": 0,
+                            "sub_accounts": [],
+                            "created": "2015-12-02T14:42:12+0000",
+                            "locale_string": null,
+                            "language": "en",
+                            "is_organization": false,
+                            "entity_type": null,
+                            "custom_identifier": "52472493"
+                        }
+                    ],
+                    "created": "2015-05-01T11:46:07+0000",
+                    "locale_string": null,
+                    "language": "en",
+                    "is_organization": false,
+                    "entity_type": null
+                }
+            }
+
+# Group Meters
+
+A meter represents a physical device that measures consumption from a utility such as heat, cooling or electricity.
+Each meter has a holder who can **assign** or **share** the meter to other accounts.
+
+Assigned or shared meters references a root meter, and it is good practice to use the
+**root._id** as unique identifier in your own applications. The **_id** field only represents the
+reference itself, and is used to updated meta-information about the meter such as name, tags or if the meter is active or not.
+
+## Meter [/meters/{id}]
+
++ Parameters
+    + id (string, required) - Id of the meter.
+
+
+### Get a meter [GET]
+
++ Parameters
+    + id: 5825c85d22c8aa00606b9dd5 (required, string) - The id of the account to get info about
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Meter)
+    
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": {
+                    "_id": "5825c85d22c8aa00606b9dd5",
+                    "ean": "1200004",
+                    "name": null,
+                    "holder": {
+                       "_id": "5543677f37c6b65f008b46e4",
+                        "name": "Example account",
+                        "username": "someone@example.com"
+                    },
+                    "root": {
+                        "_id": "577fdd960c8a335c008b466f",
+                        "holder": {
+                            "_id": "577fd0170c8a335c008b45fe",
+                            "name": "Rob Harvey Utility Company"
+                       }   
+                    },
+                    "assigner": {
+                        "_id": "577fd0170c8a335c008b45fe",  
+                        "name": "Rob Harvey Utility Company",
+                        "username": null
+                    },
+                    "created": "2016-11-11T13:32:13+0000",
+                    "children": [],
+                    "address": "Gränsvägen 12B",
+                    "timezone": "Etc/GMT-1",
+                    "control_level": "shared",
+                    "generation": 1,
+                    "tags": [],
+                    "box": "active",
+                    "revoked": false,
+                    "metrics": [
+                        "energy"
+                    ],
+                    "type": "cooling",
+                    "consumption_stats": {
+                        "energy": {
+                            "month": {
+                                "count": 22,
+                                "sum": 659440,
+                                "max": 92560,
+                                "last": 201610,
+                                "min": 9730,
+                                "first": 201501
+                            },
+                            "hour": {
+                                "first": null,
+                                "last": null,
+                                "sum": null,
+                                "max": null,
+                                "min": null,
+                                "count": 0
+                            },
+                            "day": {
+                                "first": null,
+                                "last": null,
+                                "sum": null,
+                                "max": null,
+                                "min": null,
+                                "count": 0
+                            }
+                        }
+                    },
+                    "readings_stats": null,
+                    "has_active_complaints": false,
+                    "representation": null,
+                    "open_channel_ids": null,
+                    "active_box_tree_paths": [
+                        [{"_id": "5bc8408d0cfb6200783c389d", "name": "Göteborg"}, {"_id": "5bc8408d0cfb6200783c389f", "name": "Kämpegatan 6"}]
+                    ]
+                }
+            }
+
+### Update a meter [POST /meters/{meter_id}]
+Contact [support@metry.io](mailto:support@metry.io) to receive write access to meters. 
+
++ Parameters
+    + meter: 5927d86628592700964a702c (string) - The _id of the meter
+
++ Request (application/json)
+
+    + Attributes
+        + address: Klackvägen 12 (string) - Meta information.
+        + name: Pumphuset vid sjön (string) - Meta information.
+        + tags: foo, bar (array[string]) - Meta information.
+        + box: inbox, ignored, temporary, active (enum [string]) - Change the box on a meter to move it to another box. Meters need to be in box active or temporary to be able to get consumption from the meter.
+        + type: electricity, heat, cooling, gas, hot_water, water (enum) - What type of consumption the meter represents.
+        + ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical metering point.
+        + representation: consumption, production, `net_consumption`, `net_production`, sensor (enum [string]) - Does this meter record energy consumption or production
+
+
++ Response 200 (application/json)
+    + Attributes (Meter)
+    
+
+## Meters collection [/meters{?box,name,address,tags,control_level,generation,type,metrics,ean,representation}]
+
+You can list all meters accessible by the authenticated user.
+
+Note that the response will only contain 50 meters at a time. To get additional meters, specify the amount to skip as a query parameter such as `skip=50`
+
+### Filtering results
+You can filter results by adding query params, for instance:
+
+    .../meters?box=active
+
+... will only list active meters.
+
+You can add multiple query params. For **dates and numbers** you can use greater than and less than characters. For instance
+
+    .../meters?consumption_stats.energy.month.last=<201503&box=active
+
+This filter will only list *active* meters where *last month value is before March 2015*.
+
+**NOTE!** Query params that are not recognized will be *silently ignored*, so make sure you spell them correctly!
+**NOTE!** We suggest using the `box` attribute to list the meters that are activated by customers. So you can use  `...meters?box=active...` instead of  `... meters?active=true ...`. 
+
+
+
+### List meters [GET]
+
++ Parameters
+    + address: Kungsgatan 2 (optional, string) - Meta information.
+    + name: Home sweet home (optional, string) - Meta information.
+    + `control_level`: subscribed (optional, enum [string])
+    + generation: 1 (optional, number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
+    + tags: bar (optional, array[string]) - Meta information.
+    + box: active (optional, enum [string]) - - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.
+    + type: electricity (optional, enum) - What type of consumption the meter represents.
+    + metrics: energy (optional, enum [string]) - Which metrics the meter is recording data in.
+    + ean: 7501054530107 (optional, number) - An International Article Number that uniquely identifies the physical meter
+    + representation: production (optional, enum [string]) - Does this meter record energy consumption or production
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Meter)
+
+# Group Trees
+
+Trees are a way to structure meters in a hierarchical structure. The implementation is intended to be as flexible as possible so that users and applications can group meters however needed, for instance, by cities, properties, buildings, and other logical groups. Consumption requests can then be made on tree nodes to get the aggregated consumption or temperature of the underlying meters.
+
+## Create [/trees]
+
+Create a new tree or add tree nodes to an existing tree. 
+
+This requires an OAuth client with the the scope `write_trees`.
+
+### Create tree node [POST]
+
+
+ 
++ Request (application/json)
+
+    + Attributes
+        + parent: null (string) - The _id of the parent if adding as a child to another node in an existing tree
+        + name: Kungsgatan (string) - A name to put on the tree node
+    
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": [],
+                "data": {
+                    "_id": "5927d86628592700964a702c",
+                    "name": "user node",
+                    "factor": 1,
+                    "children": [],
+                    "app_custom_fields": [],
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }
+            }
+
+## Modify a Tree node [/trees/{tree_id}]
+
+Update or delete a tree node. Application specific data can be specified on the tree node as custom fields which will only be available in your application. 
+
++ Parameters
+    + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
+
+### Update tree node [PUT]
+
++ Request
+
+    + Attributes
+        + parent: null (string) - The _id of the parent if adding as a child to another node in an existing tree
+        + name: Kungsgatan (string) - A name to put on the tree node
+        + `app_custom_fields`: (object) - Custom key value pairs set by a third party application.
+        + `custom_fields`: (object) - Custom key value pairs set by an internal integration.
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5927dd3b28592700ad6185dc",
+                    "name": "user node",
+                    "factor": 1,
+                    "app_custom_fields": {},
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }]
+            }
+
+### Delete tree node [DELETE]
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5927dd3b28592700ad6185dc",
+                    "name": "user node",
+                    "factor": 1,
+                    "app_custom_fields": [],
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }]
+            }
+
+## Add meters to a tree node [/trees/{tree_id}/meters]
+Add the user's meters to tree nodes so consumption requests can be made to a node to aggregate values for any meters on that tree node.
+
+Note that to request consumption values for a tree node, every meter added in the tree needs to be in box `active`.
+
++ Parameters
+    + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
+
+### Add a meter [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + `_id`: 5927dd3b28592700ad6185dc (string) - The _id of meter to add.
+        + `factor`: 1 (number) - How much the meter's consumption should contribute to the aggregated consumption value
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+        
+        {
+            "code": 200,
+            "message": "OK",
+            "profiling": [],
+            "data": {
+                "_id": "592bc4d328592700c26532bf",
+                "name": "Kungsgatan",
+                "factor": 1,
+                "app_custom_fields": [],
+                "parent": null,
+                "meters": [{
+                    "_id": "592bc4d328592700c26532c0",
+                    "root_id": "592bc4d328592700c26532c0",
+                    "factor": 1
+                }],
+                "location": null,
+                "open_channel_ids": null
+            }
+        }
+
+## Remove a meter from a Tree node [/trees/{tree_id}/meters/{meter_id}]
+
+Remove a meter reference from a tree node
+
++ Parameters
+    + tree_id: 5927d86628592700964a702c (string) - The _id of the tree node
+    + meter_id: 5927d86628592700964a702d (string) - The _id of an addedd meter
+
+
+### Remove a meter [DELETE]
+
++ Response 200 (application/json)
+            
+## Trees collection [/trees{?parent,app_custom_fields}]
+
+List all of a user's trees or get a subtree by including the query parameter `parent` as the **_id** of the parent node.
+
+It is also possible to filter tree nodes based on app specific custom fields using the query parameter syntax `app_custom_fields.{your_field}={your_value}`
+
+### List trees [GET]
+
++ Parameters
+    + parent: 5927d86628592700964a702c (string) - The _id of the nodes parent. Use `null` to only get root nodes. Then use the _id of each root node to get the nodes below it.
+
++ Response 200 (application/json)
+    + Attributes (Tree)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5927dd3b28592700ad6185dc",
+                    "name": "Kungsgatan",
+                    "factor": 1,
+                    "app_custom_fields": {},
+                    "custom_fields": {"object_id": "13415-2345"}
+                    "custom_identifier": "A-4536432"
+                    "parent": null,
+                    "meters": [],
+                    "location": null,
+                    "open_channel_ids": null
+                }]
+            }
+           
+           
+           
+
+
+# Group Consumption
+
+Consumption is the use of energy or other metrics for a meter or a tree node. Consumption is available by the granularities month, day and hour, however, it is important to understand that the availability differs depending on the meter/node and other external factors.
+
+It is only allowed to get consumption for meters that the user has activated and that are not revoked. If a request is made to a meter for which consumption the user does not have access, the response code will be **403 Forbidden**. To avoid this error, you can look on the attributes on the meter "box" and "revoked" to make sure that they have values that indicated that the user is allowed to get consumption values. "revoked" must be false and "box" must be either "active" or "temporary".
+
+## Get Consumption [/consumptions/{id}/{granularity}/{period}?metrics={metrics}]
+
+We support the following **granularities**: hour, day and month, but we cannot guarantee that it is available for every meter.
+
+The following **metrics** are supported: 
+
+* energy (kWh)
+* estimated_energy (kWh)
+* flow (m<sup>3</sup>)
+* estimated_flow (m<sup>3</sup>)
+* return_temperature (°C)
+* supply_temperature (°C)
+* temperature (°C)
+* tvoc (ppm)
+* co2 (ppm)
+
+**Note:** Metric availability varies between meters/nodes.
+
+The response with consumption **values will always match your query**. Missing values are replaced with <code>NULL</code>
+
+Each period in the response will have a `start_date` and `end_date` property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the `period` input parameter. The `period` parameter is always interpreted using the meter's local timezone.
+
+**Note:** One request is limited 100000 values. To fetch data for a longer period, split the period into multiple requests.
+
+### Meter [GET]
+
++ Parameters
+    + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get consumption data for
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM, YYYYMMDD or YYYYMMDDHH as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + Updated cost response : `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified, default metric is returned.
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Consumption)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": [
+                    {
+                        "periods" : [
+                            {
+                                "start_date" : "2013-01-01T00:00:00+0001",
+                                "end_date" : "2013-11-30T23:00:00+0001",
+                                "energy": [1,2,3,4,5,6,7,8,9,10,11],
+                                "flow": [1,2,3,4,5,6,7,8,9,10,11]
+                            }
+                        ],
+                        "meter_id": "5825c6f6de22ae00632e86f3"
+                    }
+                ]
+            }
+
+
+### Tree Node [GET]
+
+Requesting consumption for a tree node returns the sum of the consumption of all the node's meters per metric. To get the summed consumption for a specific type, add type=heat as a parameter to the url.
+
++ Parameters
+    + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the tree node to get consumption data for. Only  aggregated consumption for meters where box is active are included in the sum.
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+    + type: heat (optional, string) - Returns the sum for meters that matches the type.
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Consumption)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": [
+                    {
+                        "periods" : [
+                            {
+                                "start_date" : "2013-01-01T00:00:00+0001",
+                                "end_date" : "2013-11-30T23:00:00+0001",
+                                "energy": [1,2,3,4,5,6,7,8,9,10,11],
+                                "flow": [1,2,3,4,5,6,7,8,9,10,11],
+                                "energy_quality": [1,1,1,1,1,1,1,1,1,1,0.5]
+                            }
+                        ],
+                        "tree_id": "5825c6f6de22ae00632e86f3"
+                    }
+                ]
+            }
+            
+
+## Multiple meters [/consumptions/multi/{granularity}/{period}?metrics={metrics}]
+
+### Meter by meter  [GET]
+
++ Parameters
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + meters: `5825c6f6de22ae00632e86f3,5825c76920fe9b006308e412` (required, array[string]) - An array of meters to return consumptions data for
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+
++ Request
+    + Headers
+    
+            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+            
++ Response 200 (application/json)
+    + Attributes (Consumption)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": [
+                    {
+                        "meter_id": "526f7711a158318a068b475f",
+                        "periods": [
+                            {
+                                "energy": [
+                                    null,
+                                    57.037,
+                                    68.031
+                                ],
+                                "start_date": "2017-05-31T23:00:00+0000",
+                                "end_date": "2017-08-31T22:59:59+0000"
+                            }
+                        ]
+                    },
+                    {
+                        "meter_id": "56b06f2c81376f5a008b4b23",
+                        "periods": [
+                            {
+                                "energy": [
+                                    2369.78,
+                                    2236.336,
+                                    1488.188
+                                ],
+                                "start_date": "2017-05-31T23:00:00+0000",
+                                "end_date": "2017-08-31T22:59:59+0000"
+                            }
+                        ]
+                    }
+                ]
+            }
+    
+## Sum of meters [/consumptions/sum/{granularity}/{period}?metrics={metrics}]
+
+### Sum of meters [GET]
+
++ Parameters
+    + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
+    + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + meters: `5825c6f6de22ae00632e86f3,5825c76920fe9b006308e412` (required, array[string]) - An array of meters to return consumptions data for
+    + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+
++ Request
+    + Headers
+    
+            Authorization: OAuth 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+            
++ Response 200 (application/json)
+    + Attributes (Consumption)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "data": [
+                    {
+                        "periods": [
+                            {
+                                "energy": [
+                                    2369.78,
+                                    2293.373,
+                                    1556.219
+                                ],
+                                "energy_quality": [
+                                    0.5,
+                                    1,
+                                    1
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+
+
+
+
+# Group Costs
+
+Data representing the cost of energy usage parsed from invoices. Costs are stored as time series data in the same way as consumptions and the api works similarly.
+
+
+
+## Get Costs [/costs/{id}/month/{period}?metrics={metrics}]
+
+The only granularity available for costs is month.
+
+The following **metrics** are supported: 
+
+* retail_subscription
+* retail_usage
+* retail_undefined
+* retail_total
+
+* grid_subscription
+* grid_subscription_power
+* grid_subscription_return_temperature
+* grid_subscription_flow
+* grid_usage
+* grid_undefined
+* grid_total
+
+Learn more about the definition of each metric here (in Swedish only): https://metry.zendesk.com/hc/sv/articles/360005144654
+
+**Note:** Metric availability varies between meters.
+
+The response with cost **values will always match your query**. Missing values are replaced with <code>NULL</code>
+
+### For a Meter [GET]
+
++ Parameters
+    + id: `5b7e64209b8cffjt9e114d3e` (required, string) - The id of the meter to get cost data for
+    + period: `2016` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
+    + metrics: `retail_total,grid_total` (optional, enum [string]) - Limits the response to one or more metrics separated by commas. If not specified `retail_total` and `grid_total`.
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+    + Attributes (Consumption)
+        + account_id: (string) The account that the costs are held by.
+        + meter_id: (string) The id of the meter the cost data is for.
+        + currency: (string) The monetary unit the costs are recorded in.
+        + periods: (array[Cost])
+        
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": [],
+                "data": [
+                    {
+                        "account_id": "5b7e64f8tb8cfb009e114d3f",
+                        "meter_id": "5b7e64209b8cffjt9e114d3e",
+                        "currency": "SEK",
+                        "periods": [
+                            {
+                                "retail_total": [null, null, null, null, null, null, null, null, null, null, null, null],
+                                "grid_total": [345, 343, 321, 433, 345, 546, 234, 212, 256, 396, 194, 390],
+                                "start_date": "2015-12-31T23:00:00+0000",
+                                "end_date": "2016-12-31T22:59:59+0000"
+                            }
+                        ]
+                    }
+                ]
+            }
+
+
+# Group Invoices
+
+
+## Invoices collection [/invoices?status={status}&meter_ids={root_meter_id}&results.ean={ean}&results.invoice_number={invoice_number}]
+
+Invoices collected or uploaded can be listed including the parsed results. The parsed results include various fields that are extracted from the invoice and invoice rows describing the pricing components.
+
+The response will only contain 50 invoices at a time. To get additional invoices, specify the amount to skip as a query parameter as `skip=50`.
+
+Invoices that have successfully been parsed and interpreted will have the `status` property set to **completed**. Add this as a query parameter when listing invoices to not find invoices that for some reason could not be parsed `?status=completed`.   
+
+
+### List invoices [GET]
+
++ Parameters
+    + status: `completed` (string) - Filter invoices with a specific status. 
+    + meter_ids: `5b7e64209b8cffjt9e114d3e` (string) - The root ID of a meter to find invoices for a specific meter.
+    + results.ean: `735999100057526501` (string) -  The ID defined for the metering point by the utility provider parsed from the invoices.
+    + results.invoice_number: `1234525` (string) -  Find an invoice by the invoice number found on the invoice. 
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
+
++ Response 200 (application/json)
+
+        
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": [],
+                "count": 1,
+                "limit": 50,
+                "skip": 0,
+                "data": [{
+                    "_id": "540da71a2c3d1c3c008b53682",
+                    "account": {
+                        "_id": "540da71a2c3d1c3c008b53684",
+                        "name": "Example Account"
+                    },
+                    "owner": {
+                        "_id": "540da71a2c3d1c3c008b53683",
+                        "name": "E.ON Sverige"
+                    },
+                    "status": "completed", 
+                    "results": [{
+                        "ean": "735999100057526501",
+                        "period": "20190101-20190131",
+                        "due_date": "2019-02-31T00:00:00+0100",
+                        "metrics": {
+                            "grid_total": 2692.884
+                        },
+                        "invoice_number": "1234525",
+                        "total_vat": 673.221,
+                        "total_amount_excl_vat": 2692.884,
+                        "total_amount_due": 3366.105,
+                        "invoice_rows": [{
+                            "description": "Effekt",
+                            "amount": 522,
+                            "contract_type": "grid",
+                            "metric": "grid_subscription_power",
+                            "price": 6,
+                            "price_unit": "kr/kW",
+                            "quantity": 87,
+                            "quantity_unit": "kW,mnd",
+                            "period": "20190101-20190131"
+                        }, {
+                            "description": "Energi",
+                            "amount": 2170.884,
+                            "contract_type": "grid",
+                            "metric": "grid_usage",
+                            "price": 7.778,
+                            "price_unit": "öre/kWh",
+                            "quantity": 27912,
+                            "quantity_unit": "kWh",
+                            "period": "20190101-20190131"
+                        }]
+                   }]
+                }]
+            }
+
+# Group Readings
+
+Readings are the exact timestamped values for a meter.
+
+## Get readings [/readings/{meter_id}/{period}?metrics={metrics}]
+
+Each period in the response will have a start_date and end_date property. Note that these are UTC dates, so depending on the meter's time zone they may appear to not match the date specified in the period input parameter. The period parameter is always interpreted in the meter's local timezone.
+
+### Reading status
+The `status` for a reading value can be `recorded`, `interpolated` or `meter_change`.
+
+* **recorded:** The value has been recorded exactly at the given point.
+* **interpolated:** The value is interpolated based on the surrounded recorded values
+* **meter_change:** The meter has changed. A meter change reading is the reading that occurred after a meter change.
+
+### Readings blocked
+As new readings are stored in Metry, the system automatically tries to find anomalous readings that could suggest that the incoming readings are incorrect.
+
+If an anomaly is found, then the meter attribute `readings_blocked` will be set to `true`. This prevents new consumption values from being calculated from that point forward and that no readings will be interpolated until the meter attribute `readings_blocked` is changed back to `false`.
+
+This attribute is also included in the response when requesting readings as seen in the example response.
+
+Importing readings from Metry when readings are blocked is possible but should be avoided until the user has resolved the issue with the anomalous reading and unblocked readings.
+
+### Get readings for a meter [GET]
+
++ Parameters
+    + meter_id (required, string, `53294e5ae9cada3306001735`) ... The id of the meter to get reading data for
+    + period (required, string `2013-201311`) ... Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM, YYYYMMDD or YYYYMMDDHH as
+    long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013.
+    All date will be interpreted using the meters timezone.
+    + metrics (optional, string `energy,flow,power`) ... Limits the response to one or more metrics separated by commas. If not specified metric energy is returned.
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": [
+                    {
+                        "periods" : [
+                            {
+                                "start_date" : "2016-01-01T14:00:00+0100",
+                                "end_date" : "2016-01-01T15:00:00+0100",
+                                "energy": [
+                                    {
+                                        "time" : "2016-01-01T14:00:00+0100",
+                                        "value" : 12345.11,
+                                        "status" : "recorded",
+                                        "counter" : null
+                                    },
+                                    {
+                                        "time" : "2016-01-01T15:00:00+0100",
+                                        "value" : 12365.11,
+                                        "status" : "interpolated",
+                                        "counter" : null
+                                    },
+                                    {
+                                        "time" : "2016-01-01T15:13:00+0100",
+                                        "value" : 12369.94,
+                                        "status" : "recorded",
+                                        "counter" : null
+                                    }
+                                ]
+                            }
+                        ],
+                        "readings_blocked": false,
+                        "meter_id" : "53185731df62324818000007"
+                    }
+                ]
+            }
+
+
+# Group Open Data Channels
+
+Open data channels represent collections of meters and consumption data that can be viewed without requiring authorization.
+Via the open channel resource you can see which open channels are available then list the available meters for that channel.  Once the meter ids have been obtained their consumption data can be fetched via the consumption resource.  When requesting data for meters that are part of an open channel no authentication is required
+
+## Open channels [/open_channels?name={name}&granularities={granularities}&metrics={metrics}]
+
+List and filter the available open data channels 
+
+### List open channels [GET]
+
++ Parameters
+    + name: SOLution (optional, string) - the name of the open channel
+    + granularities: hour (optional, enum[string]) - the granularities available in the open channel
+    + metrics: energy (optional, enum[string]) - the metrics available in the open channel
++ Response 200 (application/json)
+    + Attributes (Open Channel)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "next_page": null,
+                "previous_page": null,
+                "additional_meta": [],
+                "data": [
+                    {
+                        "_id": "5825d2ff6ae4ce006252ee5d",
+                        "name": "SOLution",
+                        "granularities": [
+                            "month",
+                            "day",
+                            "hour"
+                        ],
+                        "periods": [
+                            "2012-"
+                        ],
+                        "metrics": [
+                            "energy"
+                        ]
+                    }
+                ]
+            }
+    
+
+## Open channel meters [/open_channels/{id}/meters/{?address,name,generation,type,metrics,representation}]
+
+List and filter the available meters for a given open data channels
+
+### List open channel meters [GET]
+
++ Parameters
+    + id: 5825d2ff6ae4ce006252ee5d (required, string) - The id of the open channel to list meters for
+    + address: Kungsgatan 2 (optional, string) - Meta information.
+    + name: Bruttomätning villa (optional, string) - Meta information.
+    + generation: 1 (optional, number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
+    + type: electricity (optional, enum) - What type of consumption the meter represents.
+    + metrics: energy (optional, enum [string]) - Which metrics the meter is recording data in.
+    + representation: production (optional, enum [string]) - Does this meter record energy consumption or production
++ Response 200 (application/json)
+    + Attributes (Open Channel Meter)
+    + Body
+    
+            {
+                "code": 200,
+                "message": "OK",
+                "profiling": null,
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "next_page": null,
+                "previous_page": null,
+                "additional_meta": [],
+                "data": [
+                    {
+                        "_id": "58248fe1de22ae0062035d1a",
+                        "owner": {
+                            "_id": "5268c832dedcde9d1d0000df",
+                            "name": "Göteborg Energi"
+                        },
+                        "name": "Konsumtion ingen prod",
+                        "timezone": "Etc/GMT-1",
+                        "address": "Energigatan 13",
+                        "location": [17.359470099999976, 58.10032929999999],
+                        "generation": 0,
+                        "metrics": [
+                            "energy"
+                        ],
+                        "type": "electricity",
+                        "consumption_stats": {
+                            "energy": {
+                                "hour": {
+                                    "count": 27745,
+                                    "sum": 47672.922,
+                                    "max": 9.76,
+                                    "last": 2016103100,
+                                    "min": 0,
+                                    "first": 2013090100
+                                },
+                                "day": {
+                                    "count": 1156,
+                                    "sum": 47671.922,
+                                    "max": 127.69,
+                                    "last": 20161030,
+                                    "min": 4.81,
+                                    "first": 20130901
+                                },
+                                "month": {
+                                    "count": 37,
+                                    "sum": 46565.792,
+                                    "max": 2579.43,
+                                    "last": 201609,
+                                    "min": 371.22,
+                                    "first": 201309
+                                }
+                            }
+                        },
+                        "open_channel_ids": [
+                            "5825d2ff6ae4ce006252ee5d"
+                        ],
+                        "representation": "consumption"
+                    }
+                ]
+            }
+            
+
+# Group Streams
+
+Streams are used to continuously get new or updated data such as consumption values. These are ideally used when an application wants to continuously sync data from Metry to another system for persistent storage.
+
+The supported resources are the following
+* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature* as well as all cost metrics. Cost values are included in consumption streams but are prefixed with *cost_*, such as *cost_retail_total*.
+* **invoices** Parsed data from invoices including invoice rows.
+
+
+## Manage streams [/streams]
+
+A client can create and delete streams. When a stream is created, all historical data will be pushed through the stream. 
+
+A stream is connected to the authenticated account and the OAuth client that creates it. This means that a third party application will need one stream for each Metry account connected to the application. 
+
+### Create a stream [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + resource: consumption (enum[string], required) - The resource of data to stream.
+            + Members
+                + `consumption`
+                + `invoices`
+        + granularity: null (string, optional) - An optional filter to only get timeseries data with a specific granularity such as *month*, *day*, *hour*. This only applies to the resource "consumption".
+
++ Response 200 (application/json)
+    + Attributes (Stream)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "_id": "5c90afaf775578007d6da703",
+                    "created": "2019-03-19T09:00:31+0000",
+                    "holder_id": "5c90afa377557800970067f6",
+                    "client_id": "5c90afaa7755780097006802",
+                    "resource": "consumption",
+                    "granularity": null,
+                    "last_offset": null
+                }
+            }
+            
+            
+### Get a stream by ID [GET /streams/{stream_id}]
+
+
++ Parameters
+    + `stream_id`: 5c90db77775578007d6da70a (string) - The _id value of a stream
++ Response 200 (application/json)
+    + Attributes (Stream)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "_id": "5c90afaf775578007d6da703",
+                    "created": "2019-03-19T09:00:31+0000",
+                    "holder_id": "5c90afa377557800970067f6",
+                    "client_id": "5c90afaa7755780097006802",
+                    "resource": "consumption",
+                    "granularity": null,
+                    "last_offset": null
+                }
+            }         
+            
+### List streams [GET /streams?resource={resource}&granularity={granularity}]
+
++ Parameters
+    + resource: consumption (enum[string], optional) - Search for streams for a specific resource.
+        + Members
+            + `consumption`
+            + `invoices`
+    + granularity: null (string, optional) - Search for streams limited to a certain granularity such as *month*, *day*, *hour*. 
+
++ Response 200 (application/json)
+    + Attributes (Stream)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5c90db77775578007d6da70a",
+                    "created": "2019-03-19T12:07:19+0000",
+                    "holder_id": "5c90db6977557800bc319526",
+                    "client_id": "5c90afaa7755780097006802",
+                    "resource": "consumption",
+                    "granularity": null,
+                    "last_offset": null
+                }]
+            }
+         
+            
+            
+### Delete a stream [DELETE /streams/{stream_id}]
+
++ Parameters
+    + `stream_id`: 5c90db77775578007d6da70a (string) - The _id value of a stream
++ Response 200 (application/json)
+    + Attributes
+    + Body
+    
+            {
+                "code": 200,
+                "message": "Deleted stream."
+            }
+
+
+
+## Consuming streams [/streams/{stream_id}/consume]
+
+Consuming a stream is done using an offset that is returned in each response. If no offset is specified in the request, such as when first starting to consume the stream, it will return the first data in the stream or from the last offset which is set after requesting with a greater offset. A response does not necessarily include all data in the stream. This means that the client should keep track of the last offset locally in memory, making additional requests, updating the local last offset each time, until no more records are returned from the stream.
+
+**Read more about how to consume a stream with example code here:**
+https://support.metry.io/hc/en-us/articles/360020161673-Import-data-using-Streams
+
+#### Request rate limiting
+
+Only one client should consume one stream at a time. This means that parallel requests to the same stream should be avoided. If too many requests happen at the same time, the api will respond with status **429 Too many requests**.
+
+If the response does not return any records, there is no more data currently in the stream. Data is usually added in Metry hourly or daily, so making additional requests immediately after receiving an empty response should be avoided; instead, wait at least 60 seconds before making a new request.
+
+#### Fault tolerance
+If the consumer crashes for any reason and is unable to completely process the batch, it can resume from the same last batch using that batch’s offset without losing any data. This provides an *at-least-once* guarantee for reading data. The client does not need to store the offset itself. To resume, it can get the last offset from the stream by first fetching the stream from the API.
+
+The property `last_offset` on a stream is updated after making a request with a greater offset value than last time, indicating that the consumer has successfully processed the data from the last response. Processed data will eventually be deleted from the stream during a periodic cleanup process. 
+
+### Consume a consumption stream [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + offset: 1552987235155131904 (number, optional) - The offset of the last received response. If this offset does not exist in the consumer, leaving it out or setting it to null will return the first data in the stream with an offset to use for upcoming requests.
+        
++ Response 200 (application/json)
+    + Attributes (Stream Batch)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "offset": 1552988044643025920,
+                    "resource": "consumption",
+                    "records": [{
+                        "meter": {
+                            "_id": "5c90bb1077557800b028b68a",
+                            "ean": "735999000000000000",
+                            "timezone": "Etc/GMT-1"
+                        },
+                        "values": [{
+                            "value": 0.5312,
+                            "granularity": "hour",
+                            "metric": "flow",
+                            "updated": false,
+                            "period": "2017100100",
+                            "pushed_at":"2018-05-24 11:15:25"
+                        }, {
+                            "value": 1.3543,
+                            "granularity": "hour",
+                            "metric": "flow",
+                            "updated": false,
+                            "period": "2017100101",
+                            "pushed_at":"2018-05-24 11:17:43"
+                            
+                        }]
+                    }]
+                }
+            }
+
+
+### Consume an invoices stream [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + offset: 1552987235155131904 (number, optional) - The offset of the last received response. If this offset does not exist in the consumer, leaving it out or setting it to null will return the first data in the stream with an offset to use for upcoming requests.
+        
++ Response 200 (application/json)
+    + Attributes (Stream Batch)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "offset": 1552988044643025920,
+                    "resource": "invoices",
+                    "records": [{
+                        "_id": "5cb5b34380b432007b386523",
+                        "owner": {
+                            "_id": "510f9c9054e8ef0700000001",
+                            "name": "Vattenfall"
+                        },
+                        "results": [{
+                            "ean": "735999100057526501",
+                            "period": "20190101-20190131",
+                            "due_date": "2019-02-31T00:00:00+0100",
+                            "metrics": {
+                                "grid_total": 2692.884
+                            },
+                            "invoice_number": "1234525",
+                            "total_vat": 673.221,
+                            "total_amount_excl_vat": 2692.884,
+                            "total_amount_due": 3366.105,
+                            "invoice_rows": [{
+                                "description": "Effekt",
+                                "amount": 522,
+                                "contract_type": "grid",
+                                "metric": "grid_subscription_power",
+                                "price": 6,
+                                "price_unit": "kr/kW",
+                                "quantity": 87,
+                                "quantity_unit": "kW,mnd",
+                                "period": "20190101-20190131"
+                            }, {
+                                "description": "Energi",
+                                "amount": 2170.884,
+                                "contract_type": "grid",
+                                "metric": "grid_usage",
+                                "price": 7.778,
+                                "price_unit": "öre/kWh",
+                                "quantity": 27912,
+                                "quantity_unit": "kWh",
+                                "period": "20190101-20190131"
+                            }]
+                        }]
+                    }]
+                }
+            }
+
+
+# Group Exports
+Exports are used to continuously push data from Metry to another system as files instead of polling a stream. This is appropriate for integrations that prefer receiving data via files using for example FTP, SMTP or webhooks. The export will periodically consume a stream given a set interval such as hourly or daily, write the data do a file for a configured file format and send the file to your system. 
+
+### File formats
+There are existing file formats that can be used. If your system already support a specific file format that you prefer to use, Metry can create support for it. Contact support@metry.io to learn more. Pricing can vary.
+
+* `ConsumptionCSV` <a href="https://support.metry.io/hc/en-us/articles/360008344960-Export-format-ConsumptionCSV">Documentation</a>
+
+### Target systems
+Files can be sent to various targets and will require specific configuration parameters. The configuration should be passed as an object on the "target" property in the request body.
+
+#### FTP
+Put exported files on an FTP server.
+
+`{"ftp": {"host": "ftp.example.com", "port": 21, "username": "metry", "password": "metrypassword"}}`
+  
+#### SFTP
+Put exported files on an SFTP server.
+
+`{"sftp": {"host": "ftp.example.com", "port": 22, "username": "metry", "password": "metrypassword"}}`
+  
+#### SMTP
+Send exports to a specific email address.
+
+`{"smtp": {"email": "metryexports@example.com"}}`
+  
+#### HTTP
+Post files to a webserver using either HTTP or HTTPS. To prevent anybody from posting files, it is common to provide either basic authentication parameters in the URL or a token as a query or path parameter.
+
+`{"http": {"url": "https://example.com/import?token=metrytoken"}}`
+
+#### AWS S3 bucket
+Put exported files in an AWS S3 bucket. You need to provide AWS credentials as an Access Key ID and Access Key Secret. It is recommended to create a new AWS IAM user for this which only has privileges to put files in the specified bucket.
+
+`{"aws_s3": {
+    "bucket": "metry_exports",
+    "access_key_id": "VKIIALKFJLKF33N12345IXS",
+    "access_key_secret": "V5FBggbBStxpkdUJg5d3GJg6VtdwR9BZbPy7nmy6"
+}}
+`
+
+#### Microsoft Azure Blob Storage
+Upload exported files to an Azure Blob storage. You need to provide the name of the Azure Blob Storage container as well as the storage account name and key. The container and the correct privileges need to have been created already.
+
+`{"azure_blob_storage": {
+    "container": "path/to/container",
+    "account_name": "metry_exports",
+    "account_key": "AeaUsd7txe351ert03QmQukhSecgC+eyUROeAEVz7HLWcSuQ+7sX8S14ve4pNZ8AfmGMFrmcoMk/acjwlSx3P=="
+}}
+`
+
+
+## Manage exports [/exports]
+
+Just like streams, exports are connected to the authenticated account and OAuth client that created it. Once the export configuration is created, it will automatically create a stream and start exporting data at the start of the next hour, day or month. 
+
+### Create an export [POST]
+
++ Request (application/json)
+
+    + Attributes
+        + format: {"name": "ConsumptionCSV"} (object, required) - The file format used
+        + source_type: stream (string, required) - The source of data used. Currently only "stream" is supported. 
+        + frequency: hourly (enum[string], required) - How frequently the export should be run. 
+            + Members
+                + `hourly`
+                + `daily`
+                + `monthly`
+        + target: {} (object, required) - The target system for where to send exported files. 
+
++ Response 200 (application/json)
+    + Attributes (Export)
+    + Body
+
+            {
+              "code": 200,
+              "message": "OK",
+              "data": {
+                "_id": "5d4addcc775578007d5ec953",
+                "created": "2019-08-07T14:18:52+0000",
+                "holder_id": "5d4addb677557800fa53a466",
+                "holder": {
+                  "_id": "5d4addb677557800fa53a466",
+                  "name": "Demo User",
+                  "username": "user@name.se"
+                },
+                "client_id": "5d0109c277557800c06dbd13",
+                "format": {
+                  "name": "ConsumptionCSV",
+                  "params": null
+                },
+                "source_type": "stream",
+                "frequency": "monthly",
+                "target": {
+                  "type": "ftp",
+                  "ftp": {
+                    "host": "ftp.example.com",
+                    "port": 21,
+                    "username": "username",
+                    "password": "password",
+                    "path": null
+                  },
+                  "sftp": null,
+                  "smtp": null,
+                  "http": null,
+                  "aws_s3": null
+                },
+                "stream_id": "5d4addcc775578007d5ec955"
+              }
+            }
+
+### Get an export by ID [GET /exports/{export_id}]
+
+
++ Parameters
+    + `export_id`: 5c90db77775578007d6da70a (string) - The _id value of an export
++ Response 200 (application/json)
+    + Attributes (Export)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "data": {
+                    "_id": "5d4addcc775578007d5ec953",
+                    "created": "2019-08-07T14:18:52+0000",
+                    "holder_id": "5d4addb677557800fa53a466",
+                    "holder": {
+                      "_id": "5d4addb677557800fa53a466",
+                      "name": "Demo User",
+                      "username": "user@name.se"
+                    },
+                    "client_id": "5d0109c277557800c06dbd13",
+                    "format": {
+                      "name": "ConsumptionCSV",
+                      "params": null
+                    },
+                    "source_type": "stream",
+                    "frequency": "monthly",
+                    "target": {
+                      "type": "ftp",
+                      "ftp": {
+                        "host": "ftp.example.com",
+                        "port": 21,
+                        "username": "username",
+                        "password": "password",
+                        "path": null
+                      },
+                      "sftp": null,
+                      "smtp": null,
+                      "http": null,
+                      "aws_s3": null
+                    },
+                    "stream_id": "5d4addcc775578007d5ec955"
+                  }
+            }         
+            
+### List exports [GET /exports?format.name={format_name}&frequency={frequency}]
+
++ Parameters
+    + format_name: {"name": "ConsumptionCSV"} (object, required) - The file format used
+    + frequency: hourly (enum[string], required) - How frequently the export should be run. 
+        + Members
+            + `hourly`
+            + `daily`
+            + `monthly`
+
++ Response 200 (application/json)
+    + Attributes (Export)
+    + Body
+
+            {
+                "code": 200,
+                "message": "OK",
+                "count": 1,
+                "skip": 0,
+                "limit": 50,
+                "data": [{
+                    "_id": "5d4addcc775578007d5ec953",
+                    "created": "2019-08-07T14:18:52+0000",
+                    "holder_id": "5d4addb677557800fa53a466",
+                    "holder": {
+                      "_id": "5d4addb677557800fa53a466",
+                      "name": "Demo User",
+                      "username": "user@name.se"
+                    },
+                    "client_id": "5d0109c277557800c06dbd13",
+                    "format": {
+                      "name": "ConsumptionCSV",
+                      "params": null
+                    },
+                    "source_type": "stream",
+                    "frequency": "monthly",
+                    "target": {
+                      "type": "ftp",
+                      "ftp": {
+                        "host": "ftp.example.com",
+                        "port": 21,
+                        "username": "username",
+                        "password": "password",
+                        "path": null
+                      },
+                      "sftp": null,
+                      "smtp": null,
+                      "http": null,
+                      "aws_s3": null
+                    },
+                    "stream_id": "5d4addcc775578007d5ec955"
+                  }]
+            }
+         
+            
+            
+### Delete an export [DELETE /exports/{export_id}]
+
++ Parameters
+    + `export_id`: 5c90db77775578007d6da70a (string) - The _id value of an export
++ Response 200 (application/json)
+    + Attributes
+    + Body
+    
+            {
+                "code": 200,
+                "message": "Deleted export."
+            }
+            
+
+
+# Data Structures
+
+## Account (object)
++ `_id`: 55300dc9f82bd8080094a212 (string) - Unique identifier for the account.
++ name: Example account (string) - Name of the user
++ username: someone@example.com (string) - Email, also used as sign in identity.
++ `sub_accounts`: [] (array[Account]) - DEPRECATED An array of sub accounts of the current account. As some accounts have more subaccounts than what can easily be returned in a single request, we have removed them from this view. To fetch a paginated list of subaccounts, use instead /accounts/me/subaccounts?offset=
++ created: `2015-05-01T11:46:07+0000` (string) - Date time string when the account was created
++ `locale_string`: `sv-SE` (string) - Locale string representing language and country
++ language: en (string) - Represents the accounts language preference
++ `is_organization`: true (boolean) - Is this an organization account
++ `entity_type`:  person, business, `utility_provider`, `metering_operator`, hardware, landlord, `facility_manager` (enum [string]) - The type of entity that this account represents
++ `custom_identifier`: 52472493 (string) - A custom value that can be added to a sub account by a manager account to match against an identifier in your other systems.
+
+## Meter (object)
++ `_id`: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
++ holder: (Holder With Username) - An account that is the holder of the meter.
++ root: (object, required) - Reference to the root meter; remains the same for assigned and shared meters.
+    + `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
+    + holder: (Holder, required) - An account that is the holder of the root meter.
++ assigner: (Holder With Username) - The account that assigned the meter to it's holder; authorized to revoke access at anytime.
++ created: `2015-05-01T11:46:07+0000` (string) - date time string when a meter was created.
++ children: (array[Child Meter]) - An array of Meters that are children of the current meter.
++ address: Klackvägen 12 (string) - Meta information.
++ location: [17.359470099999976, 58.10032929999999] (array[number]) - Geographic coordinates as longitude and latitude 
++ timezone: `Etc/GMT-1` (string, required) - Timezone the meter is located in. Used to define consumption aggregation from hour to day.
++ `control_level`: owned, subscribed, shared, manual (enum [string], required) - The level of control the holder has on the meter. "Owned" represents the highest level of control.
++ generation: 1 (number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
++ name: Pumphuset vid sjön (string) - Meta information.
++ tags: foo, bar (array[string]) - Meta information.
++ box: inbox, ignored, active (enum [string]) - When a Metry robot finds a new meter it places it in the customer's inbox, the customer is then able to move the meter to ignored or active.  Metry only collects consumption data for meters placed in active.  
++ revoked: false (boolean, required) - If revoked the assigner of the meter has decided to deny the holder access, often because the holder's subscription has been canceled by the root holder.
++ type: electricity, heat, cooling, gas, hot_water, water, sensor (enum) - What type of consumption the meter represents.
++ metrics: energy, flow, energy_hightariff, energy_lowtariff, temperature, return_temperature, supply_temperature, tvoc, co2  (enum [string]) - Which metrics the meter is recording data in.
++ ean: 7501054530107 (number) - An International Article Number that uniquely identifies the physical meter
++ consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
++ readings_stats: (object) - A summary of readings data for this meter.
++ has_active_complaints: true (boolean) - is there an active issue open for this meter regarding missing consumption values.
++ representation: consumption, production, `net_consumption`, `net_production`, sensor (enum [string]) - Does this meter record energy consumption or production
++ on_hold: false (boolean) - The holder has decided to set this meter as on hold and exclude it from statistics, if for example it is a new meter that has not yet started to record consumption
++ `active_box_tree_paths`: (array[array[Tree reference]]) - A list paths to the meter in the tree in Metry for meters in active box. 
+
+## Holder (object)
++ `_id`: 58233c51c18edcbe1acf824f (string, required) - Unique identifier for the account.
++ name: Example holder (string) - Name of the user.
+
+## Holder With Username (Holder)
++ username: someone@example.com (string) - Email, also used as sign in identity.
+
+## Child Meter (object)
++ `_id`: 58231f8ec18edcbe1acf8249 (string, required) - Unique identifier root meter.
++ holder: (Holder With Username) - An account that is the holder of the meter.
+
+## Stream (object)
++ `_id`: 5c90afaf775578007d6da703 (string, required) - Unique identifier for the stream.
++ created: 2019-03-19T09:00:31+0000 (string) - When the stream was created in ISO 8601 format.
++ `holder_id`: 5c90afa377557800970067f6 (string) - A reference to the account holding the stream. It is from this account the data is coming.
++ `client_id`: 5c90afaa7755780097006802 (string, optional) - A reference to the OAuth client, usually a third party application that created the stream and has access to it.
++ resource: consumption (string) - The kind of resource the stream will include data. 
++ granularity: null (string, optional) - An optional filter for which granularity of data the stream will include for time series resources.
++ `last_offset`: 1552987235155131904 (number, optional) - The last committed offset on the stream set when consuming the stream with a greater offset value. This is used to resume the reading from a stream.
+
+## Export (object)
++ `_id`: 5c90afaf775578007d6da703 (string, required) - Unique identifier for the export.
++ created: 2019-03-19T09:00:31+0000 (string) - When the stream was created in ISO 8601 format.
++ `holder_id`: 5c90afa377557800970067f6 (string) - A reference to the account holding the stream. It is from this account the data is coming.
++ `client_id`: 5c90afaa7755780097006802 (string, optional) - A reference to the OAuth client, usually a third party application that created the stream and has access to it.
++ source_type: stream (string) - The source of data used. Currently only "stream" is supported. 
++ frequency: hourly (enum[string], required) - How frequently the export should be run. 
+    + Members
+        + `hourly`
+        + `daily`
+        + `monthly`
++ target: null (object) - The target system for where to send exported files. 
+
+## Stream Batch (object)
++ offset: 1552987235155131904 (number) - The offset of the the batch of data. Use this value in upcoming requests to get the next data.
++ resource: consumption (string) - The data resource of the stream. 
++ records: [] (array[object]) - An array of records. The format of the data depends on the resource of the stream.
+
+## Tree (object)
++ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier for the tree node. It can be used instead of a meter id to request consumption values. 
++ name: Kungsgatan (string) - A user defined name on the tree node
++ custom_identifier: A-534523 (string) - A user defined custom identifier on the tree node
++ factor: 1 (number) - How much the node's consumption should contribute to the aggregated value.
++ `app_custom_fields`: (object) - Custom fields created by your app. The value of this property depends on what OAuth client the access token used belongs to.
++ `custom_fields`: (object) - Custom fields created by an internal integration. To use custom fields in a third party application with an OAuth integration, use `app_custom_fields` 
++ parent: 58231f8ec18edcbe1acf8240 (string) - The name of the node's parent in the tree. If it is the root, parent is `null`.
++ location: [20.2282046, 67.854537] (array[number]) - Geographical coordinates of the tree node as longitude and latitude.
++ meters: [] (array[Meter Reference]) - Meters added to the node.  
+
+## Tree reference (object)
++ `_id`: 58231f8ec18edcbe1acf8241 (string, required) - Unique identifier tree node. It can be used instead of a meter id to request consumption values. 
++ name: Kungsgatan (string) - A user defined name on the tree node
+
+## Meter Reference (object
+
+## Consumption (object)
+
+## Cost (object)
++ metric: [] (array[number]) - The values for each requested metric
++ start_date: (string) - The start date of the period, a date time string in iso format
++ end_date: (string) - The end date of the period, a date time string in iso format
+
+## Open Channel (object)
++ `_id`: 5825d2ff6ae4ce006252ee5d (string, required) - Unique identifier for the open channel
++ name: SOLution (string) - the name of the open channel
++ granularities: hour, day, month (enum[string]) - the granularities available in the open channel
++ metrics: energy, flow, energy_hightariff, energy_lowtariff, temperature, return_temperature, supply_temperature, tvoc, co2 (enum[string]) - the metrics available in the open channel
+
+## Open Channel Meter (object)
++ `_id`: 55300dc9f82bd8080094a212 (string, required) - Unique identifier for the meter assigned and shared meters gets a new unique id.
++ owner: (Holder, required) - An account that is the owner of this meter.
++ name: Pumphuset vid sjön (string) - Meta information.
++ timezone: `Etc/GMT-1` (string, required) - Timezone the meter is located in. Used to define consumption aggregation from hour to day.
++ address: Klackvägen 12 (string) - Meta information.
++ generation: 1 (number) - Integer that represents the current meters level in a tree structure, gen 0 (root meter) is held by the owner of the meter, gen 1 is the subscribed meter held by company or person that's energy usage is recorded by the meter, gen 2 is a shared meter which has been shared with a 3rd party.
++ metrics: energy, flow, energy_hightariff, energy_lowtariff, temperature, return_temperature, supply_temperature, tvoc, co2  (enum [string]) - Which metrics the meter is recording data in.
++ type: electricity, heat, cooling, gas, water (enum) - What type of consumption the meter represents.
++ consumption_stats: (object) - A summary of consumption data for each metric this meter is recording.
++ open_channel_ids: (array[string]) - An array of open channel ids that this meter is included in
