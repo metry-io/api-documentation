@@ -10,10 +10,10 @@ Copy the command below into a terminal and run it.
 curl -H 'Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e' https://app.metry.io/api/v2/accounts/me
 ```
 
-<h3>So, what happened here?</h3>
+### So, what happened here?
 You just made a request to our API and **requested basic information** about the authenticated user!
 
-<h3>What about the energy consumption?</h3>
+### What about the energy consumption?
 To fetch the energy consumption, we first need to see what meters the user has:
 
 ```sh
