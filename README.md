@@ -130,7 +130,7 @@ For future compatibility, please interpret the following HTTP status code ranges
 ## Rate limiting
 If the rate of requests from a single client is greater than what we estimate to be reasonable which is about 10 requests/second, the API will temporarily respond with status code **429**. If your client does not make more than one request at a time, it is unlikely to be affected by this rate limit. The rate limit may change in the future if we see a need for it.
 
-# Group Accounts
+#Accounts
 
 An account represents a person, business or organization that uses the Metry platform.
 
@@ -188,7 +188,7 @@ Tip: Use alias "me" to reference the currently authorized user.
                 }
             }
 
-# Group Meters
+# Meters
 
 A meter represents a physical device that measures consumption from a utility such as heat, cooling or electricity.
 Each meter has a holder who can **assign** or **share** the meter to other accounts.
@@ -363,7 +363,7 @@ This filter will only list *active* meters where *last month value is before Mar
 + Response 200 (application/json)
     + Attributes (Meter)
 
-# Group Trees
+# Trees
 
 Trees are a way to structure meters in a hierarchical structure. The implementation is intended to be as flexible as possible so that users and applications can group meters however needed, for instance, by cities, properties, buildings, and other logical groups. Consumption requests can then be made on tree nodes to get the aggregated consumption or temperature of the underlying meters.
 
@@ -559,7 +559,7 @@ It is also possible to filter tree nodes based on app specific custom fields usi
            
 
 
-# Group Consumption
+# Consumption
 
 Consumption is the use of energy or other metrics for a meter or a tree node. Consumption is available by the granularities month, day and hour, however, it is important to understand that the availability differs depending on the meter/node and other external factors.
 
@@ -767,7 +767,7 @@ Requesting consumption for a tree node returns the sum of the consumption of all
 
 
 
-# Group Costs
+# Costs
 
 Data representing the cost of energy usage parsed from invoices. Costs are stored as time series data in the same way as consumptions and the api works similarly.
 
@@ -841,7 +841,7 @@ The response with cost **values will always match your query**. Missing values a
             }
 
 
-# Group Invoices
+# Invoices
 
 
 ## Invoices collection [/invoices?status={status}&meter_ids={root_meter_id}&results.ean={ean}&results.invoice_number={invoice_number}]
@@ -925,7 +925,7 @@ Invoices that have successfully been parsed and interpreted will have the `statu
                 }]
             }
 
-# Group Readings
+# Readings
 
 Readings are the exact timestamped values for a meter.
 
@@ -1000,7 +1000,7 @@ Importing readings from Metry when readings are blocked is possible but should b
             }
 
 
-# Group Open Data Channels
+# Open Data Channels
 
 Open data channels represent collections of meters and consumption data that can be viewed without requiring authorization.
 Via the open channel resource you can see which open channels are available then list the available meters for that channel.  Once the meter ids have been obtained their consumption data can be fetched via the consumption resource.  When requesting data for meters that are part of an open channel no authentication is required
@@ -1130,7 +1130,7 @@ List and filter the available meters for a given open data channels
             }
             
 
-# Group Streams
+# Streams
 
 Streams are used to continuously get new or updated data such as consumption values. These are ideally used when an application wants to continuously sync data from Metry to another system for persistent storage.
 
@@ -1368,7 +1368,7 @@ The property `last_offset` on a stream is updated after making a request with a 
             }
 
 
-# Group Exports
+# Exports
 Exports are used to continuously push data from Metry to another system as files instead of polling a stream. This is appropriate for integrations that prefer receiving data via files using for example FTP, SMTP or webhooks. The export will periodically consume a stream given a set interval such as hourly or daily, write the data do a file for a configured file format and send the file to your system. 
 
 ### File formats
