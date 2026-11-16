@@ -595,7 +595,6 @@ Each period in the response will have a `start_date` and `end_date` property. No
     + id: 5825c6f6de22ae00632e86f3 (required, string) - The id of the meter to get consumption data for
     + period: `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM, YYYYMMDD or YYYYMMDDHH as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + granularity: month (required, string) - The granularity to get consumption data for (month, day or hour)
-    + Updated cost response : `2015-201511` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
     + metrics: energy (optional, string) - Limits the response to one or more metrics separated by commas. If not specified, default metric is returned.
 
 + Request
@@ -766,164 +765,6 @@ Requesting consumption for a tree node returns the sum of the consumption of all
 
 
 
-
-# Costs
-
-Data representing the cost of energy usage parsed from invoices. Costs are stored as time series data in the same way as consumptions and the api works similarly.
-
-
-
-## Get Costs [/costs/{id}/month/{period}?metrics={metrics}]
-
-The only granularity available for costs is month.
-
-The following **metrics** are supported: 
-
-* retail_subscription
-* retail_usage
-* retail_undefined
-* retail_total
-
-* grid_subscription
-* grid_subscription_power
-* grid_subscription_return_temperature
-* grid_subscription_flow
-* grid_usage
-* grid_undefined
-* grid_total
-
-Learn more about the definition of each metric here (in Swedish only): https://metry.zendesk.com/hc/sv/articles/360005144654
-
-**Note:** Metric availability varies between meters.
-
-The response with cost **values will always match your query**. Missing values are replaced with <code>NULL</code>
-
-### For a Meter [GET]
-
-+ Parameters
-    + id: `5b7e64209b8cffjt9e114d3e` (required, string) - The id of the meter to get cost data for
-    + period: `2016` (required, string) -  Defines what period to fetch data for. You may enter any combination of YYYY, YYYYMM or YYYYMMDD as long as the start date is before the end date. You may also leave out the end date, if you, for instance, would like to just fetch data for 2013. All date will be interpreted using the meters time zone.
-    + metrics: `retail_total,grid_total` (optional, enum [string]) - Limits the response to one or more metrics separated by commas. If not specified `retail_total` and `grid_total`.
-
-+ Request
-    + Headers
-    
-            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
-
-+ Response 200 (application/json)
-    + Attributes (Consumption)
-        + account_id: (string) The account that the costs are held by.
-        + meter_id: (string) The id of the meter the cost data is for.
-        + currency: (string) The monetary unit the costs are recorded in.
-        + periods: (array[Cost])
-        
-    + Body
-
-            {
-                "code": 200,
-                "message": "OK",
-                "profiling": [],
-                "data": [
-                    {
-                        "account_id": "5b7e64f8tb8cfb009e114d3f",
-                        "meter_id": "5b7e64209b8cffjt9e114d3e",
-                        "currency": "SEK",
-                        "periods": [
-                            {
-                                "retail_total": [null, null, null, null, null, null, null, null, null, null, null, null],
-                                "grid_total": [345, 343, 321, 433, 345, 546, 234, 212, 256, 396, 194, 390],
-                                "start_date": "2015-12-31T23:00:00+0000",
-                                "end_date": "2016-12-31T22:59:59+0000"
-                            }
-                        ]
-                    }
-                ]
-            }
-
-
-# Invoices
-
-
-## Invoices collection [/invoices?status={status}&meter_ids={root_meter_id}&results.ean={ean}&results.invoice_number={invoice_number}]
-
-Invoices collected or uploaded can be listed including the parsed results. The parsed results include various fields that are extracted from the invoice and invoice rows describing the pricing components.
-
-The response will only contain 50 invoices at a time. To get additional invoices, specify the amount to skip as a query parameter as `skip=50`.
-
-Invoices that have successfully been parsed and interpreted will have the `status` property set to **completed**. Add this as a query parameter when listing invoices to not find invoices that for some reason could not be parsed `?status=completed`.   
-
-
-### List invoices [GET]
-
-+ Parameters
-    + status: `completed` (string) - Filter invoices with a specific status. 
-    + meter_ids: `5b7e64209b8cffjt9e114d3e` (string) - The root ID of a meter to find invoices for a specific meter.
-    + results.ean: `735999100057526501` (string) -  The ID defined for the metering point by the utility provider parsed from the invoices.
-    + results.invoice_number: `1234525` (string) -  Find an invoice by the invoice number found on the invoice. 
-
-+ Request
-    + Headers
-    
-            Authorization: Bearer 9f999b72772410cfb4fe0d4309b5f9dabb01e2fafcd7ba946c6cdc11aa8e
-
-+ Response 200 (application/json)
-
-        
-    + Body
-
-            {
-                "code": 200,
-                "message": "OK",
-                "profiling": [],
-                "count": 1,
-                "limit": 50,
-                "skip": 0,
-                "data": [{
-                    "_id": "540da71a2c3d1c3c008b53682",
-                    "account": {
-                        "_id": "540da71a2c3d1c3c008b53684",
-                        "name": "Example Account"
-                    },
-                    "owner": {
-                        "_id": "540da71a2c3d1c3c008b53683",
-                        "name": "E.ON Sverige"
-                    },
-                    "status": "completed", 
-                    "results": [{
-                        "ean": "735999100057526501",
-                        "period": "20190101-20190131",
-                        "due_date": "2019-02-31T00:00:00+0100",
-                        "metrics": {
-                            "grid_total": 2692.884
-                        },
-                        "invoice_number": "1234525",
-                        "total_vat": 673.221,
-                        "total_amount_excl_vat": 2692.884,
-                        "total_amount_due": 3366.105,
-                        "invoice_rows": [{
-                            "description": "Effekt",
-                            "amount": 522,
-                            "contract_type": "grid",
-                            "metric": "grid_subscription_power",
-                            "price": 6,
-                            "price_unit": "kr/kW",
-                            "quantity": 87,
-                            "quantity_unit": "kW,mnd",
-                            "period": "20190101-20190131"
-                        }, {
-                            "description": "Energi",
-                            "amount": 2170.884,
-                            "contract_type": "grid",
-                            "metric": "grid_usage",
-                            "price": 7.778,
-                            "price_unit": "öre/kWh",
-                            "quantity": 27912,
-                            "quantity_unit": "kWh",
-                            "period": "20190101-20190131"
-                        }]
-                   }]
-                }]
-            }
 
 # Readings
 
@@ -1134,9 +975,8 @@ List and filter the available meters for a given open data channels
 
 Streams are used to continuously get new or updated data such as consumption values. These are ideally used when an application wants to continuously sync data from Metry to another system for persistent storage.
 
-The supported resources are the following
-* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature* as well as all cost metrics. Cost values are included in consumption streams but are prefixed with *cost_*, such as *cost_retail_total*.
-* **invoices** Parsed data from invoices including invoice rows.
+Currently the only supported resource is:
+* **consumption** This includes consumption values for the metrics *energy, flow, energy_hightariff, energy_lowtariff, return_temperature, supply_temperature*.
 
 
 ## Manage streams [/streams]
@@ -1153,7 +993,6 @@ A stream is connected to the authenticated account and the OAuth client that cre
         + resource: consumption (enum[string], required) - The resource of data to stream.
             + Members
                 + `consumption`
-                + `invoices`
         + granularity: null (string, optional) - An optional filter to only get timeseries data with a specific granularity such as *month*, *day*, *hour*. This only applies to the resource "consumption".
 
 + Response 200 (application/json)
@@ -1204,7 +1043,6 @@ A stream is connected to the authenticated account and the OAuth client that cre
     + resource: consumption (enum[string], optional) - Search for streams for a specific resource.
         + Members
             + `consumption`
-            + `invoices`
     + granularity: null (string, optional) - Search for streams limited to a certain granularity such as *month*, *day*, *hour*. 
 
 + Response 200 (application/json)
@@ -1301,67 +1139,6 @@ The property `last_offset` on a stream is updated after making a request with a 
                             "period": "2017100101",
                             "pushed_at":"2018-05-24 11:17:43"
                             
-                        }]
-                    }]
-                }
-            }
-
-
-### Consume an invoices stream [POST]
-
-+ Request (application/json)
-
-    + Attributes
-        + offset: 1552987235155131904 (number, optional) - The offset of the last received response. If this offset does not exist in the consumer, leaving it out or setting it to null will return the first data in the stream with an offset to use for upcoming requests.
-        
-+ Response 200 (application/json)
-    + Attributes (Stream Batch)
-    + Body
-
-            {
-                "code": 200,
-                "message": "OK",
-                "data": {
-                    "offset": 1552988044643025920,
-                    "resource": "invoices",
-                    "records": [{
-                        "_id": "5cb5b34380b432007b386523",
-                        "owner": {
-                            "_id": "510f9c9054e8ef0700000001",
-                            "name": "Vattenfall"
-                        },
-                        "results": [{
-                            "ean": "735999100057526501",
-                            "period": "20190101-20190131",
-                            "due_date": "2019-02-31T00:00:00+0100",
-                            "metrics": {
-                                "grid_total": 2692.884
-                            },
-                            "invoice_number": "1234525",
-                            "total_vat": 673.221,
-                            "total_amount_excl_vat": 2692.884,
-                            "total_amount_due": 3366.105,
-                            "invoice_rows": [{
-                                "description": "Effekt",
-                                "amount": 522,
-                                "contract_type": "grid",
-                                "metric": "grid_subscription_power",
-                                "price": 6,
-                                "price_unit": "kr/kW",
-                                "quantity": 87,
-                                "quantity_unit": "kW,mnd",
-                                "period": "20190101-20190131"
-                            }, {
-                                "description": "Energi",
-                                "amount": 2170.884,
-                                "contract_type": "grid",
-                                "metric": "grid_usage",
-                                "price": 7.778,
-                                "price_unit": "öre/kWh",
-                                "quantity": 27912,
-                                "quantity_unit": "kWh",
-                                "period": "20190101-20190131"
-                            }]
                         }]
                     }]
                 }
@@ -1694,11 +1471,6 @@ Just like streams, exports are connected to the authenticated account and OAuth 
 ## Meter Reference (object
 
 ## Consumption (object)
-
-## Cost (object)
-+ metric: [] (array[number]) - The values for each requested metric
-+ start_date: (string) - The start date of the period, a date time string in iso format
-+ end_date: (string) - The end date of the period, a date time string in iso format
 
 ## Open Channel (object)
 + `_id`: 5825d2ff6ae4ce006252ee5d (string, required) - Unique identifier for the open channel
